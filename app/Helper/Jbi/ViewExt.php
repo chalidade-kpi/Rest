@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Helper\Globalconfig;
+namespace App\Helper;
 
 use Illuminate\Support\Facades\DB;
-use App\Models\Billing\TxProfileTariffHdr;
-use App\Models\Billing\TsTariff;
+use App\Models\Billing\TxProfileTariffHdr_ilcs;
+use App\Models\Billing\TsTariff_ilcs;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Firebase\JWT\JWT;
-use App\Helper\Globalconfig\FileUpload;
+use App\Helper\Jbi\FileUpload;
 
 class ViewExt{
 
@@ -17,7 +17,7 @@ class ViewExt{
     SELECT
       *
     FROM
-      BILLING_MDM.TM_COMP_NOTA
+      BILLING_mdm_ilcs.TM_COMP_NOTA
     WHERE
       BRANCH_ID = ^$^branch_id
       AND BRANCH_CODE = '^$^branch_code'
@@ -27,7 +27,7 @@ class ViewExt{
       (
         SELECT DISTINCT GROUP_TARIFF_ID FROM (
           SELECT
-            GROUP_TARIFF_ID FROM BILLING_MDM.TM_COMP_NOTA
+            GROUP_TARIFF_ID FROM BILLING_mdm_ilcs.TM_COMP_NOTA
             WHERE
               NOTA_ID = ^$^nota_id
               AND BRANCH_ID = ^$^branch_id
@@ -52,7 +52,7 @@ class ViewExt{
         )
       )
     ";
-    $countPBM = DB::connection('mdm')->table('TM_PBM_INTERNAL')->where('PBM_ID',$input['pbm_id'])->where('BRANCH_ID',$input['branch_id'])->where('BRANCH_CODE',$input['branch_code'])->count();
+    $countPBM = DB::connection('mdm_ilcs')->table('TM_PBM_INTERNAL')->where('PBM_ID',$input['pbm_id'])->where('BRANCH_ID',$input['branch_id'])->where('BRANCH_CODE',$input['branch_code'])->count();
     if ($countPBM == 0) {
       $sql = "SELECT * FROM (".$sql.") WHERE COMP_NOTA_NAME <> 'STEVEDORING'";
     }
@@ -61,12 +61,12 @@ class ViewExt{
     $searchVal = array("^$^branch_id", "^$^branch_code", "^$^nota_id", "^$^cust_profile_id");
     $replaceVal = array($input['branch_id'], $input['branch_code'], $input['nota_id'], $input['cust_profile_id']);
     $sql = str_replace($searchVal, $replaceVal, $sql);
-    $result = DB::connection('eng')->select(DB::raw($sql));
+    $result = DB::connection('eng_ilcs')->select(DB::raw($sql));
     return ["result" => $result, "count" => count($result), "query" => $sql];
   }
 
   public static function getViewNotaPLB($input) {
-    $childs = DB::connection('mdm')->table('TM_NOTA')->where('no_parent_id', $input['nota_id'])->where('service_code', 2)->orderBy('nota_id', 'asc')->get();
+    $childs = DB::connection('mdm_ilcs')->table('TM_NOTA')->where('no_parent_id', $input['nota_id'])->where('service_code', 2)->orderBy('nota_id', 'asc')->get();
     if (count($childs) == 0) {
       return ['Success' => false, 'response' => 'Fail, this nota not have childs', "json" => ""];
     }
@@ -78,7 +78,7 @@ class ViewExt{
       //     "branch_code" => $input['branch_code'],
       //     "nota_id" => $list->nota_id
       //   ];
-      //   $cekAgain = DB::connection('mdm')->table('TS_NOTA')->where($setData)->count();
+      //   $cekAgain = DB::connection('mdm_ilcs')->table('TS_NOTA')->where($setData)->count();
       //   if($cekAgain == 0){
       //     $checked = false;
       //   }else{
@@ -114,7 +114,7 @@ class ViewExt{
         "branch_code" => $input['branch_code'],
         "nota_id" => $list->nota_id
       ];
-      $cekAgain = DB::connection('mdm')->table('TS_NOTA')->where($setData)->count();
+      $cekAgain = DB::connection('mdm_ilcs')->table('TS_NOTA')->where($setData)->count();
       if($cekAgain == 0){
         $checked = false;
       }else{
@@ -144,11 +144,11 @@ class ViewExt{
   }
 
   public static function getViewNotaPLB_old($input) {
-    $parent = DB::connection('mdm')->table('TM_NOTA')->whereNull('no_parent_id')->where('service_code', 2)->orderBy('nota_id', 'asc')->get();
+    $parent = DB::connection('mdm_ilcs')->table('TM_NOTA')->whereNull('no_parent_id')->where('service_code', 2)->orderBy('nota_id', 'asc')->get();
 
     $estjs = [];
     foreach ($parent as $list) {
-      $childs = DB::connection('mdm')->table('TM_NOTA')->where('no_parent_id', $list->nota_id)->where('service_code', 2)->orderBy('nota_id', 'asc')->get();
+      $childs = DB::connection('mdm_ilcs')->table('TM_NOTA')->where('no_parent_id', $list->nota_id)->where('service_code', 2)->orderBy('nota_id', 'asc')->get();
       if (count($childs) > 0) {
         $addAg = [];
         foreach ($childs as $listSc) {
@@ -160,7 +160,7 @@ class ViewExt{
             "branch_code" => $input['branch_code'],
             "nota_id" => $listSc->nota_id
           ];
-          $cekAgain = DB::connection('mdm')->table('TS_NOTA')->where($setData)->count();
+          $cekAgain = DB::connection('mdm_ilcs')->table('TS_NOTA')->where($setData)->count();
           if($cekAgain == 0){
             $checked = false;
           }else{
@@ -192,7 +192,7 @@ class ViewExt{
         "branch_code" => $input['branch_code'],
         "nota_id" => $list->nota_id
       ];
-      $cekAgain = DB::connection('mdm')->table('TS_NOTA')->where($setData)->count();
+      $cekAgain = DB::connection('mdm_ilcs')->table('TS_NOTA')->where($setData)->count();
       if($cekAgain == 0){
         $checked = false;
       }else{
@@ -231,7 +231,7 @@ class ViewExt{
     $type        = $input["type"];
     $method      = $input["method"];
     $cancel_type = $input["cancelled_type"];
-    $cancel      = DB::connection("omuster")
+    $cancel      = DB::connection("omuster_ilcs")
                   ->table("TX_HDR_CANCELLED A")
                   ->join("TX_HDR_".strtoupper($type)."_CARGO B", "B.".strtoupper($type)."_CARGO_NO", "=", "A.CANCELLED_REQ_NO")
                   ->where("A.CANCELLED_TYPE",$cancel_type)
@@ -243,14 +243,14 @@ class ViewExt{
     foreach ($cancel as $value) {
       if ($method == "view") {
         if ($type == "rec") {
-          $detail  = DB::connection("omuster")
+          $detail  = DB::connection("omuster_ilcs")
           ->table("TX_DTL_CANCELLED A")
           ->leftJoin("TX_DTL_".strtoupper($type)."_CARGO B", "B.".strtoupper($type)."_CARGO_DTL_SI_NO", "=", "A.CANCL_SI")
           ->where("B.".strtoupper($type)."_CARGO_HDR_ID", $value->rec_cargo_id)
           ->where("A.CANCL_HDR_ID ", $input["cancelled_id"])
           ->get();
         } else {
-          $detail  = DB::connection("omuster")
+          $detail  = DB::connection("omuster_ilcs")
           ->table("TX_DTL_CANCELLED A")
           ->leftJoin("TX_DTL_".strtoupper($type)."_CARGO B", "B.".strtoupper($type)."_CARGO_DTL_SI_NO", "=", "A.CANCL_SI")
           ->where("B.".strtoupper($type)."_CARGO_HDR_ID", $value->del_cargo_id)
@@ -259,14 +259,14 @@ class ViewExt{
         }
       } else {
         if ($type == "rec") {
-          $detail  = DB::connection("omuster")
+          $detail  = DB::connection("omuster_ilcs")
           ->table("TX_DTL_".strtoupper($type)."_CARGO B")
           ->leftJoin("TX_DTL_CANCELLED A", "B.".strtoupper($type)."_CARGO_DTL_SI_NO", "=", "A.CANCL_SI")
           ->where("B.".strtoupper($type)."_CARGO_HDR_ID", $value->rec_cargo_id)
           ->where("A.CANCL_HDR_ID ", $input["cancelled_id"])
           ->get();
         } else {
-          $detail  = DB::connection("omuster")
+          $detail  = DB::connection("omuster_ilcs")
           ->table("TX_DTL_".strtoupper($type)."_CARGO B")
           ->leftJoin("TX_DTL_CANCELLED A", "B.".strtoupper($type)."_CARGO_DTL_SI_NO", "=", "A.CANCL_SI")
           ->where("B.".strtoupper($type)."_CARGO_HDR_ID", $value->del_cargo_id)
@@ -274,16 +274,16 @@ class ViewExt{
           ->get();
         }
       }
-      $newDt["DETAIL"]  = $detail ;
+      $newDt["DETAIL"]  = $detail;
     }
 
     if ($type == "rec") {
-      $newDt["FILE"]    = DB::connection("omuster")
+      $newDt["FILE"]    = DB::connection("omuster_ilcs")
                         ->table("TX_DOCUMENT")
                         ->where("REQ_NO", $cancel[0]->rec_cargo_no)
                         ->get();
     } else {
-      $newDt["FILE"]    = DB::connection("omuster")
+      $newDt["FILE"]    = DB::connection("omuster_ilcs")
                         ->table("TX_DOCUMENT")
                         ->where("REQ_NO", $cancel[0]->del_cargo_no)
                         ->get();
@@ -308,10 +308,6 @@ class ViewExt{
                   A.COMP_NOTA_TL,
                   E.REFF_NAME COMP_NOTA_TL_NAME,
                   A.COMP_NOTA_VIEW,
-                  A.COMP_FORM_ORDER,
-                  A.COMP_REQUIRED,
-                  A.PROC_NAME,
-                  A.COMP_FORM_SHOW,
                   F.REFF_NAME COMP_NOTA_VIEW_NAME
                  ";
 
@@ -330,11 +326,6 @@ class ViewExt{
                   A.COMP_NOTA_TL,
                   E.REFF_NAME,
                   A.COMP_NOTA_VIEW,
-                  A.COMP_FORM_ORDER,
-                  A.COMP_REQUIRED,
-                  A.PROC_NAME,
-                  A.COMP_FORM_SHOW,
-                  A.COMP_NOTA_VIEW,
                   F.REFF_NAME
                   ";
 
@@ -348,12 +339,11 @@ class ViewExt{
                   TM_REFF F ON A.COMP_NOTA_VIEW = F.REFF_ID AND F.REFF_TR_ID = '10'
                  ";
 
-    $data = DB::connection('mdm')
+    $data = DB::connection('mdm_ilcs')
                 ->table(DB::raw($tableraw))
                 ->selectraw($selectraw)
                 ->join('TM_NOTA B', 'A.NOTA_ID', '=', 'B.NOTA_ID')
                 ->join('TM_BRANCH C', 'A.BRANCH_CODE', '=', 'C.BRANCH_CODE')
-                ->orderBy('A.COMP_NOTA_ORDER', "ASC")
                 ->groupBy($grupbyraw);
 
     if(!empty($input["where"][0])) {
@@ -411,24 +401,23 @@ class ViewExt{
     }
     $results  = json_decode($res->getBody()->getContents(), true);
     $qrcode   = $results['getDataCetakResponse']['esbBody']['url'];
-    $qrcode = "https://eservice.indonesiaport.co.id/index.php/eservice/api/getdatacetak?kode=billingedii&tipe=nota&no=".$input["nota_no"]; //optional
 
     return ["link" => $qrcode];
   }
 
-  function getDebitur($input, $request) {
+  public static function getDebitur($input) {
     $startDate = date("Y-m-d", strtotime($input["startDate"]));
     $endDate = date("Y-m-d", strtotime($input["endDate"]));
 
-    $getRpt = DB::connection('omcargo')->table('V_RPT_DEBITUR');
-    if (!empty($input["condition"]["NOTA_BRANCH_ID"])) {
-      $getRpt->where('BRANCH_ID',$input["condition"]["NOTA_BRANCH_ID"]);
-    }else if (empty($input["condition"]["NOTA_BRANCH_ID"])) {
+    $getRpt = DB::connection('omcargo_ilcs')->table('V_RPT_DEBITUR');
+    if (!empty($input["condition"]["BRANCH_ID"])) {
+      $getRpt->where('BRANCH_ID',$input["condition"]["BRANCH_ID"]);
+    }else if (empty($input["condition"]["BRANCH_ID"])) {
       $getRpt->where('BRANCH_ID',$input['user']->user_branch_id);
     }
-    if (!empty($input["condition"]["NOTA_BRANCH_CODE"])) {
-      $getRpt->where('BRANCH_CODE',$input["condition"]["NOTA_BRANCH_CODE"]);
-    }else if (empty($input["condition"]["NOTA_BRANCH_CODE"])) {
+    if (!empty($input["condition"]["BRANCH_CODE"])) {
+      $getRpt->where('BRANCH_CODE',$input["condition"]["BRANCH_CODE"]);
+    }else if (empty($input["condition"]["BRANCH_CODE"])) {
       $getRpt->where('BRANCH_CODE',$input['user']->user_branch_code);
     }
     if (!empty($input["condition"]["NOTA_NO"])) {
@@ -472,7 +461,7 @@ class ViewExt{
     $startDate = date("Y-m-d h:i:s", strtotime($input["startDate"]));
     $endDate = date("Y-m-d h:i:s", strtotime($input["endDate"]));
 
-    $getRpt = DB::connection('omcargo')->table('V_RPT_REKONSILASI_NOTA');
+    $getRpt = DB::connection('omcargo_ilcs')->table('V_RPT_REKONSILASI_NOTA');
     if (!empty($input["condition"]["BRANCH_ID"])) {
       $getRpt->where('BRANCH_ID',$input["condition"]["BRANCH_ID"]);
     }else if (empty($input["condition"]["BRANCH_ID"])) {
@@ -490,7 +479,7 @@ class ViewExt{
       $getRpt->where('UKK',$input["condition"]["UKK"]);
     }
     if (!empty($input["condition"]["NOTA"])) {
-      $getRpt->where('NOTA_NO',$input["condition"]["NOTA"]);
+      $getRpt->where('NOTA_NO',$input["condition"]["NOTA_NO"]);
     }
     if (!empty($input["startDate"]) AND !empty($input["endDate"])) {
       $getRpt->whereBetween('NOTA_DATE',[$startDate,$endDate]);
@@ -525,7 +514,7 @@ class ViewExt{
     $startDate = $input["startYear"];
     $endDate = $input["endYear"];
 
-    $getRpt = DB::connection('omcargo')->table('V_RPT_DTL_PENDAPATAN')->where('DT', 'D');
+    $getRpt = DB::connection('omcargo_ilcs')->table('V_RPT_DTL_PENDAPATAN')->where('DT', 'D');
     if (!empty($input["condition"]["REAL_BRANCH_ID"])) {
       $getRpt->where('BRANCH_ID',$input["condition"]["REAL_BRANCH_ID"]);
     }else if (empty($input["condition"]["REAL_BRANCH_ID"])) {
@@ -578,7 +567,7 @@ class ViewExt{
     $startDate = date("Y-m-d", strtotime($input["startDate"]));
     $endDate = date("Y-m-d", strtotime($input["endDate"]));
 
-    $getRpt = DB::connection('omcargo')->table('V_RPT_TRAFIK_DAN_PROD');
+    $getRpt = DB::connection('omcargo_ilcs')->table('V_RPT_TRAFIK_DAN_PROD');
     if (!empty($input["condition"]["REAL_BRANCH_ID"])) {
       $getRpt->where('BRANCH_ID',$input["condition"]["REAL_BRANCH_ID"]);
     }else if (empty($input["condition"]["REAL_BRANCH_ID"])) {
@@ -616,58 +605,6 @@ class ViewExt{
     $result = $getRpt->get();
 
     return ["result"=>$result, "total"=>$count];
-  }
-
-  public function readExcelImport(Request $request)
-  {
-    $json_request = $request->json()->get('TCARequest');
-    $encoded_string = $json_request['esbBody']['base64'];
-
-    $target_dir = 'temp_truck/';
-    if (!file_exists($target_dir)){
-      mkdir($target_dir, 0777);
-    }
-
-    $decoded_file = base64_decode($encoded_string); // decode the file
-    $mime_type = finfo_buffer(finfo_open(), $decoded_file, FILEINFO_MIME_TYPE); // extract mime type
-    $extension = $this->mime2ext($mime_type); // extract extension from mime type
-    $name = Carbon::now()->format('mdY_h_i_s');
-    $file = $name.'.'.$extension; // rename file as a unique name
-    $file_dir = $target_dir.$name.'.'.$extension;
-    try {
-      file_put_contents($file_dir, $decoded_file);
-      $response = true;
-    } catch (Exception $e) {
-      $response = $e->getMessage();
-    }
-
-    $objPHPExcel = PHPExcel_IOFactory::load($file_dir);
-    $sheet = $objPHPExcel->getSheet(0);
-    $highestRow = $sheet->getHighestRow();
-    // $highestColumn = $sheet->getHighestColumn();
-    $responseData = [];
-    for ($row = 2; $row <= $highestRow; $row++){
-      // $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE, FALSE);
-      $responseData[] = ["no_polisi" => $sheet->getCell('A'.$row)->getValue()];
-    }
-
-    unlink($file_dir);
-    return response()->json([
-      'TCAResponse' => [
-        'esbHeader' => [
-          'internalId' => '537750c2-3912-4cbb-a5ed-ed98f7d312f9',
-          'responseTimestamp' => '20190717 09:54:02.173',
-          'responseCode' => '0',
-          'responseMessage' => 'Success'
-        ],
-        'esbBody' => [
-          'results' => [
-            'response' => $responseData,
-            'status' => 'success',
-            'message' => 'Successfully, Payment']
-        ]
-      ]
-    ]);
   }
 
 }

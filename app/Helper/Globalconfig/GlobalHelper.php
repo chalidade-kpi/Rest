@@ -510,6 +510,123 @@ class GlobalHelper {
     return ["result"=>$result, "count"=>$count];
   }
 
+  public static function autoCompleteJbi($input) {
+  $connect  = DB::connection($input["db"])->table($input["table"]);
+
+  if(!empty($input["groupby"])) {
+    $connect->groupBy(strtoupper($input["groupby"]));
+  }
+
+  if (!empty($input["range"])) {
+    $result  = $connect->whereBetween($input["range"][0],[$input["range"][1],$input["range"][2]]);
+  }
+
+  if (!empty($input["selected"])) {
+    $result  = $connect->select($input["selected"]);
+  }
+
+  if(!empty($input["orderby"][0])) {
+  $in        = $input["orderby"];
+  $connect->orderby(strtoupper($in[0]), $in[1]);
+  }
+
+  if(!empty($input["where"][0])) {
+    $connect->where($input["where"]);
+  }
+
+  if(!empty($input["whereIn"][0])) {
+  $in        = $input["whereIn"];
+  $connect->whereIn(strtoupper($in[0]), $in[1]);
+  }
+
+  if(!empty($input["whereNotIn"][0])) {
+  $in        = $input["whereNotIn"];
+  $connect->whereNotIn(strtoupper($in[0]), $in[1]);
+  }
+
+  if(!empty($input["join"])) {
+          foreach ($input["join"] as $list) {
+      $connect->join(strtoupper($list["table"]), strtoupper($list["field2"]), '=', strtoupper($list["field1"]));
+    }
+  }
+
+  if(!empty($input["stripping"])) {
+          foreach ($input["stripping"] as $list) {
+      $connect->join(strtoupper($list["table"]), strtoupper($list["field1"]), '=', strtoupper($list["field2"]));
+    }
+  }
+
+  if(!empty($input["stuffing"])) {
+          foreach ($input["stuffing"] as $list) {
+      $connect->join(strtoupper($list["table"]), strtoupper($list["field1"]), '=', strtoupper($list["field2"]));
+    }
+  }
+
+  if(!empty($input["lastActivity"])) {
+    foreach ($input["lastActivity"] as $list) {
+      $connect->join(strtoupper($list["table"]), strtoupper($list["field1"]), '=', strtoupper($list["field2"]));
+    }
+  }
+
+  if(!empty($input["nameActivity"])) {
+    foreach ($input["nameActivity"] as $list) {
+      $connect->join(strtoupper($list["table"]), strtoupper($list["field1"]), '=', strtoupper($list["field2"]));
+    }
+  }
+
+  if (!empty($input["selectedCycle"])) {
+    $result  = $connect->select($input["selectedCycle"]);
+    foreach ($input["joinCycle"] as $list) {
+      $connect->join(strtoupper($list["table"]), strtoupper($list["field1"]), '=', strtoupper($list["field2"]));
+    }
+  }
+
+  if (!empty($input["query"]) && !empty($input["field"])) {
+    if (is_array($input["field"])) {
+      foreach ($input["field"] as $field) {
+        $upper = DB::connection($input["db"])->table($input["table"])->where(strtoupper($field),"like", "%".strtoupper($input["query"])."%")->get();
+        $capit = DB::connection($input["db"])->table($input["table"])->where(strtoupper($field),"like", "%".ucwords(strtolower($input["query"]))."%")->get();
+        $lower = DB::connection($input["db"])->table($input["table"])->where(strtoupper($field),"like", "%".strtolower($input["query"])."%")->get();
+
+        if (!empty($upper)) {
+          $connect->where(strtoupper($field),"like", "%".strtoupper($input["query"])."%");
+        } else if(!empty($capit)) {
+          $connect->where(strtoupper($field),"like", "%".ucwords(strtolower($input["query"]))."%");
+        } else if(!empty($lower)) {
+          $connect->where(strtoupper($field),"like", "%".strtolower($input["query"])."%");
+        } else {
+          $connect->where($input["field"], "like", "%".$input["query"]."%");
+        }
+      }
+    } else {
+      $upper = DB::connection($input["db"])->table($input["table"])->where(strtoupper($input["field"]),"like", "%".strtoupper($input["query"])."%")->get();
+      $capit = DB::connection($input["db"])->table($input["table"])->where(strtoupper($input["field"]),"like", "%".ucwords(strtolower($input["query"]))."%")->get();
+      $lower = DB::connection($input["db"])->table($input["table"])->where(strtoupper($input["field"]),"like", "%".strtolower($input["query"])."%")->get();
+
+      if (!empty($upper)) {
+        $connect->where(strtoupper($input["field"]),"like", "%".strtoupper($input["query"])."%");
+      } else if(!empty($capit)) {
+        $connect->where(strtoupper($input["field"]),"like", "%".ucwords(strtolower($input["query"]))."%");
+      } else if(!empty($lower)) {
+        $connect->where(strtoupper($input["field"]),"like", "%".strtolower($input["query"])."%");
+      } else {
+        $connect->where($input["field"], "like", "%".$input["query"]."%");
+      }
+    }
+  }
+
+
+  $count    = $connect->count();
+  if (!empty($input['start']) || $input["start"] == '0') {
+    if (!empty($input['limit'])) {
+      $connect->skip($input['start'])->take($input['limit']);
+    }
+  }
+  $result   = $connect->get();
+
+  return ["result"=>$result, "count"=>$count];
+}
+
   public static function join($input) {
     $connect = DB::connection($input["db"])->table($input["table"]);
     if (isset($input["type"])) {
@@ -652,7 +769,7 @@ class GlobalHelper {
       // $addSlashes = str_replace('?', "'?'", $connect->toSql());
       // $count      = vsprintf(str_replace('?', '%s', $addSlashes), $connect->getBindings());
 
-      return ["result"=>$data, "count"=>$data];
+      return ["result"=>$data, "count"=>$count];
   }
 
   public static function whereQuery($input) {
@@ -789,7 +906,7 @@ class GlobalHelper {
       if ($data == "HEADER") {
         $hdr   = json_decode(json_encode($val["VALUE"]), TRUE);
         if ($hdr[0][$cek] == '' || $sq == "N") {
-          if ($dbhdr == "omuster") {
+          if ($dbhdr == "omuster" or $dbhdr == "omuster_ilcs") {
             $sequence = DB::connection($dbhdr)->table("DUAL")->select($tblhdr."_SEQ.NEXTVAL")->get();
             $seq      = ($sequence[0]->nextval);
           } else {
@@ -966,24 +1083,41 @@ class GlobalHelper {
 
   public static function tanggalMasukKeluar($service, $req_no, $dtl_id) {
     if ($service == "DEL") {
+        // echo $dtl_id;
         $header = DB::connection('omcargo')->table('TX_HDR_'.$service)->where($service.'_NO', '=', $req_no)->first();
-        $dtl    = DB::connection('omcargo')->table('TX_DTL_'.$service)->where('HDR_'.$service.'_ID', '=', $header->del_id)->where('DTL_ID', $dtl_id)->first();
-        $date2  =date_create($dtl->dtl_out);
-        $date1  =date_create($dtl->dtl_in);
+        $dtlReq = DB::connection('omcargo')->table('TX_DTL_'.$service)->where('HDR_'.$service.'_ID', '=', $header->del_id)->where('DTL_'.$service.'_ID', $dtl_id)->first();
+
+        // BPRP
+        // $header = DB::connection('omcargo')->table('TX_HDR_BPRP')->where('BPRP_REQ_NO', '=', $req_no)->first();
+        // $dtl    = DB::connection('omcargo')->table('TX_DTL_BPRP')->where('HDR_BPRP_ID', '=', $header->bprp_id)->where('DTL_BPRP_ID', $dtl_id)->first();
+        // $date1  =date_create($dtl->dtl_datein);
+        // $date2  = date_add(date_create($dtl->dtl_dateout), date_interval_create_from_date_string('1 days'));
+
+        $date1  =date_create($dtlReq->dtl_in);
+        $date2  =date_add(date_create($dtlReq->dtl_out), date_interval_create_from_date_string('1 days'));
         $count = date_diff($date1,$date2);
-        // echo
-        echo date("d-m-y", strtotime($dtl->dtl_in))."<br>".date("d-m-y", strtotime($dtl->dtl_out))."<br>".$count->format('%a Hari');
+        echo date("d-m-y", strtotime($dtlReq->dtl_in))."<br>".date("d-m-y", strtotime($dtlReq->dtl_out))."<br>".$count->format('%a Hari');
+
+        // echo date("d-m-y", strtotime($dtl->dtl_datein))."<br>".date("d-m-y", strtotime($dtl->dtl_dateout))."<br>".$count->format('%a Hari');
     }
     else if ($service == "REC") {
         $dtlIn  = DB::connection('omcargo')->table('TX_HDR_'.$service)->where($service.'_NO', '=', $req_no)->first();
-        $dtlOut = DB::connection('omcargo')->table('TX_DTL_'.$service)->where('HDR_'.$service.'_ID', '=', $dtlIn->rec_id)->where('DTL_ID', $dtl_id)->first();
-        $date1  =date_create($dtlOut->dtl_in);
-        $date2  =date_create($dtlIn->rec_etd);
+        $dtlOut = DB::connection('omcargo')->table('TX_DTL_'.$service)->where('HDR_'.$service.'_ID', '=', $dtlIn->rec_id)->first();
+
+        // BPRP
+        $header = DB::connection('omcargo')->table('TX_HDR_BPRP')->where('BPRP_REQ_NO', '=', $req_no)->first();
+        $dtl    = DB::connection('omcargo')->table('TX_DTL_BPRP')->where('HDR_BPRP_ID', '=', $header->bprp_id)->first();
+
+        // $date1  =date_create($dtlOut->dtl_in);
+        $date1  =date_create($dtl->dtl_datein);
+
+        $date2  = date_add(date_create($dtl->dtl_dateout), date_interval_create_from_date_string('1 days'));
+        // $date2  =date_create($dtlIn->rec_etd);
         $count = date_diff($date1,$date2);
-        echo date("d-m-y", strtotime($dtlOut->dtl_in))."<br>".date("d-m-y", strtotime($dtlIn->rec_etd))."<br>".$count->format('%a Hari');
+        echo date("d-m-y", strtotime($dtl->dtl_datein))."<br>".date("d-m-y", strtotime($dtl->dtl_dateout))."<br>".$count->format('%a Hari');
     } else if($service == "BPRP") {
       $header = DB::connection('omcargo')->table('TX_HDR_'.$service)->where($service.'_REQ_NO', '=', $req_no)->first();
-      $dtl    = DB::connection('omcargo')->table('TX_DTL_'.$service)->where('HDR_'.$service.'_ID', '=', $header->bprp_id)->where('DTL_ID', $dtl_id)->first();
+      $dtl    = DB::connection('omcargo')->table('TX_DTL_'.$service)->where('HDR_'.$service.'_ID', '=', $header->bprp_id)->where('DTL_'.$service.'_ID', $dtl_id)->first();
       $date2  = date_add(date_create($dtl->dtl_dateout), date_interval_create_from_date_string('1 days'));
       $date1  = date_create($dtl->dtl_datein);
       $count  = date_diff($date1,$date2);

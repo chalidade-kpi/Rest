@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Helper\Npk;
+namespace App\Helper;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\DB;
 
-use App\Helper\Npk\RequestBookingNPK;
-use App\Helper\Npk\UperRequest;
+use App\Models\OmCargo\TxHdrUper_ilcs;
+use App\Models\OmCargo\TxHdrBm_ilcs;
+use App\Models\OmCargo\TxHdrDel_ilcs;
+use App\Models\OmCargo\TxHdrRec_ilcs;
+use App\Models\OmCargo\TxHdrNota_ilcs;
 
-use App\Models\OmCargo\TxHdrUper;
-use App\Models\OmCargo\TxHdrBm;
-use App\Models\OmCargo\TxHdrDel;
-use App\Models\OmCargo\TxHdrRec;
-use App\Models\OmCargo\TxHdrNota;
+use App\Helper\Jbi\RequestBooking;
+use App\Helper\Jbi\UperRequest;
+use Carbon\Carbon;
 
-class ConnectedExternalAppsNPK{
+class ConnectedExternalApps{
 
   // BTN
     public static function getListTCA($input){
@@ -248,7 +248,7 @@ class ConnectedExternalAppsNPK{
 
   	public static function realTos($input){
   		$count = DB::connection('omcargo')->table('TX_HDR_REALISASI')->where('REAL_REQ_NO', $input['req_no'])->count();
-      $req = TxHdrBm::where('BM_NO', $input['req_no'])->first();
+      $req = TxHdrBm_ilcs::where('BM_NO', $input['req_no'])->first();
       if (empty($req)) {
         return ['result' => "Fail, request not found!", "Success" => false];
       }
@@ -351,13 +351,13 @@ class ConnectedExternalAppsNPK{
     public static function sendRequestBooking($input){
       $req_type = substr($input['req_no'], 0,3);
       if($req_type == 'REC') {
-        $header = TxHdrRec::where('rec_no',$input['req_no'])->first();
+        $header = TxHdrRec_ilcs::where('rec_no',$input['req_no'])->first();
         $table = 'TX_HDR_REC';
         // if ($header->rec_extend_status == 'Y') {
         //   $req_type = 'EXT';
         // }
       }else if($req_type == 'DEL') {
-        $header = TxHdrDel::where('del_no',$input['req_no'])->first();
+        $header = TxHdrDel_ilcs::where('del_no',$input['req_no'])->first();
         $table = 'TX_HDR_DEL';
         // if ($header->del_extend_status == 'Y') {
         //   $req_type = 'EXT';
@@ -365,13 +365,13 @@ class ConnectedExternalAppsNPK{
       }else{
         $req_type = substr($input['req_no'], 0,2);
         if ($req_type == 'BM') {
-          $header = TxHdrBm::where('bm_no',$input['req_no'])->first();
+          $header = TxHdrBm_ilcs::where('bm_no',$input['req_no'])->first();
           $table = 'TX_HDR_BM';
           $req_type = 'BM';
         }
       }
 
-      $config = RequestBookingNPK::config($table);
+      $config = RequestBooking::config($table);
       if (!empty($header)) {
         $condition = DB::connection('omcargo')->table('TS_SEND_TOS')->pluck('pkg_id');
         $detil = DB::connection('omcargo')->table($config['head_tab_detil'])->where($config['head_forigen'],$header[$config['head_primery']])->whereIn('dtl_pkg_id', $condition)->get();
@@ -383,7 +383,6 @@ class ConnectedExternalAppsNPK{
       $endpoint_url=config('endpoint.sendRequestBookingNewExcute');
       $respn = [];
       $string_json_arr = [];
-      $hitEsb = [];
       foreach ($detil as $list) {
         $listA = (array)$list;
         $hsl = [];
@@ -391,7 +390,7 @@ class ConnectedExternalAppsNPK{
         $vparam = '';
         $hscode = '0000';
         if ($req_type == 'REC' or $req_type == 'BM') {
-          $hscode = DB::connection('mdm')->table('TM_COMMODITY')->where('COMMODITY_ID', $list->dtl_cmdty_id)->first();
+          $hscode = DB::connection('mdm_ilcs')->table('TM_COMMODITY')->where('COMMODITY_ID', $list->dtl_cmdty_id)->first();
           $hscode = $hscode->hscode;
         }
         // first
@@ -401,7 +400,7 @@ class ConnectedExternalAppsNPK{
             $vparam .= $req_type; // IF_FLAG
           }
           $vparam .= '^'.$listA[$config['head_tab_detil_id']]; // ID_CARGO
-          $packageNameParent = DB::connection('mdm')->select(DB::raw('SELECT (CASE WHEN B.PACKAGE_NAME IS NULL THEN A.PACKAGE_NAME ELSE B.PACKAGE_NAME END) PACKAGE_NAME FROM TM_PACKAGE A LEFT JOIN TM_PACKAGE B ON B.PACKAGE_CODE = A.PACKAGE_PARENT_CODE WHERE A.PACKAGE_ID ='.$list->dtl_pkg_id));
+          $packageNameParent = DB::connection('mdm_ilcs')->select(DB::raw('SELECT (CASE WHEN B.PACKAGE_NAME IS NULL THEN A.PACKAGE_NAME ELSE B.PACKAGE_NAME END) PACKAGE_NAME FROM TM_PACKAGE A LEFT JOIN TM_PACKAGE B ON B.PACKAGE_CODE = A.PACKAGE_PARENT_CODE WHERE A.PACKAGE_ID ='.$list->dtl_pkg_id));
           $packageNameParent = $packageNameParent[0];
           $packageNameParent = $packageNameParent->package_name;
           $vparam .= '^'.$packageNameParent; // PKG_NAME
@@ -464,7 +463,7 @@ class ConnectedExternalAppsNPK{
           $vparam .= '^201'; // id_Port
 
           $string_json = '{
-              "saveCargoNpkInterfaceRequest": {
+              "savecargoNpkInterfaceRequest": {
                   "esbHeader": {
                       "externalId": "2",
                       "timestamp": "2"
@@ -477,7 +476,7 @@ class ConnectedExternalAppsNPK{
                   }
               }
           }';
-          $string_json_arr[] = json_decode($string_json);
+          $string_json_arr[] = $string_json;
 
           $username="npk_billing";
           $password ="npk_billing";
@@ -496,13 +495,7 @@ class ConnectedExternalAppsNPK{
           } catch (ClientException $e) {
             return $e->getResponse();
           }
-          $resB = json_decode($res->getBody()->getContents(), true);
-          $hsl[] = $resB;
-
-          $hitEsb[] = [
-            'request' => json_decode($string_json),
-            'response' => $resB
-          ];
+          $hsl[] = json_decode($res->getBody()->getContents(), true);
         //first
 
 
@@ -516,7 +509,7 @@ class ConnectedExternalAppsNPK{
             $vparam .= $req_type; // IF_FLAG
           }
           $vparam .= '^'.$listA[$config['head_tab_detil_id']]; // ID_CARGO
-          $packageNameParent = DB::connection('mdm')->select(DB::raw('SELECT (CASE WHEN B.PACKAGE_NAME IS NULL THEN A.PACKAGE_NAME ELSE B.PACKAGE_NAME END) PACKAGE_NAME FROM TM_PACKAGE A LEFT JOIN TM_PACKAGE B ON B.PACKAGE_CODE = A.PACKAGE_PARENT_CODE WHERE A.PACKAGE_ID ='.$list->dtl_pkg_id));
+          $packageNameParent = DB::connection('mdm_ilcs')->select(DB::raw('SELECT (CASE WHEN B.PACKAGE_NAME IS NULL THEN A.PACKAGE_NAME ELSE B.PACKAGE_NAME END) PACKAGE_NAME FROM TM_PACKAGE A LEFT JOIN TM_PACKAGE B ON B.PACKAGE_CODE = A.PACKAGE_PARENT_CODE WHERE A.PACKAGE_ID ='.$list->dtl_pkg_id));
           $packageNameParent = $packageNameParent[0];
           $packageNameParent = $packageNameParent->package_name;
           $vparam .= '^'.$packageNameParent; // PKG_NAME
@@ -581,7 +574,7 @@ class ConnectedExternalAppsNPK{
           $vparam .= '^201'; // id_Port
 
           $string_json = '{
-              "saveCargoNpkInterfaceRequest": {
+              "savecargoNpkInterfaceRequest": {
                   "esbHeader": {
                       "externalId": "2",
                       "timestamp": "2"
@@ -594,7 +587,7 @@ class ConnectedExternalAppsNPK{
                   }
               }
           }';
-          $string_json_arr[] = json_decode($string_json);
+          $string_json_arr[] = $string_json;
 
           $username="npk_billing";
           $password ="npk_billing";
@@ -614,31 +607,20 @@ class ConnectedExternalAppsNPK{
             return $e->getResponse();
           }
 
-          $resB = json_decode($res->getBody()->getContents(), true);
-          $hsl[] = $resB;
-
-          $hitEsb[] = [
-            'request' => json_decode($string_json),
-            'response' => $resB
-          ];
+          $hsl[] = json_decode($res->getBody()->getContents(), true);
         }
 
         $respn[] = $hsl;
       }
-      return [
-        'result' => 'Success',
-        'hitEsb' => $hitEsb
-        // 'response' => $respn,
-        // 'json' => $string_json_arr
-      ];
+      return ['result' => 'Success', 'response' => $respn, 'json' => $string_json_arr];
       // return ['result' => 'Success', 'json' => $string_json_arr];
     }
 
     public static function sendUperPutReceipt($uper_id, $pay){
-      $uperH = TxHdrUper::find($uper_id);
-      $branch = DB::connection('mdm')->table('TM_BRANCH')->where('branch_id',$uperH->uper_branch_id)->where('branch_code',$uperH->uper_branch_code)->get();
+      $uperH = TxHdrUper_ilcs::find($uper_id);
+      $branch = DB::connection('mdm_ilcs')->table('TM_BRANCH')->where('branch_id',$uperH->uper_branch_id)->where('branch_code',$uperH->uper_branch_code)->get();
       $branch = $branch[0];
-      $bank = DB::connection('mdm')->table('TM_BANK')->where('bank_code',$pay->pay_bank_code)->where('branch_id',$pay->pay_branch_id)->where('branch_code',$uperH->uper_branch_code)->get();
+      $bank = DB::connection('mdm_ilcs')->table('TM_BANK')->where('bank_code',$pay->pay_bank_code)->where('branch_id',$pay->pay_branch_id)->where('branch_code',$uperH->uper_branch_code)->get();
       $bank = $bank[0];
 
       $endpoint_url=config('endpoint.sendUperPutReceipt');
@@ -758,10 +740,10 @@ class ConnectedExternalAppsNPK{
     }
 
     public static function sendNotaPutReceipt($nota_id, $pay){
-      $notaH = TxHdrNota::find($nota_id);
-      $branch = DB::connection('mdm')->table('TM_BRANCH')->where('branch_id',$notaH->nota_branch_id)->where('branch_code',$notaH->nota_branch_code)->get();
+      $notaH = TxHdrNota_ilcs::find($nota_id);
+      $branch = DB::connection('mdm_ilcs')->table('TM_BRANCH')->where('branch_id',$notaH->nota_branch_id)->where('branch_code',$notaH->nota_branch_code)->get();
       $branch = $branch[0];
-      $bank = DB::connection('mdm')->table('TM_BANK')->where('bank_code',$pay->pay_bank_code)->where('branch_id',$pay->pay_branch_id)->where('branch_code',$notaH->nota_branch_code)->get();
+      $bank = DB::connection('mdm_ilcs')->table('TM_BANK')->where('bank_code',$pay->pay_bank_code)->where('branch_id',$pay->pay_branch_id)->where('branch_code',$notaH->nota_branch_code)->get();
       $bank = $bank[0];
 
       $endpoint_url=config('endpoint.sendNotaPutReceipt');
@@ -939,7 +921,7 @@ class ConnectedExternalAppsNPK{
                 "responseMessage": ""
                 },
                 "esbBody": {
-                    "truckId": "'.$input['truck_id'].'",
+                    "truckId": "'.$input['truck_plat_no'].'",
                     "truckNumber": "'.$input['truck_plat_no'].'",
                     "rfidCode": "'.$input['truck_rfid_code'].'",
                     "customerName": "'.$input['customer_name'].'",
@@ -994,7 +976,7 @@ class ConnectedExternalAppsNPK{
               },
               "esbBody":   {
                               "idTerminal":"201",
-                              "tid":"'.$input['truck_id'].'",
+                              "tid":"'.str_replace(' ','',$input['truck_plat_no']).'",
                               "truckNumber":"'.str_replace(' ','',$input['truck_plat_no']).'"
                       },
               "esbSecurity": {
@@ -1032,12 +1014,9 @@ class ConnectedExternalAppsNPK{
         }
       }
       $results = json_decode($res->getBody()->getContents(), true);
-
-      if(isset($results['getTruckResponse']['esbBody']['results'][0]) and isset($results['getTruckResponse']['esbBody']['results'][0]['idTruck'])){
-        DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',str_replace(' ','',$input['truck_plat_no']))->update([
-          "truck_id_seq" => $results['getTruckResponse']['esbBody']['results'][0]['idTruck']
-        ]);
-      }
+      DB::connection('mdm_ilcs')->table('TM_TRUCK')->where('truck_id',str_replace(' ','',$input['truck_plat_no']))->update([
+        "truck_id_seq" => $results['getTruckResponse']['esbBody']['results'][0]['idTruck']
+      ]);
       $res = [
         "request" => json_decode($string_json, true),
         "response" => $results
@@ -1048,11 +1027,11 @@ class ConnectedExternalAppsNPK{
     public static function closeTCA($input){
       $endpoint_url=config('endpoint.closeTCA');
 
-      $terminal = DB::connection('mdm')->table('TM_TERMINAL')->where('terminal_code', $input['tca_terminal_code'])->get();
+      $terminal = DB::connection('mdm_ilcs')->table('TM_TERMINAL')->where('terminal_code', $input['tca_terminal_code'])->get();
       $terminal = $terminal[0];
-      $truck = DB::connection('mdm')->table('TM_TRUCK')->where('truck_id', $input['tca_truck_id'])->get();
+      $truck = DB::connection('mdm_ilcs')->table('TM_TRUCK')->where('truck_id', $input['tca_truck_id'])->get();
       if (count($truck) == 0) {
-        return ["Success"=>false, 'result_msg' => 'Fail, not found '.$input['tca_truck_id'].' on mdm.tm_truck'];
+        return ["Success"=>false, 'result_msg' => 'Fail, not found '.$input['tca_truck_id'].' on mdm_ilcs.tm_truck'];
       }
       $truck = $truck[0];
 
@@ -1067,7 +1046,7 @@ class ConnectedExternalAppsNPK{
                 "responseMessage": ""
                 },
                 "esbBody": {
-                  "vTid": "'.$truck->truck_plat_no.'",
+                  "vTid": "'.$truck->truck_id_seq.'",
                   "vNoRequest": "'.$input['tca_req_no'].'",
                   "vBlNumber": "'.$input['tca_bl'].'",
                   "vIdTerminal": "'.$terminal->terminal_id.'"
@@ -1095,28 +1074,7 @@ class ConnectedExternalAppsNPK{
           echo $e->getResponse() . "\n";
         }
       }
-
-      $response = json_decode($res->getBody()->getContents(),TRUE);
-      $success  = $response["closeTCAInterfaceResponse"]["esbHeader"]["responseCode"];
-      if (isset($response["closeTCAInterfaceResponse"]["esbBody"])) {
-        $msg      = $response["closeTCAInterfaceResponse"]["esbBody"]["vMsg"];
-      }
-
-      if ($success == "F") {
-        return ["Success" => false, "message" => "Data Tidak Ditemukan"];
-      } else {
-        if ($msg == "NOT OK") {
-          return ["Success" => false, "message" => "Data Gagal di Hapus/ TCA Sedang Berjalan"];
-        } else {
-          $hdr       = DB::connection('omcargo')->table('TX_HDR_TCA')->where('TCA_REQ_NO', $input['tca_req_no'])->first();
-          $whereUp   = [
-            // 'TCA_HDR_ID' => $hdr->tca_id,
-            'TCA_TRUCK_ID'=> $input['tca_truck_id']
-          ];
-          $updateDTL = DB::connection('omcargo')->table('TX_DTL_TCA')->where($whereUp)->update(["TCA_IS_ACTIVE" => 'N']);
-          return ["success"=> $success, "message" => "TCA Berhasil Di Hapus"];
-        }
-      }
+      return [json_decode($res->getBody()->getContents())];
     }
 
     public static function createTCA($input, $tca_id){
@@ -1208,15 +1166,15 @@ class ConnectedExternalAppsNPK{
 
     public static function sendNotaProforma($nota_id){
       $endpoint_url=config('endpoint.sendNotaProforma');
-      $find = TxHdrNota::find($nota_id);
-      $branch = DB::connection('mdm')->table('TM_BRANCH')->where('branch_id',$find->nota_branch_id)->where('branch_code',$find->nota_branch_code)->get();
+      $find = TxHdrNota_ilcs::find($nota_id);
+      $branch = DB::connection('mdm_ilcs')->table('TM_BRANCH')->where('branch_id',$find->nota_branch_id)->where('branch_code',$find->nota_branch_code)->get();
       $branch = $branch[0];
 
       $findU_uper_no = null;
       $findU_uper_terminal_code = '00';
       $findU_uper_amount = null;
 
-      $findU = TxHdrUper::where('uper_req_no', $find->nota_req_no)->where('uper_cust_id', $find->nota_cust_id)->first();
+      $findU = TxHdrUper_ilcs::where('uper_req_no', $find->nota_req_no)->where('uper_cust_id', $find->nota_cust_id)->first();
       if (!empty($findU)) {
         $findU_uper_no = $findU->uper_no;
         // $findU_uper_terminal_code = $findU->uper_terminal_code;
@@ -1327,7 +1285,7 @@ class ConnectedExternalAppsNPK{
          "branchAccount":"'.$branchAccount.'",
          "statusCetak":"",
          "statusKirimEmail":"",
-         "amountDasarPenghasilan":"'.$find->nota_dpp.'",
+         "amountDasarPeng_ilcshasilan":"'.$find->nota_dpp.'",
          "amountMaterai":null,
          "ppn10Persen":"'.$find->nota_ppn.'",
          "statusKoreksi":"",
@@ -1396,8 +1354,8 @@ class ConnectedExternalAppsNPK{
             "interfaceLineAttribute2":"'.$dateIn.'",
             "interfaceLineAttribute3":"'.$dateOut.'",
             "interfaceLineAttribute4":"'.$masa11.'",
-            "interfaceLineAttribute5":"'.$masa2.'",
-            "interfaceLineAttribute6":"'.$masa12.'",
+            "interfaceLineAttribute5":"'.$masa12.'",
+            "interfaceLineAttribute6":"'.$masa2.'",
             "interfaceLineAttribute7":"'.$hitM1.'",
             "interfaceLineAttribute8":"'.$hitM2.'",
             "interfaceLineAttribute9":"",
@@ -1507,10 +1465,10 @@ class ConnectedExternalAppsNPK{
     }
 
     public static function notaProformaPutApply($nota_id, $pay){
-      $notaH = TxHdrNota::find($nota_id);
-      $branch = DB::connection('mdm')->table('TM_BRANCH')->where('branch_id',$notaH->nota_branch_id)->where('branch_code',$notaH->nota_branch_code)->get();
+      $notaH = TxHdrNota_ilcs::find($nota_id);
+      $branch = DB::connection('mdm_ilcs')->table('TM_BRANCH')->where('branch_id',$notaH->nota_branch_id)->where('branch_code',$notaH->nota_branch_code)->get();
       $branch = $branch[0];
-      $bank = DB::connection('mdm')->table('TM_BANK')->where('bank_code',$pay->pay_bank_code)->where('branch_id',$pay->pay_branch_id)->get();
+      $bank = DB::connection('mdm_ilcs')->table('TM_BANK')->where('bank_code',$pay->pay_bank_code)->where('branch_id',$pay->pay_branch_id)->get();
       $bank = $bank[0];
 
       $endpoint_url=config('endpoint.notaProformaPutApply');
@@ -1582,7 +1540,7 @@ class ConnectedExternalAppsNPK{
     }
 
     public static function uperSimkeuCek($input){
-      $cekUperPaid = TxHdrUper::where('uper_no',$input['uper_no'])->where('uper_paid', 'Y')->count();
+      $cekUperPaid = TxHdrUper_ilcs::where('uper_no',$input['uper_no'])->where('uper_paid', 'Y')->count();
       if ($cekUperPaid > 0) {
         return ['result' => "Info, uper already paid!", "Success" => true];
       }
@@ -1627,8 +1585,8 @@ class ConnectedExternalAppsNPK{
         return ['Success' => true, 'result' => 'Data dalam antrian, silahkan coba beberapa saat lagi... '.$results['inquiryStatusReceiptResponse']['esbHeader']['responseMessage']];
       }else if ($results['inquiryStatusReceiptResponse']['esbHeader']['responseCode'] == 1) {
         if ($results['inquiryStatusReceiptResponse']['esbBody']['details'][0]['statusReceipt'] == 'S') {
-          TxHdrUper::where('uper_no',$input['uper_no'])->update(['uper_paid' => 'Y']);
-          $upr = TxHdrUper::where('uper_no',$input['uper_no'])->get();
+          TxHdrUper_ilcs::where('uper_no',$input['uper_no'])->update(['uper_paid' => 'Y']);
+          $upr = TxHdrUper_ilcs::where('uper_no',$input['uper_no'])->get();
           $dt = [
             'req_no' => $upr[0]->uper_req_no,
             'uper_paid_date' => $upr[0]->uper_paid_date
@@ -1636,7 +1594,7 @@ class ConnectedExternalAppsNPK{
           $sendRequestBooking = UperRequest::sendRequestBooking($dt);
           return ['result' => $results['inquiryStatusReceiptResponse']['esbBody']['details'][0]['statusReceiptMsg'], 'uper_no' => $input['uper_no'], 'sendRequestBooking' => $sendRequestBooking];
         }else if($results['inquiryStatusReceiptResponse']['esbBody']['details'][0]['statusReceipt'] == 'F'){
-          // TxHdrUper::where('uper_no',$input['uper_no'])->update(['uper_paid' => 'F']);
+          // TxHdrUper_ilcs::where('uper_no',$input['uper_no'])->update(['uper_paid' => 'F']);
           return ['Success' => false, 'result' => $results['inquiryStatusReceiptResponse']['esbBody']['details'][0]['statusReceiptMsg'], 'uper_no' => $input['uper_no']];
         }else{
           return ['Success' => true, 'result' => 'Data dalam antrian, silahkan coba beberapa saat lagi... '. $results['inquiryStatusReceiptResponse']['esbBody']['details'][0]['statusReceiptMsg'], 'uper_no' => $input['uper_no']];
@@ -1687,10 +1645,10 @@ class ConnectedExternalAppsNPK{
         return ['Success' => false, 'result' => $results['inquiryStatusLunasResponse']['esbHeader']['responseMessage'], 'esbRes' => $results];
       }else if ($results['inquiryStatusLunasResponse']['esbHeader']['responseCode'] == 1) {
         if ($results['inquiryStatusLunasResponse']['esbBody']['details'][0]['statusLunas'] == 'S') {
-          TxHdrNota::where('nota_no',$input['nota_no'])->update(['nota_paid' => 'Y']);
+          TxHdrNota_ilcs::where('nota_no',$input['nota_no'])->update(['nota_paid' => 'Y']);
           return ['result' => 'Nota is paid', 'nota_no' => $input['nota_no'], 'esbRes' => $results];
         }else if ($results['inquiryStatusLunasResponse']['esbBody']['details'][0]['statusLunas'] == 'F') {
-          // TxHdrNota::where('nota_no',$input['nota_no'])->update(['nota_paid' => 'F']);
+          // TxHdrNota_ilcs::where('nota_no',$input['nota_no'])->update(['nota_paid' => 'F']);
           return ['Success' => false, 'result' => 'Nota is failed', 'nota_no' => $input['nota_no'], 'esbRes' => $results];
         }else{
           return ['Success' => false, 'result' => 'Nota sending to simkeu!', 'nota_no' => $input['nota_no'], 'esbRes' => $results];

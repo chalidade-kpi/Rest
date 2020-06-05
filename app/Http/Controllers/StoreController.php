@@ -25,6 +25,8 @@ use App\Models\Mdm\TmTruckCompany;
 use App\Models\OmCargo\TxHdrBm;
 use App\Models\OmCargo\TxHdrRec;
 
+use App\Helper\Jbi\JbiRequestBooking;
+
 class StoreController extends Controller
 {
     /**
@@ -73,6 +75,8 @@ class StoreController extends Controller
         $connection = 'omcargo';
       }else if ($branch_id == 4) {
         $connection = 'omuster';
+      }else if ($branch_id == 10){
+        $connection = 'omuster_ilcs';
       }
       DB::connection($connection)->table('TH_LOGS_API_STORE')->insert([
         "create_date" => \DB::raw("TO_DATE('".Carbon::now()->format('Y-m-d H:i:s')."', 'YYYY-MM-DD HH24:mi:ss')"),
@@ -198,6 +202,23 @@ class StoreController extends Controller
 
     // NPKS
 
+    // Start JBI
+    function sendRequestJBI($input, $request){
+        return JbiRequestBooking::sendRequestJBI($input);
+      }
+
+    function approvalRequestJBI($input, $request){
+      return JbiRequestBooking::approvalRequestJBI($input);
+    }
+
+    function approvalProformaJBI($input, $request){
+      return JbiRequestBooking::approvalProformaJBI($input);
+    }
+
+    function storePaymentJBI($input, $request){
+      return JbiRequestBooking::storePaymentJBI($input);
+    }
+
     public function testview_file(){
       $file = file_get_contents(url("omcargo/tx_payment/5/users.png"));
       return base64_encode($file);
@@ -224,15 +245,18 @@ class StoreController extends Controller
     }
 
     function truckRegistration($input){
-      $cekoldtmtruckcompany = DB::connection('mdm')->table('TM_TRUCK')->where('truck_cust_id',$input['truck_cust_id'])->first();
-      if (empty($cekoldtmtruckcompany) or !is_numeric($cekoldtmtruckcompany->truck_cust_id)) {
-        $new = new TmTruckCompany;
-        $new->comp_name = $input['truck_cust_name'];
-        $new->comp_address = $input['truck_cust_address'];
-        $new->comp_branch_id = $input['truck_branch_id'];
-        $new->comp_branch_code = $input['truck_branch_code'];
-        $new->save();
-        $input['truck_cust_id'] = $new->comp_id;
+      $user = json_decode(json_encode($input["user"]), TRUE);
+      if (!is_numeric($input['truck_cust_id'])) {
+        $cekoldtmtruckcompany = DB::connection('mdm')->table('TM_TRUCK')->where('truck_cust_id',$input['truck_cust_id'])->first();
+        if (empty($cekoldtmtruckcompany) or !is_numeric($cekoldtmtruckcompany->truck_cust_id)) {
+          $new = new TmTruckCompany;
+          $new->comp_name = $input['truck_cust_name'];
+          $new->comp_address = $input['truck_cust_address'];
+          $new->comp_branch_id = $input['truck_branch_id'];
+          $new->comp_branch_code = $input['truck_branch_code'];
+          $new->save();
+          $input['truck_cust_id'] = $new->comp_id;
+        }
       }
 
       $terminal = DB::connection('mdm')->table('TM_TERMINAL')->where([
@@ -251,9 +275,11 @@ class StoreController extends Controller
         "date" => date('d-m-Y', strtotime($input['truck_plat_exp']))
       ];
 
-      $datenow    = Carbon::now()->format('Y-m-d H:i:s');
+      // $datenow    = Carbon::now()->format('Y-m-d H:i:s', '+7 hour');
+      $datenow    = date('Y-m-d H:i:s', strtotime('+7 hour'));
       $set_data_self = [
-        "truck_create_by" => $input["user"]->user_id,
+        "truck_create_by" => $user["user_id"],
+        "truck_create_by_name" => $user["user_name"],
         "truck_create_date" => \DB::raw("TO_DATE('".$datenow."', 'YYYY-MM-DD HH24:mi:ss')"),
         "truck_id" => str_replace(' ','',$input['truck_plat_no']),
         "truck_name" => $input['truck_name'],
@@ -301,6 +327,7 @@ class StoreController extends Controller
       }
       if ($head->tca_req_type  == 1) {
         $reques = DB::connection('omcargo')->table('TX_HDR_REC')->where('rec_no', $head->tca_req_no)->get();
+        if (empty($reques)) { return [ 'Success' => false, 'result' => 'not found '.$head->tca_req_no.' on rec' ]; }
         $reques = $reques[0];
         $vvdID = $reques->rec_vvd_id;
         $vvdName = $reques->rec_vessel_name;
@@ -308,6 +335,7 @@ class StoreController extends Controller
         $vvdVO = $reques->rec_voyout;
       }else if ($head->tca_req_type  == 2) {
         $reques = DB::connection('omcargo')->table('TX_HDR_DEL')->where('del_no', $head->tca_req_no)->get();
+        if (empty($reques)) { return [ 'Success' => false, 'result' => 'not found '.$head->tca_req_no.' on del' ]; }
         $reques = $reques[0];
         $vvdID = $reques->del_vvd_id;
         $vvdName = $reques->del_vessel_name;
@@ -315,6 +343,7 @@ class StoreController extends Controller
         $vvdVO = $reques->del_voyout;
       }else if ($head->tca_req_type  == 3) {
         $reques = DB::connection('omcargo')->table('TX_HDR_BM')->where('bm_no', $head->tca_req_no)->get();
+        if (empty($reques)) { return [ 'Success' => false, 'result' => 'not found '.$head->tca_req_no.' on bm' ]; }
         $reques = $reques[0];
         $vvdID = $reques->bm_vvd_id;
         $vvdName = $reques->bm_vessel_name;
@@ -483,6 +512,18 @@ class StoreController extends Controller
 
   function hitRename($input) {
     return ConnectedExternalAppsNPKS::getUpdateRename($input);
+  }
+
+  function hitRealNPKS($input) {
+    return ConnectedExternalAppsNPKS::realisationByHit($input);
+  }
+
+  function hitPlacementNPKS($input) {
+    return ConnectedExternalAppsNPKS::placementByHit($input);
+  }
+
+  function hitRenameNPKS($input) {
+    return ConnectedExternalAppsNPKS::renameByHit($input);
   }
 
 }
