@@ -845,7 +845,9 @@ class SendTos{
                 'A.STRIPP_DTL_VIA_NAME',
                 'A.STRIPP_EXT_DATE',
                 'A.STRIPP_FL_REAL',
-                'A.STRIPP_HDR_ID'
+                'A.STRIPP_HDR_ID',
+                'A.REC_CARGO_DTL_SI_NO',
+                'A.REC_CARGO_DTL_QTY'
             )
             ->where('A.STRIPP_HDR_ID', $request_hdr_id)
             ->get();
@@ -879,7 +881,10 @@ class SendTos{
                 'STRIP_DTL_ACTIVE'            => $data->stripp_dtl_isactive,
                 'STRIP_DTL_ORIGIN'            => '',
                 'STRIP_DTL_CANCELLED'         => $data->stripp_dtl_iscancelled,
-                'STRIP_DTL_COUNTER'           => ''
+                'STRIP_DTL_COUNTER'           => '',
+                'STRIP_DTL_VIA'               => $data->stripp_dtl_via,
+                'STRIP_DTL_BL_SI'             => $data->rec_cargo_dtl_si_no,
+                'STRIP_DTL_QTY'               => $data->rec_cargo_dtl_qty
             ];
 
             DB::connection('npks_ilcs')->table('TX_REQ_STRIP_DTL')->insert($dtl);
@@ -1010,7 +1015,10 @@ class SendTos{
                         'A.STUFF_DTL_END_DATE',
                         'A.STUFF_DTL_ISCANCELLED',
                         'A.STUFF_DTL_STACKING_AREA',
-                        'A.STUFF_FL_REAL'
+                        'A.STUFF_FL_REAL',
+                        'A.STUFF_DTL_BL_SI',
+                        'A.STUFF_DTL_QTY'
+
                   )
                   ->where('A.STUFF_HDR_ID', $request_hdr_id)
                   ->get();
@@ -1037,7 +1045,9 @@ class SendTos{
                 $dtl['STUFF_DTL_START_STUFF_PLAN']  = $valuex->stuff_dtl_start_date;
                 $dtl['STUFF_DTL_CANCELLED']         = $valuex->stuff_dtl_iscancelled;
                 $dtl['STUFF_DTL_COUNTER']           = 1;
-                $dtl['STUFF_DTL_VIA']               = $valuex->stuff_dtl_via_name;
+                $dtl['STUFF_DTL_VIA']               = $valuex->stuff_dtl_via;
+                $dtl['STUFF_DTL_BL_SI']             = $valuex->stuff_dtl_bl_si;
+                $dtl['STUFF_DTL_QTY']               = $valuex->stuff_dtl_qty;
             DB::connection('npks_ilcs')->table('TX_REQ_STUFF_DTL')->insert($dtl);
         }
 
