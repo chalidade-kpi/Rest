@@ -87,8 +87,8 @@ class CanclHelper{
 				$reqDtlQty = 1;
 			}else{
 				$reqDtlQty = $reqDtl[$config['DTL_QTY']]-$reqDtl[$config['DTL_QTY_CANC']];
-                                if($input['nota_id'] == 21) { $reqDtlQty = $reqDtlQty-$reqDtl['rec_cargo_dtl_real_qty']; }
-                                else if($input['nota_id'] == 22) { $reqDtlQty = $reqDtlQty-$reqDtl['del_cargo_dtl_real_qty']; }
+          if($input['nota_id'] == 21) { $reqDtlQty = $reqDtlQty-$reqDtl['rec_cargo_dtl_real_qty']; }
+              else if($input['nota_id'] == 22) { $reqDtlQty = $reqDtlQty-$reqDtl['del_cargo_dtl_real_qty']; }
 			}
 			if ($list->cancl_qty > $reqDtlQty) {
 				return [
@@ -119,7 +119,8 @@ class CanclHelper{
 			$oldDtl = (array)$oldDtl;
 				$upd = [
 					$config['DTL_IS_CANCEL'] => 'Y',
-					$config['DTL_QTY_CANC'] => $list->cancl_qty + $oldDtl[$config['DTL_QTY_CANC']]
+					$config['DTL_QTY_CANC'] => $list->cancl_qty
+					// $config['DTL_QTY_CANC'] => $list->cancl_qty + $oldDtl[$config['DTL_QTY_CANC']]
 				];
 			}
 			DB::connection('omuster')->table($config['head_tab_detil'])->where([

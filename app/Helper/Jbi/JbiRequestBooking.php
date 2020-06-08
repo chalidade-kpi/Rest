@@ -103,6 +103,12 @@ class JbiRequestBooking{
 					foreach ($tarifD as $list) {
 						$countLine++;
 						$list = (array)$list;
+						
+						#jika req barang dan komponen tariff pass truck ambil qty_truck
+						if($list['package_id'] == 5 && $list['group_tariff_id'] == 3){
+							$list["qty"] = $list["qty_truck"];
+						}
+
 						$set_data = [
 							"dtl_group_tariff_id" => $list["group_tariff_id"],
 							"dtl_group_tariff_name" => $list["group_tariff_name"],
