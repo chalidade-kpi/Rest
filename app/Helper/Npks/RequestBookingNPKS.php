@@ -488,7 +488,7 @@ class RequestBookingNPKS{
             			'reqCanc' => (array)$cekIsCanc
             		];
             		$sendInvAR = EInvo::sendInvPay($arr);
-           	        $getNota->nota_status = 5; 
+           	        $getNota->nota_status = 5;
            	        $getNota->nota_paid = 'Y';
            	        $getNota->save();
             	}

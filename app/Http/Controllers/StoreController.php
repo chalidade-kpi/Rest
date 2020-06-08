@@ -307,8 +307,14 @@ class StoreController extends Controller
         DB::connection('mdm')->table('TM_TRUCK')->insert($set_data_self);
         $res = ConnectedExternalAppsNPK::truckRegistration($set_data);
       }else{
-        $tid = DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$input['truck_id'])->first();
-        $set_data['truck_id'] = $tid->truck_id;
+        if (is_numeric($input['truck_id'])) {
+          $tid     = DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$input['truck_id'])->first();
+          $truckId = $tid->truck_id;
+        } else {
+          $tid     = DB::connection('mdm')->table('TM_TRUCK')->where('truck_plat_no',$input['truck_id'])->first();
+          $truckId = $tid->truck_id;
+        }
+        $set_data['truck_id'] = $truckId;
         DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$input['truck_id'])->update($set_data_self);
         $res = ConnectedExternalAppsNPK::updateTid($set_data);
       }
