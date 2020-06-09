@@ -806,7 +806,7 @@ class PrintAndExport{
 
     $getRpt = DB::connection('omcargo')->table('V_RPT_DEBITUR');
     if (!empty($branchId)) {
-      $getRpt->where('NOTA_BRANCH_ID',$branchId);
+      $getRpt->where('BRANCH_ID',$branchId);
     }
     if (!empty($branchCode)) {
       $getRpt->where('BRANCH_CODE',$branchCode);

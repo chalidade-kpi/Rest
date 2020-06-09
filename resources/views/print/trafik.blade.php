@@ -107,36 +107,36 @@ a{
     <td>{{$data->nota_date}}</td>
     <td>{{$data->debitur}}</td>
     <td>{{$data->pbm}}</td>
-    <td>{{$data->nota_no}}</td>
-    <td>{{number_format($data->steve_amt)}}</td>
+    <td>{{$data->steve_nota_no}}</td>
+    <td><?php echo $data->steve_amt; ?></td>
     <td>{{$data->steve_cmdt}}</td>
-    <td>{{$data->steve_unit}}</td>
-    <td>{{number_format($data->steve_qty)}}</td>
-    <td>{{$data->nota_no}}</td>
-    <td>{{number_format($data->cargo_amt)}}</td>
+    <td><?php echo $data->steve_unit; ?></td>
+    <td><?php echo $data->steve_qty; ?></td>
+    <td>{{$data->cargo_nota_no}}</td>
+    <td><?php echo $data->cargo_amt; ?></td>
     <td>{{$data->cargo_cmdt}}</td>
-    <td>{{$data->cargo_unit}}</td>
-    <td>{{number_format($data->cargo_qty)}}</td>
-    <td>{{$data->nota_no}}</td>
-    <td>{{number_format($data->ang_lang_amt)}}</td>
+    <td><?php echo $data->cargo_unit; ?></td>
+    <td><?php echo $data->cargo_qty; ?></td>
+    <td>{{$data->ang_lang_nota_no}}</td>
+    <td><?php echo $data->ang_lang_amt; ?></td>
     <td>{{$data->ang_lang_cmdt}}</td>
-    <td>{{$data->ang_lang_unit}}</td>
-    <td>{{number_format($data->ang_lang_qty)}}</td>
-    <td>{{$data->nota_no}}</td>
-    <td>{{number_format($data->sewa_alat_amt)}}</td>
+    <td><?php echo $data->ang_lang_unit; ?></td>
+    <td><?php echo $data->ang_lang_qty; ?></td>
+    <td>{{$data->sewa_alat_nota_no}}</td>
+    <td><?php echo $data->sewa_alat_amt; ?></td>
     <td>{{$data->sewa_alat_cmdt}}</td>
-    <td>{{$data->sewa_alat_unit}}</td>
-    <td>{{number_format($data->sewa_alat_qty)}}</td>
-    <td>{{$data->nota_no}}</td>
-    <td>{{number_format($data->retr_alat_amt)}}</td>
+    <td><?php echo $data->sewa_alat_unit; ?></td>
+    <td><?php echo $data->sewa_alat_qty; ?></td>
+    <td>{{$data->retr_alat_nota_no}}</td>
+    <td><?php echo $data->retr_alat_amt; ?></td>
     <td>{{$data->retr_alat_cmdt}}</td>
-    <td>{{$data->retr_alat_unit}}</td>
-    <td>{{number_format($data->retr_alat_qty)}}</td>
-    <td>{{$data->nota_no}}</td>
-    <td>{{number_format($data->pfs_amt)}}</td>
+    <td><?php echo $data->retr_alat_unit; ?></td>
+    <td><?php echo $data->retr_alat_qty; ?></td>
+    <td>{{$data->pfs_nota_no}}</td>
+    <td><?php echo $data->pfs_amt; ?></td>
     <td>{{$data->pfs_cmdt}}</td>
-    <td>{{$data->pfs_unit}}</td>
-    <td>{{number_format($data->pfs_qty)}}</td>
+    <td><?php echo $data->pfs_unit; ?></td>
+    <td><?php echo $data->pfs_qty; ?></td>
   </tr>
   @endforeach
 

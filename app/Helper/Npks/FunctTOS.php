@@ -123,7 +123,7 @@ class FunctTOS{
 		} else {
 			$dtlLoop = DB::connection('omuster')->table($config['head_tab_detil'])->where($config['head_forigen'], $input['id'])->whereIn($config['DTL_FL_REAL'], $config['DTL_FL_REAL_S']);
 		}
-		if (!empty($config['DTL_IS_CANCEL'])) {
+		if (!empty($config['DTL_IS_CANCEL']) AND !in_array($input['nota_id'], [21,22])) {
 			$dtlLoop = $dtlLoop->where($config['DTL_IS_CANCEL'],'N');
 		}
 		$dtlLoop = $dtlLoop->get();

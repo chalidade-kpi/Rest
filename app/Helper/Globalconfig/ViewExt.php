@@ -416,7 +416,7 @@ class ViewExt{
     return ["link" => $qrcode];
   }
 
-  function getDebitur($input, $request) {
+  public static function getDebitur($input, $request) {
     $startDate = date("Y-m-d", strtotime($input["startDate"]));
     $endDate = date("Y-m-d", strtotime($input["endDate"]));
 
