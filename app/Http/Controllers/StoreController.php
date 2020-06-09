@@ -315,11 +315,9 @@ class StoreController extends Controller
           $truckId = $tid->truck_id;
         }
         $set_data['truck_id'] = $truckId;
-        DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$input['truck_id'])->update($set_data_self);
+        DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$truckId)->update($set_data_self);
         $res = ConnectedExternalAppsNPK::updateTid($set_data);
       }
-        $tid = DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$input['truck_id'])->first();
-        $set_data['truck_id'] = $tid->truck_id;
 
       $res['getTruckPrimaryIdTos'] = ConnectedExternalAppsNPK::getTruckPrimaryIdTos($set_data);
       return $res;
