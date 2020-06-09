@@ -13,7 +13,7 @@ class MasterContainer{
 		$check = DB::connection('mdm_ilcs')->table('TM_CONTAINER')->where('cont_no', $cont_no)->count();
 		// dd($check);
 		if ($check > 0) {
-			return [ "result" => "Error, nomor container sudah ada", "cont_no"=> $cont_no ];
+			return [ "success" => false, "result" => "Error, nomor container sudah ada", "cont_no"=> $cont_no ];
 		} else {
 			DB::connection('mdm_ilcs')->table('TM_CONTAINER')->insert([
 				'CONT_NO' => $input['CONT_NO'],
@@ -24,7 +24,7 @@ class MasterContainer{
 				'COMMODITY' => $input['COMMODITY'],
 				'CARGO_OWNER' => $input['CARGO_OWNER'],
 			]);
-		return [ "result" => "Success, store master container", "cont_no"=> $cont_no ];
+		return [ "success" => true, "result" => "Success, store master container", "cont_no"=> $cont_no ];
 		}
 
 	}
