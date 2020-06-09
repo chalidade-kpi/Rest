@@ -823,10 +823,10 @@ class BillingEngine {
       $newDt['plugging_unit_name'] = $plugging_unit_name;
       $response_detil[] = $newDt;
     }
-    // return $response_detil;
+
     return [
-      'TxProfileTariffHdr_ilcs' => $header,
-      'TsTariff_ilcs' => $response_detil
+      'TxProfileTariffHdr' => $header,
+      'TsTariff' => $response_detil
     ];
   }
 
