@@ -28,8 +28,8 @@ class RequestBookingNPKS{
 			}else{
 				$findReqNo = $findCanc->cancelled_no;
 				// Tambahan untuk ambil no nota lama
-				$getNotaNoReqCanc = DB::connection('omuster')->table('TX_HDR_NOTA')->where('NOTA_REQ_NO', $find[$config['head_no']])->first();
-				$getNotaNoReqCanc = $getNotaNoReqCanc->nota_no;
+				// $getNotaNoReqCanc = DB::connection('omuster')->table('TX_HDR_NOTA')->where('NOTA_REQ_NO', $find[$config['head_no']])->first();
+				// $getNotaNoReqCanc = $getNotaNoReqCanc->nota_no;
 			}
 			$query = "SELECT * FROM V_PAY_SPLIT WHERE booking_number= '".$findReqNo."'";
 			$tarifs = DB::connection('eng')->select(DB::raw($query));
@@ -46,12 +46,12 @@ class RequestBookingNPKS{
 				}
 
 				// Tambahan Untuk Koreksi
-				if (isset($getNotaNoReqCanc)) {
-					$sequence = DB::connection('omuster')->table("SYS.DUAL")->select("SEQ_TX_HDR_NOTA.NEXTVAL")->get();
-		      $sequence = $sequence[0]->nextval;
-					$headU->nota_id = $sequence;
-					$headU->nota_no = $tarif['tax_code'].substr($getNotaNoReqCanc,3);
-				}
+				// if (isset($getNotaNoReqCanc)) {
+				// 	$sequence = DB::connection('omuster')->table("SYS.DUAL")->select("SEQ_TX_HDR_NOTA.NEXTVAL")->get();
+		    //   $sequence = $sequence[0]->nextval;
+				// 	$headU->nota_id = $sequence;
+				// 	$headU->nota_no = $tarif['tax_code'].substr($getNotaNoReqCanc,3);
+				// }
 				$headU->app_id = $find['app_id'];
 				$headU->nota_group_id = $tarif['nota_id'];
 				$headU->nota_org_id = $tarif['branch_org_id'];
