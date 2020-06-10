@@ -123,7 +123,7 @@ class FunctTOS{
 		} else {
 			$dtlLoop = DB::connection('omuster')->table($config['head_tab_detil'])->where($config['head_forigen'], $input['id'])->whereIn($config['DTL_FL_REAL'], $config['DTL_FL_REAL_S']);
 		}
-		if (!empty($config['DTL_IS_CANCEL'])) {
+		if (!empty($config['DTL_IS_CANCEL']) AND !in_array($input['nota_id'], [21,22])) {
 			$dtlLoop = $dtlLoop->where($config['DTL_IS_CANCEL'],'N');
 		}
 		$dtlLoop = $dtlLoop->get();
@@ -687,10 +687,10 @@ class FunctTOS{
 	            "RECEIVING_DARI": "'.$dr->reff_name.'",
 	            "TANGGAL_LUNAS": "'.$nota_paid_date.'",
 	            "DI": "",
-							"REQ_DTL_VESSEL_NAME": "'.$head[$arr['config']['head_vessel_name']].'",
-							"REQ_DTL_VESSEL_CODE": "'.$head[$arr['config']['head_vessel_code']].'",
-							"REC_DTL_VOYIN": "'.$head[$arr['config']['head_vin']].'",
-							"REC_DTL_VOYOUT": "'.$head[$arr['config']['head_vout']].'",
+							"VESSEL_NAME": "'.$head[$arr['config']['head_vessel_name']].'",
+							"VESSEL_CODE": "'.$head[$arr['config']['head_vessel_code']].'",
+							"VOYIN": "'.$head[$arr['config']['head_vin']].'",
+							"VOYOUT": "'.$head[$arr['config']['head_vout']].'",
 							"PAYMENT_METHOD": "'.$head[$arr['config']['head_paymethod']].'",
 	            "BRANCH_ID" : "'.$head[$arr['config']['head_branch']].'"
 	          },

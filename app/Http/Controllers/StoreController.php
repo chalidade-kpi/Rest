@@ -26,6 +26,7 @@ use App\Models\OmCargo\TxHdrBm;
 use App\Models\OmCargo\TxHdrRec;
 
 use App\Helper\Jbi\JbiRequestBooking;
+use App\Helper\Jbi\MasterContainer;
 
 class StoreController extends Controller
 {
@@ -219,6 +220,10 @@ class StoreController extends Controller
       return JbiRequestBooking::storePaymentJBI($input);
     }
 
+    function storeMasterContainer($input, $request){
+      return MasterContainer::storeMasterContainer($input);
+    }
+
     public function testview_file(){
       $file = file_get_contents(url("omcargo/tx_payment/5/users.png"));
       return base64_encode($file);
@@ -307,13 +312,17 @@ class StoreController extends Controller
         DB::connection('mdm')->table('TM_TRUCK')->insert($set_data_self);
         $res = ConnectedExternalAppsNPK::truckRegistration($set_data);
       }else{
-        $tid = DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$input['truck_id'])->first();
-        $set_data['truck_id'] = $tid->truck_id;
-        DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$input['truck_id'])->update($set_data_self);
+        if (is_numeric($input['truck_id'])) {
+          $tid     = DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$input['truck_id'])->first();
+          $truckId = $tid->truck_id;
+        } else {
+          $tid     = DB::connection('mdm')->table('TM_TRUCK')->where('truck_plat_no',$input['truck_id'])->first();
+          $truckId = $tid->truck_id;
+        }
+        $set_data['truck_id'] = $truckId;
+        DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$truckId)->update($set_data_self);
         $res = ConnectedExternalAppsNPK::updateTid($set_data);
       }
-        $tid = DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$input['truck_id'])->first();
-        $set_data['truck_id'] = $tid->truck_id;
 
       $res['getTruckPrimaryIdTos'] = ConnectedExternalAppsNPK::getTruckPrimaryIdTos($set_data);
       return $res;

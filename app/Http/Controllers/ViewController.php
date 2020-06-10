@@ -25,7 +25,7 @@ use App\Helper\Npk\ConnectedExternalAppsNPK;
 use App\Helper\Npk\RequestTCA;
 
 use App\Helper\Jbi\JbiRequestBooking;
-
+use App\Helper\Jbi\BillingEngine as jbiBillingEngine;
 class ViewController extends Controller
 {
     /**
@@ -99,6 +99,10 @@ class ViewController extends Controller
     // BillingEngine
     function viewProfileTariff($input, $request) {
         return BillingEngine::viewProfileTariff($input);
+    }
+
+    function viewProfileTariffJBI($input, $request) {
+        return jbiBillingEngine::viewProfileTariff($input);
     }
 
     function viewCustomerProfileTariff($input, $request) {
