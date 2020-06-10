@@ -22,8 +22,7 @@ class MasterContainer{
  				'COMMODITY' => $input['COMMODITY'],
  				'CARGO_OWNER' => $input['CARGO_OWNER'],
  			]);
- 			return [ "success" => true, "result" => "Success, store master container", "cont_no"=> $cont_no ];
-			// return [ "success" => false, "result" => "Error, nomor container sudah ada", "cont_no"=> $cont_no ];
+ 			return [ "success" => true, "result" => "Success, update data container", "cont_no"=> $cont_no ];
 		} else {
 			DB::connection('mdm_ilcs')->table('TM_CONTAINER')->insert([
 				'CONT_NO' => $input['CONT_NO'],
@@ -34,7 +33,7 @@ class MasterContainer{
 				'COMMODITY' => $input['COMMODITY'],
 				'CARGO_OWNER' => $input['CARGO_OWNER'],
 			]);
-			return [ "success" => true, "result" => "Success, store master container", "cont_no"=> $cont_no ];
+			return [ "success" => true, "result" => "Success, simpan data container", "cont_no"=> $cont_no ];
 	}
 
 	}
