@@ -705,8 +705,10 @@ class GlobalHelper {
             $connect->where(strtoupper($field),"like", "%".ucwords(strtolower($input["query"]))."%");
           } else if(!empty($lower)) {
             $connect->where(strtoupper($field),"like", "%".strtolower($input["query"])."%");
+          } else if(empty($uper) AND empty($uper) AND empty($uper)) {
+
           } else {
-            $connect->where($input["field"], "like", "%".$input["query"]."%");
+            $connect->where($field, "like", "%".$input["query"]."%");
           }
         }
       } else {

@@ -373,46 +373,12 @@ class ViewExt{
   }
 
   public static function einvoiceLink($input) {
-    $endpoint_url="http://10.88.48.57:5555/restv2/inquiryData/getDataCetak";
-    $string_json = '{
-                   "getDataCetakRequest":{
-                      "esbHeader":{
-                         "internalId":"",
-                         "externalId":"EDI-2910201921570203666",
-                         "timestamp":"2019-10-29 21:57:020.36665400",
-                         "responseTimestamp":"",
-                         "responseCode":"",
-                         "responseMessage":""
-                      },
-                      "esbBody":{
-                         "kode":"billingedii",
-                         "tipe":"nota",
-                         "nota":"'.$input["nota_no"].'"
-                      }
-                   }
-                }';
+    $url = config('endpoint.linkInvoice').$input["nota_no"];
+    $ch  = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    $username="billing";
-    $password ="b1Llin9";
-    $client = new Client();
-    $options= array(
-      'auth' => [
-        $username,
-        $password
-      ],
-      'headers'  => ['content-type' => 'application/json', 'Accept' => 'application/json'],
-      'body' => $string_json,
-      "debug" => false
-    );
-    try {
-      $res = $client->post($endpoint_url, $options);
-    } catch (ClientException $e) {
-      return $e->getResponse();
-    }
-    $results  = json_decode($res->getBody()->getContents(), true);
-    $qrcode   = $results['getDataCetakResponse']['esbBody']['url'];
-    $qrcode = "https://eservice.indonesiaport.co.id/index.php/eservice/api/getdatacetak?kode=billingedii&tipe=nota&no=".$input["nota_no"]; //optional
-
+    $qrcode = curl_exec($ch);
     return ["link" => $qrcode];
   }
 
