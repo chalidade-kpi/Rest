@@ -26,6 +26,7 @@ use App\Models\OmCargo\TxHdrBm;
 use App\Models\OmCargo\TxHdrRec;
 
 use App\Helper\Jbi\JbiRequestBooking;
+use App\Helper\Jbi\MasterContainer;
 
 class StoreController extends Controller
 {
@@ -217,6 +218,10 @@ class StoreController extends Controller
 
     function storePaymentJBI($input, $request){
       return JbiRequestBooking::storePaymentJBI($input);
+    }
+
+    function storeMasterContainer($input, $request){
+      return MasterContainer::storeMasterContainer($input);
     }
 
     public function testview_file(){
