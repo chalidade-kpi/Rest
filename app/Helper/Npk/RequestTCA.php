@@ -37,6 +37,7 @@ class RequestTCA{
                 "truckcustname" => ''
             ];
             $tplat = $sheet->getCell('A'.$row)->getValue();
+            $tplat = preg_replace("/[^A-Za-z0-9 ]/", '', $tplat);
             $trck = \DB::connection('mdm')->table('TM_TRUCK')->where('TRUCK_PLAT_NO', strtoupper($tplat))->first();
             if (!empty($trck)) {
                 $d1 = date_create();
@@ -45,7 +46,7 @@ class RequestTCA{
                 $t1 = strtotime(Carbon::now()->format('Y-m-d'));
                 $t2 = strtotime($trck->truck_plat_exp);
                 $pm = $t2-$t1;
-                if ( $pm > 0 and $diff->d-7 > 0) {
+                if ( $pm > 0 and $diff->days-7 > 0) {
                     $data = [
                         "tid" => $trck->truck_id,
                         "trucktype" => $trck->truck_type,
