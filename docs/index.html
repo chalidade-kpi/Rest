@@ -1,1 +1,4480 @@
-Testing
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Lupi | Lumen Universal API</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <style type="text/css" media="screen">
+      .side-title {
+        font-size:16px;
+        font-weight: 700;
+        padding-left:20px;
+        padding-top:10px;
+      }
+      .side-item {
+        border:none;
+        border-radius: 0px;
+        font-size:14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="row wrapper" style="width:100%">
+      <div class="col-md-2 shadow-sm" id="sidebar" style="padding-right: 0px;">
+        <br>
+        <center><img src="assets/img/logo.png" alt="" style="width:150px"></center>
+        <br>
+        <div class="list-group" id="list-tab" role="tablist">
+          <h2 class="side-title">Getting Started</h2>
+          <a class="side-item list-group-item list-group-item-action active" id="about-list" data-toggle="list" href="#about" role="tab" aria-controls="about">About</a>
+          <a class="side-item list-group-item list-group-item-action" id="installation-list" data-toggle="list" href="#installation" role="tab" aria-controls="installation">Installation</a>
+          <a class="side-item list-group-item list-group-item-action" id="configuration-list" data-toggle="list" href="#configuration" role="tab" aria-controls="profile">Configuration</a>
+          <a class="side-item list-group-item list-group-item-action" id="how-to-consume-list" data-toggle="list" href="#how-to-consume" role="tab" aria-controls="profile">How to Consume</a>
+
+          <hr>
+          <h2 class="side-title">The Basic</h2>
+          <a class="side-item list-group-item list-group-item-action" id="index-function-list" data-toggle="list" href="#index-function" role="tab" aria-controls="messages">Index Funtion</a>
+          <a class="side-item list-group-item list-group-item-action" id="store-function-list" data-toggle="list" href="#store-function" role="tab" aria-controls="settings">Store Function</a>
+
+          <hr>
+          <h2 class="side-title">Index Function</h2>
+          <a class="side-item list-group-item list-group-item-action" id="showing-data-list" data-toggle="list" href="#showing-data" role="tab" aria-controls="messages">Showing Data</a>
+          <a class="side-item list-group-item list-group-item-action" id="start-limit-list" data-toggle="list" href="#start-limit" role="tab" aria-controls="settings">Start Limit</a>
+          <a class="side-item list-group-item list-group-item-action" id="where-statment-list" data-toggle="list" href="#where-statment" role="tab" aria-controls="settings">Where Statment</a>
+          <a class="side-item list-group-item list-group-item-action" id="joining-table-list" data-toggle="list" href="#joining-table" role="tab" aria-controls="settings">Joining Table</a>
+          <a class="side-item list-group-item list-group-item-action" id="selected-data-list" data-toggle="list" href="#selected-data" role="tab" aria-controls="settings">Selected Data</a>
+          <a class="side-item list-group-item list-group-item-action" id="group-data-list" data-toggle="list" href="#group-data" role="tab" aria-controls="settings">Group Data By</a>
+          <a class="side-item list-group-item list-group-item-action" id="order-data-list" data-toggle="list" href="#order-data" role="tab" aria-controls="settings">Order Data By</a>
+          <a class="side-item list-group-item list-group-item-action" id="raw-parameter-list" data-toggle="list" href="#raw-parameter" role="tab" aria-controls="settings">Raw Parameter</a>
+          <a class="side-item list-group-item list-group-item-action" id="view-header-detail-list" data-toggle="list" href="#view-header-detail" role="tab" aria-controls="settings">View Header Detail</a>
+          <hr>
+
+          <h2 class="side-title">Store Function</h2>
+          <a class="side-item list-group-item list-group-item-action" id="insert-data-list" data-toggle="list" href="#insert-data" role="tab" aria-controls="messages">Insert Data</a>
+          <a class="side-item list-group-item list-group-item-action" id="update-data-list" data-toggle="list" href="#update-data" role="tab" aria-controls="messages">Update Data</a>
+          <a class="side-item list-group-item list-group-item-action" id="delete-data-list" data-toggle="list" href="#delete-data" role="tab" aria-controls="messages">Delete Data</a>
+          <a class="side-item list-group-item list-group-item-action" id="store-header-detail-list" data-toggle="list" href="#store-header" role="tab" aria-controls="settings">Store Header Detail</a>
+          <a class="side-item list-group-item list-group-item-action" id="delete-header-detail-list" data-toggle="list" href="#delete-header" role="tab" aria-controls="settings">Delete Header Detail</a>
+          <hr>
+
+          <h2 class="side-title">Error Reporting</h2>
+          <a class="side-item list-group-item list-group-item-action" id="require-once-list" data-toggle="list" href="#require-once" role="tab" aria-controls="messages">Warning: require_once()</a>
+          <a class="side-item list-group-item list-group-item-action" id="whoops-list" data-toggle="list" href="#whoops" role="tab" aria-controls="messages">Whoops, looks like something went wrong</a>
+
+        </div>
+      </div>
+      <div class="col-md-10" id="content" style="min-height: 700px">
+        <div class="container" style="margin-top:20px;padding:20px;font-size:14px">
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-list">
+              <h1><font style="color: #f85351;">#</font> About</h1>
+              <hr>
+              <p>Lupi is a Universal API that builds over Laravel microservices (lumen). The API on this Lupi is reusable, and it seems like a starter API that you can modify as you want. Especially if you are familiar with Laravel, it's easy to read and modified Lupi. Lupi will cover almost all about the backend process and make the front-end more the fastest on the development process. The API in Lupi is dynamic, you can change parameters as you want and get the result. Let's try Lupi and share your experience</p>
+
+              <p>Foundation of Lupi is Lumen, it means all of Laravel syntax and function can be used to modify this API. You can using all of <a href="https://laravel.com/docs/7.x">Laravel </a> or <a href="https://lumen.laravel.com/docs/6.x/releases">Lumen</a> documentation over Lupi. Absolutely you must install composer and other requirements to running laravel well on your computer before using Lupi. Lumen choosing for a foundation that because lumen is lightwell than laravel and if you need other packages you can install as you need.</p>
+              <br>
+              <h4>Basic Information</h4>
+              <table class="table table-border">
+                <tr>
+                  <td width="20%">App Name</td>
+                  <td>: LUPI (Lumen Universal Application Programming Interface)</td>
+                </tr>
+                <tr>
+                  <td>App Domain</td>
+                  <td>: <a href="https://chalidade.github.io/lupi/">Github LUPI</a></td>
+                </tr>
+                <tr>
+                  <td>Version</td>
+                  <td>: 1.0</td>
+                </tr>
+                <tr>
+                  <td>Requires Lumen at least</td>
+                  <td>: 5.7.*</td>
+                </tr>
+                <tr>
+                  <td>Requires PHP</td>
+                  <td>: 7.1.*</td>
+                </tr>
+                <tr>
+                  <td>Description</td>
+                  <td>: - </td>
+                </tr>
+                <tr>
+                  <td>Author</td>
+                  <td>: Chalidade </td>
+                </tr>
+                <tr>
+                  <td>Author URI</td>
+                  <td>: Chalidade.com </td>
+                </tr>
+                <tr>
+                  <td>License</td>
+                  <td>: GNU General Public License v2 or later </td>
+                </tr>
+                <tr>
+                  <td>License URI</td>
+                  <td>: <a href="https://packagist.org/packages/laravel/lumen-framework">License</a> </td>
+                </tr>
+                <tr>
+                  <td>Powered By</td>
+                  <td>: <a href="https://packagist.org/packages/laravel/lumen-framework">Lumen</a> </td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="tab-pane fade" id="installation" role="tabpanel" aria-labelledby="installation-list">
+              <h1><font style="color: #f85351;">#</font> Installation</h1>
+              <hr>
+              <p>Installation Lupi is very easy, It seems like you download a template that you can use or modify as you want. The thing that you need to know is Lupi create based on Laravel microservices (Lumen) all of the function and package referrers to Lumen as a foundation to build Lupi, include service requirement and installation process.</p>
+              <h4>Server Requirement</h4>
+              <p>As shown on Lumen documentation that Laravel framework has a few system requirement. All of these requirement are satisfied by the <a href="https://laravel.com/docs/7.x/homestead">Larvel Homestead</a> virtual machine, so it's highly recommended that you use Homestead as your local Laravel development environment.</p>
+
+              <p>However, if you are not using Homestead, you will need to make sure your server have the following requirements :
+                <ul>
+                  <li>Install Xampp / Local Server</li>
+                  <li>PHP >= 7.1.3</li>
+                  <li>Open SSL PHP Extention</li>
+                  <li>PDO PHP Extention</li>
+                  <li>Mbstring PHP Extention</li>
+                </ul>
+              </p>
+              <br>
+              <h4>Installing Composer</h4>
+              <p>Lumen utilized <a href="https://getcomposer.org/download/">Composer</a> to manage it's dependencies. So Lupi need this too. Before using Lupi, make sure you have Composer installed on your server. If you need detail about this, you can visit <a href="#">How to Install Composer</a>.
+              </p>
+              <br>
+              <h4>Install Lupi</h4>
+              <p>It's easy to install Lupi in your machine, just following this step :
+                <ul>
+                  <li>First, open <a href="https://github.com/chalidade/lupi">Lupi repository</a></li>
+                  <li> Choose <b><i>Clone / Download </i></b></li>
+                  <li> If you choose <b><i>Download Zip</i></b>, after downloading open your htdoc folder if you're using Xampp or /var/www/html/ if you're using linux</li>
+                  <li>Then Extract and wait until extraction process done</li>
+                  <li>Open command prompt and open that directory</li>
+                  <li>Then, type <b>composer install</b> -> Enter</li>
+                  <li>After installation process, open your browser then open this project in you localhost</li>
+                </ul>
+              </p>
+              <p>If you got error like Fatal error: require_once(): Failed opening required, like this.
+                <div class="bg-light" style="padding:15px">
+                  Warning: require_once(D:\xampp\htdocs\lupi\bootstrap/../vendor/autoload.php): failed to open stream: No such file or directory in ...<br>
+                  Fatal error: require_once(): Failed opening required ‘D:\xampp\htdocs\lupi\bootstrap/../vendor/autoload’ (include_path=’D:\xampp\php\PEAR’) in ...
+                </div><br>
+              It mean, your <b> composer install </b> failed. if you have problem on installation process you can send me email chalidade@gmail.com
+              </p>
+
+            </div>
+
+
+            <div class="tab-pane fade" id="configuration" role="tabpanel" aria-labelledby="configuration-list">
+              <h1><font style="color: #f85351;">#</font> Configuration</h1>
+              <hr>
+              <p>There are many configuration Lupi that follow how configuration Lumen is. All that you know about Lumen you can implemented into Lupi. Include how to create new seeder, database migration, and etc. </p>
+              <br>
+              <h4>Configuration Database</h4>
+              <p>If you want to adding new database configuration in Lupi, it's simple. Open config folder, then edit database.php. Copy exampleMysql then change value as your database configuration.
+              </p>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Sql Database Configuration</h5>
+              <div class="bg-light" style="padding:15px">
+                'exampleMysql'  => [ <br>
+                   'driver'    => 'mysql', <br>
+                   'host'      => env('DB_HOST', 'localhost'), <br>
+                   'port'      => env('DB_PORT', 3306), <br>
+                   'database'  => env('DB_DATABASE', 'your_database'), <br>
+                   'username'  => env('DB_USERNAME', 'your_username'), <br>
+                   'password'  => env('DB_PASSWORD', 'your_pass'), <br>
+                   'charset'   => env('DB_CHARSET', 'utf8'), <br>
+                   'collation' => env('DB_COLLATION', 'utf8_unicode_ci'), <br>
+                   'prefix'    => env('DB_PREFIX', ''), <br>
+                   'timezone'  => env('DB_TIMEZONE', '+00:00'), <br>
+                   'strict'    => env('DB_STRICT_MODE', false), <br>
+                ],
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Oracle Database Configuration</h5>
+              <div class="bg-light" style="padding:15px">
+                'exampleOracle' => [
+                      'driver'        => 'oracle', <br>
+                      'tns'           => env('DB_TNS', ''),<br>
+                      'host'          => env('DB_HOST', 'localhost'),<br>
+                      'port'          => env('DB_PORT', '1521'),<br>
+                      'database'      => env('DB_DATABASE', 'your_database'),<br>
+                      'username'      => env('DB_USERNAME', 'your_username'),<br>
+                      'password'      => env('DB_PASSWORD', 'your_password'),<br>
+                      'charset'       => env('DB_CHARSET', 'AL32UTF8'),<br>
+                      'prefix'        => env('DB_PREFIX', ''),<br>
+                      'prefix_schema' => env('DB_SCHEMA_PREFIX', ''),<br>
+                      'edition'       => env('DB_EDITION', 'ora$base'),<br>
+                  ],
+              </div>
+              <br>
+              Explanation :
+              <ol>
+                <li>exampleMysql is name of your database configuration, you will call it later in controller or json format</li>
+                <li>Drivers is database type that we use</li>
+                <li>Host is your server, you can fill with domain or IP. If you're running in local server you can use localhost</li>
+                <li>Database is name of your database</li>
+                <li>Username is your username when you want to access database</li>
+                <li>Password is your password when you want to access database</li>
+              </ol>
+              <br>
+              <h5><font style="color: #f85351;">#</font> .env Configuration</h5>
+              <p>As Lumen basic configuration, you need make sure that file .env is exist in your root directory. Because if .env not exist on your root directory, we will not able to running Lupi. And give configuration of your .env file like below </p>
+              <div class="bg-light" style="padding:15px">
+                APP_NAME=Lumen <br>
+                APP_ENV=local <br>
+                APP_KEY=Aqi2bcRpqcEKUltJeNDOfancUt8Cu7s6 <br>
+                APP_DEBUG=true <br>
+                APP_URL=http://localhost <br>
+                APP_TIMEZONE=UTC <br>
+                <br>
+                LOG_CHANNEL=stack <br>
+                LOG_SLACK_WEBHOOK_URL= <br>
+                 <br>
+                CACHE_DRIVER=file <br>
+                QUEUE_CONNECTION=sync <br>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="how-to-consume" role="tabpanel" aria-labelledby="how-to-consume-list">
+              <h1><font style="color: #f85351;">#</font> How To Consume</h1>
+              <hr>
+              <p>Lupi can consume in many way. For testing you can use <a href="http://postman.io">postman</a>, the best tool for testing API. I highly recommended you to download and install postman to try lupi. Before we trying to consume Lupi, I've create database named <b>library</b>, All of library data on database, you can check on application below. Sidebar Tell us about all table on library database, just click to show the data. Then let's try to consume it. You can try example of lupi in this link : <a href="http://lupi.titikdua.site">http://lupi.titikdua.site</a> , just copy it.</p>
+              <hr>
+              <!-- <iframe id="db" src="http://db.titikdua.site" width="100%" height="500px" style="transform: scale(90%);border:0px;"></iframe> -->
+              <hr>
+              <h4><font style="color: #f85351;">#</font> Postman</h4>
+              <p>Let's try very simple testing lupi using postman. Let's do this.
+              <ol>
+                <li>Open Postman</li>
+                <li>Create New</li>
+                <li>Fill the URL with API Example Link (http://lupi.titikdua.site/index)</li>
+                <li>Click on the <b>Body</b></li>
+                <li>Select <b>raw</b></li>
+                <li>Change into format into JSON</li>
+                <li>Then fill Example JSON like below on the <b>body</b>
+                <br>
+                <div class="bg-light" style="padding:15px">
+                  { <br>
+                  	"action" : "list",<br>
+                  	"db" : "library",<br>
+                  	"table" : "TX_HDR_USER",<br>
+                  	"start" : "0"<br>
+                  } <br>
+                </div>
+                <li>Then click send, you will get response like this
+                  <br>
+                  <img src="assets/img/img1.png" alt="" style="width:90%">
+                </li>
+                <li>You can see that, the response show 2 data on table TX_HDR_USER. You can check is data same as table on <a href="#db">this</a>. You got it ? Remember because we use universal API, you can change value of "table" : <b>"TX_HDR_USER"</b> as you want. Absolutly you must check on available table first.</li>
+                <li>Let's try insert data into database using example JSON like below
+                <br>
+                <div class="bg-light" style="padding:15px;font-weight:600">
+                  { <br>
+                      "action": "simpleSave",<br>
+                      "db": "library",<br>
+                      "table": "TX_BOOK",<br>
+                      "primaryKey": "BOOK_ID",<br>
+                      "value": [<br>
+                          {<br>
+                              <font color="#f85351">"BOOK_ID": ""</font>,<br>
+                              <font style="color:#0023de">"BOOK_TITLE"</font>: <font style="color:#00bc00">"Moon"</font>,<br>
+                              <font style="color:#0023de">"BOOK_AUTHOR"</font>: <font style="color:#00bc00">"Chalidade"</font>,<br>
+                              <font style="color:#0023de">"BOOK_PUBLISHER"</font>: <font style="color:#00bc00">"Gramedia"</font>,<br>
+                              <font style="color:#0023de">"BOOK_USER"</font>: <font style="color:#00bc00">"1"</font><br>
+                          }<br>
+                      ]<br>
+                  }<br>
+                </div>
+                </li>
+                <li>You can see that there are 3 color of that script. I will explain it.
+                  <ul>
+                    <li><font color="#f85351">Red</font> color is relate with primary key of table field. If you keep it blank, LUPI will read your command as insert. If you fill with id, Lupi will read your command as update.</li>
+                    <li>Then the second color is <font style="color:#0023de">blue</font>, it mean all field of your table. You must fill it with exactly, because it's <b>case sensitive</b> </li>
+                    <li>Last is <font style="color:#00bc00">green</font> color, it mean value that you want to insert in that field. you're free to fill as you want.</li>
+                  </ul>
+                </li>
+              </ol>
+              </p>
+            </div>
+
+            <div class="tab-pane fade" id="index-function" role="tabpanel" aria-labelledby="index-function-list">
+              <h1><font style="color: #f85351;">#</font>Index</h1>
+              <hr>
+              <p>Index Function is a function that we use to display data with any parameters that usually use. Every need for showing data will cover this function like joining table, grouping data, where statement, start limit, and etc. Lupi will make it easier for you Especially front to consume API in development process without waiting backend create an API. To using index funtion you just adding index in url like example : http://lupi.titikdua.site/<font color="f85351">index </font></p>
+              <br>
+              <h4><font style="color: #f85351;">#</font> All Parameter In Index Function</h4>
+              <p>All parameter in index function as shown below</p>
+              <div class="bg-light" style="padding:15px;font-weight:600">
+                <table>
+                  <tr>
+                    <td width="2%">{</td>
+                    <td width="20%"></td>
+                    <td width="1%"></td>
+                    <td width="77%"></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereOr"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereIn"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereBetween"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereNotIn"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"selected"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"groupBy"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"orderBy"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"innerJoin"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"leftJoin"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"raw"</td>
+                    <td>:</td>
+                    <td> { </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"select"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"groupBy"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"orderBy"</td>
+                    <td>:</td>
+                    <td>""</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td> }, </td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"start"</td>
+                    <td>:</td>
+                    <td>"",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"limit"</td>
+                    <td>:</td>
+                    <td>""</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <h4><font style="color: #f85351;">#</font> Table Of Index Function</h4>
+              <p>This table will explain every parameter on Index Funtion</p>
+              <div class="table-responsive">
+                <table class="table table-border">
+                  <tr style="text-align:center">
+                    <th width="5%">No</th>
+                    <th width="10%" style="text-align:left">Parameter</th>
+                    <th width="30%" style="text-align:left">Value</th>
+                    <th width="10%">Required</th>
+                    <th width="30%">Function</th>
+                    <th width="15%">Comment</th>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>"action" :</td>
+                    <td>"list",</td>
+                    <td style="text-align:center">Y</td>
+                    <td style="text-align:justify">Declare function that will use, this parameter required to running list function</td>
+                    <td>Temporary don't change it</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>"db" :</td>
+                    <td>"DbConfigname",</td>
+                    <td style="text-align:center">Y</td>
+                    <td style="text-align:justify">Declare name of your config database, change as your configuration name</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>"table" :</td>
+                    <td>TableName",</td>
+                    <td style="text-align:center">Y</td>
+                    <td style="text-align:justify">Declare table name on database that will execute</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>"where" :</td>
+                    <td>[ ["fieldName1","=", "value1"], ["fieldName2",">", "value2"] ... ],</td>
+                    <td style="text-align:center">N</td>
+                    <td style="text-align:justify">Declare Multiple Where condition</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>"whereIn" :</td>
+                    <td>["field", ["value1","value2",...]],</td>
+                    <td style="text-align:center">N</td>
+                    <td style="text-align:justify">Declare name of your config database, change as your configuration name</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>"whereBetween" :</td>
+                    <td>["field", ["ValueStart","ValueStop"]],</td>
+                    <td style="text-align:center">N</td>
+                    <td style="text-align:justify"> 	Declare WhereBetween Condition</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>"whereNotIn" :</td>
+                    <td>["field", ["value1","value2",...]],</td>
+                    <td style="text-align:center">N</td>
+                    <td style="text-align:justify">Declare WhereNotIn Condition</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>8</td>
+                    <td>"selected" :</td>
+                    <td>["field1","field2","field3"...],</td>
+                    <td style="text-align:center">N</td>
+                    <td style="text-align:justify">Declare selected field that you want to show</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>9</td>
+                    <td>"groupBy" :</td>
+                    <td>"field",</td>
+                    <td style="text-align:center">N</td>
+                    <td style="text-align:justify">Declare groupBy field in your result</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>10</td>
+                    <td>"orderBy" :</td>
+                    <td>["field","DESC/ASC"],</td>
+                    <td style="text-align:center">N</td>
+                    <td style="text-align:justify">Declare orderBy data, choose ASC for ascending or DESC for descending</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>11</td>
+                    <td>"innerJoin" :</td>
+                    <td>[ <br>
+                        {"table2","table2.field", "=", "table1.field"}, <br>
+                        {"table3","table3.field", "=", "table1.field"},<br>
+                         .... <br>
+                         ],</td>
+                    <td style="text-align:center">N</td>
+                    <td style="text-align:justify"> 	Declare multiple inner Join function</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>12</td>
+                    <td>"leftJoin" :</td>
+                    <td>[ <br>
+                        {"table2","table2.field", "=", "table1.field"}, <br>
+                        {"table3","table3.field", "=", "table1.field"},<br>
+                         .... <br>
+                         ],</td>
+                    <td style="text-align:center">N</td>
+                    <td style="text-align:justify">	Declare multiple left Join Function</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>13</td>
+                    <td>"start" :</td>
+                    <td>"DataStart",</td>
+                    <td style="text-align:center">N</td>
+                    <td style="text-align:justify">Declare get data from</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>14</td>
+                    <td>"limit" :</td>
+                    <td>"DataLimit"</td>
+                    <td style="text-align:center">N</td>
+                    <td style="text-align:justify">	Declare get data limit</td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="store-function" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Store Function</h1>
+              <hr>
+              <p>Store function is use to store or update data into your database. This function will generate SQL Sript <b> INSERT </b> and <b> UPDATE </b>. You can do itself because it's universal. There some funtion in store. every function different by action. In every hit, you must change endpoint of <b>/store</b> if you use store function.
+              </p>
+
+              <p>An example you want to save multiple data in one table you can use action <b>simpleSave</b>, if you want to update one data with where condition you can use <b>update</b>, and etc. Because every function have different rule, So we will explain more in every function menu. </p>
+              <h4><font style="color: #f85351;">#</font> Example 1</h4>
+              <p>This is very simple way to insert data into database. let's try with using this api endpoint http://lupi.titikdua.site/store. Then create JSON like an example below : </p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"simpleSave", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"primaryKey"</td>
+                    <td>:</td>
+                    <td>"BOOK_ID",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"value"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_ID" </td>
+                    <td>: "",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_TITLE" </td>
+                    <td>: "Moon",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_AUTHOR" </td>
+                    <td>: "Chalidade",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_PUBLISHER" </td>
+                    <td>: "Gramedia",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_USER" </td>
+                    <td>: "2"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>},</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_ID" </td>
+                    <td>: "",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_TITLE" </td>
+                    <td>: "Sun",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_AUTHOR" </td>
+                    <td>: "Linanurfauziah",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_PUBLISHER" </td>
+                    <td>: "Gramedia",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_USER" </td>
+                    <td>: "1"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+
+            </div>
+
+            <div class="tab-pane fade" id="showing-data" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Showing Data</h1>
+              <hr>
+              <p>Lupi can showing data in our database, just set on parameter on with right value and you will get data as you need. In this menu, Lupi will explain with very clearly and detail about how to showing data and what query looks like with the parameter set. Let's try with simple method. </p>
+              <br>
+              <h4><font style="color: #f85351;">#</font> Example 1</h4>
+              <p>This is very simple way to show alll data on your table in a database. Just need 3 basic paramater. Like an example below</p>
+              <div class="bg-light" style="padding:15px;">
+                { <br>
+                	"action"       : "list", <br>
+                	"db"           : "library", <br>
+                	"table"        : "TX_HDR_BOOK" <br>
+                }
+              </div>
+              <p>if you're familiar with SQL Query, Those parameter will generate an SQL Query like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM TX_HDR_BOOK
+              </div>
+              <p>And execute in <b>library</b> Lupi configuration database.</p>
+              <br>
+              <br>
+              <h4><font style="color: #f85351;">#</font> Example 2</h4>
+              <p>Let's trying adding <b>where</b> stament on that's parameter</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_CATEGORY", "=", "FICTION"],</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_QTY", ">", "5"]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <p>Those parameter will generate an SQL Query like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` WHERE `BOOK_CATEGORY` = 'FICTION' AND `BOOK_QTY` > '5'
+              </div>
+              <br>
+              <br>
+              <h4><font style="color: #f85351;">#</font> Example 3</h4>
+              <p>Let's trying adding <br>limit</b> function on that's parameter</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_CATEGORY", "=", "FICTION"]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>],</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"limit"</td>
+                    <td>:</td>
+                    <td>"2"</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <p>Those parameter will generate an SQL Query like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` WHERE `BOOK_CATEGORY` = 'FICTION' LIMIT 2
+              </div>
+              <br>
+              <br>
+              <h4><font style="color: #f85351;">#</font> Example 4</h4>
+              <p>Let's trying simple join</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_USER",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"join"</td>
+                    <td>:</td>
+                    <td>{</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td style="text-align:center">{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <table>
+                        <tr>
+                          <td>"table"</td>
+                          <td>:</td>
+                          <td>"TX_DTL_USER"</td>
+                        </tr>
+                        <tr>
+                          <td>"field1"</td>
+                          <td>:</td>
+                          <td>"TX_DTL_USER.DTL_HDR_ID"</td>
+                        </tr>
+                        <tr>
+                          <td>"table"</td>
+                          <td>:</td>
+                          <td>"TX_HDR_USER.USER_ID"</td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td style="text-align:center">}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>},</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["USER_ID", "=", "1"]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <p>Those parameter will generate an SQL Query like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` JOIN `TX_DTL_USER` ON `TX_DTL_USER`.`DTL_HDR_ID` = `TX_HDR_BOOK`.`USER_ID` WHERE `USER_ID` = '1'
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="start-limit" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Start Limit</h1>
+              <hr>
+              <p>Start and limit in index funtion using for pagination or get limited data as you needs. Start is use to get data from index x. then limit use to indentified how many data that we want to get. As example, if we want to get data in table <b>TX_HDR_BOOK</b> from index 0 and we want get only 2 data. So we use json format like this.
+
+                <div class="bg-light" style="padding:15px;">
+                  <table>
+                    <tr>
+                      <td>{</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>"action"</td>
+                      <td>:</td>
+                      <td>"list", </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>"db"</td>
+                      <td>:</td>
+                      <td>"library",</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>"table"</td>
+                      <td>:</td>
+                      <td>"TX_HDR_USER",</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>"start"</td>
+                      <td>:</td>
+                      <td>"0"</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>"limit"</td>
+                      <td>:</td>
+                      <td>"2"</td>
+                    </tr>
+                    <tr>
+                      <td>}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </table>
+                </div>
+                <p>That's parameter will generate SQL Script like below</p>
+                <div class="bg-light" style="padding:15px;">
+                  SELECT * FROM `TX_HDR_BOOK` LIMIT 0,2
+                </div>
+              </p>
+              <p>Absolutly you can combine start and limit with any parameter from index function to get result as you want. </p>
+            </div>
+
+            <div class="tab-pane fade" id="where-statment" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Where Statement</h1>
+              <hr>
+              <p>Where Statment is a parameter that often we will use. This parameter can be used to filtering data or get data with a keyword. Where statements can be used with other parameter include join parameter. There are few where statement that explain below</p>
+              <br>
+              <h4><font style="color: #f85351;">#</font> Basic Where</h4>
+              <p>This is basic where template and how where statement explain</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"your_database_config",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"your_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["field1", "=", "value"],</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["field2", ">", "value"],</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>.....</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>.....</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <p>Basic where statement will generate <b>AND</b> condition in every field and value. In that case, that will generate an SQL code like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `your_table` WHERE `field1` = 'value' <b> AND </b> `field2` > 'value' <b> AND </b> `field3` = 'value' <b> AND </b> ......... <b> AND </b> .........
+              </div>
+              <br>
+              <p>Every new condition will generate AND condition on Basic where. Format of statements is patent, ['field', 'operator', 'value'] as long as you don't modified the main of LUPI controller. All of operator that you apply on SQL code, you can use in LUPI too.  </p>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 1</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_CATEGORY", "=", "FICTION"]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>],</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"limit"</td>
+                    <td>:</td>
+                    <td>"2"</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>Those parameter will generate an SQL Query like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` WHERE `BOOK_CATEGORY` = 'FICTION' LIMIT 2
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 2</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_CATEGORY", "=", "FICTION"],</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_TITLE", "like", "%farmer%"]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>Like SQL Query, you can use 'like' operator as condition, Those parameter will generate an SQL Query like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` WHERE `BOOK_CATEGORY` = 'FICTION' AND `BOOK_TITLE` like '%farmer%'
+              </div>
+              <br><br>
+              <h4><font style="color: #f85351;">#</font> Or Where</h4>
+              <p>Or Where use to get data on <b> OR </b> condition seems like Basic where, every condition will generate <b>OR</b> condition. Absolutly you can combine this Or Where with Basic Where. Or Where format show on below</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"your_database_config",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"your_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["field1", "=", "value"],</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["field2", ">", "value"],</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>.....</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>.....</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <p>Or Where statement will generate <b>OR</b> condition in every field and value. In that case, that will generate an SQL code like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `your_table` WHERE `field1` = 'value' <b> OR </b> `field2` > 'value' <b> OR </b> `field3` = 'value' <b> OR </b> ......... <b> OR </b> .........
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 1</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereOr"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_CATEGORY", "=", "FICTION"],</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_TITLE", "like", "%farmer%"]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>That parameter will generate SQL Script like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` WHERE `BOOK_CATEGORY` = 'FICTION' OR `BOOK_TITLE` like '%farmer%'
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 2</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereOr"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_TITLE", "like", "%farmer%"]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>],</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_CATEGORY", "=", "FICTION"]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_RACK", "=", "1"]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>As you can see that Basic Where on JSON placed after Or Where but in Query, it will placed on first priority than Or Where. That parameter will generate SQL Script like below.</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` WHERE `BOOK_CATEGORY` = 'FICTION' AND `BOOK_RACK` = '1' OR `BOOK_TITLE` like '%farmer%'
+              </div>
+              <br>
+              <p> Remember that in Lupi all parameter we can combine as we want. So you can use Basic where and Or Where on one JSON to get result as you need.</p>
+              <br><br>
+              <h4><font style="color: #f85351;">#</font> Where In</h4>
+              <p>Where In use to get data in array value that we declare. As example we want to show data book on page 1,3,5,6 so we must use Where In for this condition. Where In Format show in format below</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"your_database_config",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"your_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereIn"</td>
+                    <td>:</td>
+                    <td>["field", ["value1", "value2", "value3", "...", "..."]]</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <p>The IN operator allows you to specify multiple values in a WHERE clause. In that case, that will generate an SQL code like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `your_table` WHERE `field1` IN ("value1","value2","value3",...,....)
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 1</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereIn"</td>
+                    <td>:</td>
+                    <td>["BOOK_PAGE", [1,3,5,6]]</td>
+                  </tr>
+                  <tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>That parameter will generate SQL Script like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` WHERE `BOOK_PAGE` IN (1,3,5,6)
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 2</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereIn"</td>
+                    <td>:</td>
+                    <td>["BOOK_PAGE", [1,3,5,6]],</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_CATEGORY", "=", "FICTION"]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>Basic Where is first priority so it will placed on first statement in SQL script, then another where condition. That JSON will generate SQL Script like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` WHERE `BOOK_CATEGORY` = 'FICTION' AND `BOOK_PAGE` IN (1,3,5,6)
+              </div>
+              <br><br>
+              <h4><font style="color: #f85351;">#</font> Where Not In</h4>
+              <p>Where Not In use to get data Not In array value that we declare. As example we want to show data book on page except 1,3,5,6 so we must use Where Not In for this condition. Where In Format show in format below</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"your_database_config",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"your_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereNotIn"</td>
+                    <td>:</td>
+                    <td>["field", ["value1", "value2", "value3", "...", "..."]]</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <p>The NOT IN operator allows you to specify multiple values in a WHERE clause. In that case, that will generate an SQL code like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `your_table` WHERE `field1` NOT IN ("value1","value2","value3",...,....)
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 1</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereNotIn"</td>
+                    <td>:</td>
+                    <td>["BOOK_PAGE", [1,3]]</td>
+                  </tr>
+                  <tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>That parameter will generate SQL Script like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` WHERE `BOOK_PAGE` NOT IN (1,3)
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 2</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereNotIn"</td>
+                    <td>:</td>
+                    <td>["BOOK_PAGE", [1,3]],</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_CATEGORY", "=", "FICTION"]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` WHERE `BOOK_CATEGORY` = 'FICTION' AND `BOOK_PAGE` NOT IN (1,3)
+              </div>
+              <br><br>
+              <h4><font style="color: #f85351;">#</font> Where Beetwen</h4>
+              <p>Where Between use to get selects value within a giving range. As example we want to show data book on page between 2 and 5 or book publish between january and march so we must use Where Between for this condition. Where between Format show in format below</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"your_database_config",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"your_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereBetween"</td>
+                    <td>:</td>
+                    <td>["field", ["ValueStart","ValueStop"]]</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <p>The BETWEEN operator selects values within a given range. The values can be numbers, text, or dates. Where between In that case, that will generate an SQL code like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `your_table` WHERE `field1` BETWEEN "ValueStart" AND "ValueStop"
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 1</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereBetween"</td>
+                    <td>:</td>
+                    <td>["BOOK_PAGE", ["3","5"]]</td>
+                  </tr>
+                  <tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>That parameter will generate SQL Script like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` WHERE `BOOK_PAGE` BETWEEN "3" AND "5"
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 2</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"whereBetween"</td>
+                    <td>:</td>
+                    <td>["BOOK_DATE_PUBLISH", ["2019-01-01","2020-01-01"]],</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>["BOOK_CATEGORY", "=", "FICTION"]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>That JSON will generate SQL Script like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` WHERE `BOOK_CATEGORY` = 'FICTION' AND `BOOK_DATE_PUBLISH` BETWEEN "2019-01-01" AND "2020-01-01"
+              </div>
+              <br><br>
+            </div>
+
+            <div class="tab-pane fade" id="joining-table" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Joining Table</h1>
+              <hr>
+              <p>A join clause is used to combine rows from two or more tables, based on related column between them. There are two type join in LUPI, Left Join and Inner Join that will explain on below</p>
+              <h4><font style="color: #f85351;">#</font> Inner Join</h4>
+              <p>Inner Join will returns data that have matching values in both tables,If the values of one of the data do not match then the data will not be displayed, while the same data will still be displayed. This is basic where template and how where statement explain</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"your_database_config",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"your_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"innerJoin"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>: "your_joining_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field1"</td>
+                    <td>: "your_table.your_field_on_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field2"</td>
+                    <td>: "your_joining_table.your_field_on_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>},</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>: "your_joining_table AS C",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field1"</td>
+                    <td>: "C.your_field_on_table1",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field2"</td>
+                    <td>: "your_table.your_field_on_table2",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <p>We can joining more than two table by adding group of parameter ("table", "field1", "field2"). Table on join parameter mean your joining table, then field1 / field2 on join parameter mean your related field between table A and table B. You can use alias for your table to declare easier. For That Sample, we will generate an SQL Script like below </p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `your_table` <br>INNER JOIN `your_joining_table` ON `your_table`.your_field_on_table1 = `your_joining_table`.your_field_on_table <br>INNER JOIN `your_joining_table` AS C ON C.your_field_on_table1 = `your_table`.your_field_on_table2
+              </div>
+              <br>
+              <!-- <p>Let's jump into an Example</p> -->
+              <h5><font style="color: #f85351;">#</font> Example 1</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK as A",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"innerJoin"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>: "TX_DTL_BOOK as B",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field1"</td>
+                    <td>: "B.DTL_HDR_ID",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field2"</td>
+                    <td>: "A.BOOK_ID",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>],</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"start"</td>
+                    <td>:</td>
+                    <td>"0",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"limit"</td>
+                    <td>:</td>
+                    <td>"10"</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>That JSON will generate SQL Script like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` as A INNER JOIN `TX_DTL_BOOK` as B ON A.BOOK_ID = B.DTL_HDR_ID LIMIT 0,10
+              </div>
+              <br><br>
+              <h4><font style="color: #f85351;">#</font> Left Join</h4>
+              <p>The Left Join return all records from table1, and the matched record from the table2. The result is NULL from the right side where there is no data match. This is basic where template and how where statement explain</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"your_database_config",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"your_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"leftJoin"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>: "your_joining_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field1"</td>
+                    <td>: "your_table.your_field_on_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field2"</td>
+                    <td>: "your_joining_table.your_field_on_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>},</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>: "your_joining_table AS C",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field1"</td>
+                    <td>: "C.your_field_on_table1",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field2"</td>
+                    <td>: "your_table.your_field_on_table2",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `your_table` <br>LEFT JOIN `your_joining_table` ON `your_table`.your_field_on_table1 = `your_joining_table`.your_field_on_table <br>LEFT JOIN `your_joining_table` AS C ON C.your_field_on_table1 = `your_table`.your_field_on_table2
+              </div>
+              <br>
+              <!-- <p>Let's jump into an Example</p> -->
+              <h5><font style="color: #f85351;">#</font> Example 1</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK as A",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"leftJoin"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>: "TX_DTL_BOOK as B",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field1"</td>
+                    <td>: "B.DTL_HDR_ID",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field2"</td>
+                    <td>: "A.BOOK_ID",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>],</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"start"</td>
+                    <td>:</td>
+                    <td>"0",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"limit"</td>
+                    <td>:</td>
+                    <td>"10"</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>That JSON will generate SQL Script like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` as A LEFT JOIN `TX_DTL_BOOK` as B ON A.BOOK_ID = B.DTL_HDR_ID LIMIT 0,10
+              </div>
+              <br><br>
+            </div>
+
+            <div class="tab-pane fade" id="selected-data" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Selected Data</h1>
+              <hr>
+              <p>The SELECT statement is used to select fields that we want to showing. We can choose what we want to show. example if we have table TX_HDR_BOOK that have fields BOOK_NO, BOOK_TITLE, BOOK_PAGE, BOOK_YEAR and we just want to show BOOK_TITLE and BOOK_YEAR so we can use select parameter </p>
+              <h5><font style="color: #f85351;">#</font> Example 1</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"selected"</td>
+                    <td>:</td>
+                    <td>["BOOK_TITLE", "BOOK_YEAR"],</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"start"</td>
+                    <td>:</td>
+                    <td>"0",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"limit"</td>
+                    <td>:</td>
+                    <td>"10"</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>That JSON will generate SQL Script like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT `BOOK_TITLE`, `BOOK_YEAR` FROM `TX_HDR_BOOK` LIMIT 0,10
+              </div>
+              <p>Yes, Absolutly you can combine with other paramater like join or where statement</p>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 2</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK as A",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"leftJoin"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>: "TX_DTL_BOOK as B",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field1"</td>
+                    <td>: "B.DTL_HDR_ID",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field2"</td>
+                    <td>: "A.BOOK_ID",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>],</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td style="vertical-align:top">"selected"</td>
+                    <td style="vertical-align:top">:</td>
+                    <td>[<br>"A.BOOK_TITLE as TITLE", <br>"B.DTL_AUTHOR as AUTHOR",<br>"B.DTL_DATE_PUBLISH as PUBLISH" <br>],</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"start"</td>
+                    <td>:</td>
+                    <td>"0",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"limit"</td>
+                    <td>:</td>
+                    <td>"10"</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>We can aliases field as we want by adding <b>as</b> like above. That JSON will generate SQL Script like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT A.`BOOK_TITLE` as TITLE, B.`DTL_AUTHOR` as AUTHOR, B.`DTL_DATE_PUBLISH` as PUBLISH FROM `TX_HDR_BOOK` as A <br>
+                LEFT JOIN `TX_DTL_BOOK` as B ON A.BOOK_ID = B.DTL_HDR_ID LIMIT 0,10
+              </div>
+              <br><br>
+            </div>
+
+            <div class="tab-pane fade" id="group-data" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Group Data By</h1>
+              <hr>
+              <p>The Group By parameter in Lupi usually use to group rows that have same value into sumary rows. An example you want to find the number of book that publish each year. The Group By parameter is often used with agregate function (COUNT, MAX, MIN, SUM, AVG) to group the result-set by one or more columns. Keep it mind that you need <b>selected</b> parameter to using group by in Lupi </p>
+              <h5><font style="color: #f85351;">#</font> Example 1</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"selected"</td>
+                    <td>:</td>
+                    <td>["BOOK_AUTHOR", "BOOK_YEAR"],</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"groupBy"</td>
+                    <td>:</td>
+                    <td>"BOOK_YEAR",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"start"</td>
+                    <td>:</td>
+                    <td>"0",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"limit"</td>
+                    <td>:</td>
+                    <td>"10"</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>That JSON will generate SQL Script like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT `BOOK_AUTHOR`, `BOOK_YEAR` FROM `TX_HDR_BOOK` GROUP BY `BOOK_YEAR` LIMIT 0,10
+              </div>
+              <p>If you want to count how many book of author you can use combination of groupBy and raw select like below.</p>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 2</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"raw"</td>
+                    <td>:</td>
+                    <td>{</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"selected"</td>
+                    <td>:</td>
+                    <td>"BOOK_AUTHOR, count(BOOK_AUTHOR) as BOOK_TOTAL"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>},</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"groupBy"</td>
+                    <td>:</td>
+                    <td>"BOOK_AUTHOR",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"start"</td>
+                    <td>:</td>
+                    <td>"0",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"limit"</td>
+                    <td>:</td>
+                    <td>"10"</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>Raw parameter lets us use agregate funtion like count, sum, avg, and etc in select funtion. it mean we can use sql raw code in Lupi. which we will explain in another menu </p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT `BOOK_AUTHOR`, count(`BOOK_AUTHOR`) as BOOK_TOTAL from TX_HDR_BOOK GROUP BY `BOOK_AUTHOR`
+              </div>
+              <br><br>
+            </div>
+
+            <div class="tab-pane fade" id="order-data" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Order Data By</h1>
+              <hr>
+              <p>In every condition we need to sort data by ascending or descending. The Order By parameter in Lupi is used to sort the result-set in ascending (ASC) or descending (DESC). In default Lupi will sort data by ascending if you need to sort the record to descending use DESC keyword. </p>
+              <h5><font style="color: #f85351;">#</font> Example 1</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"selected"</td>
+                    <td>:</td>
+                    <td>["BOOK_AUTHOR", "BOOK_YEAR"],</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"orderBy"</td>
+                    <td>:</td>
+                    <td>["BOOK_YEAR", "DESC"],</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"start"</td>
+                    <td>:</td>
+                    <td>"0",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"limit"</td>
+                    <td>:</td>
+                    <td>"10"</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>That JSON will generate SQL Script like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT `BOOK_AUTHOR`, `BOOK_YEAR` FROM `TX_HDR_BOOK` ORDER BY `BOOK_YEAR` DESC LIMIT 0,10
+              </div>
+              <p>Absolutly we can combine with other parameter like join and where condition</p>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 2</h5>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK as A",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"leftJoin"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>: "TX_DTL_BOOK as B",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field1"</td>
+                    <td>: "B.DTL_HDR_ID",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field2"</td>
+                    <td>: "A.BOOK_ID",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>],</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"orderBy"</td>
+                    <td>:</td>
+                    <td>["A.BOOK_ID", "DESC"],</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"start"</td>
+                    <td>:</td>
+                    <td>"0",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"limit"</td>
+                    <td>:</td>
+                    <td>"10"</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>The code will generate an SQL Code like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT * FROM `TX_HDR_BOOK` as A LEFT JOIN `TX_DTL_BOOK` as B ON A.BOOK_ID = B.DTL_HDR_ID ORDER BY A.BOOK_ID DESC LIMIT 0,10
+              </div>
+              <br><br>
+            </div>
+
+            <div class="tab-pane fade" id="raw-parameter" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Raw Parameter</h1>
+              <hr>
+              <p>The raw parameter mean you can use an complex raw SQL script on this parameter if all function on lupi cannot cover your needs. Because some parameter in Lupi have fix format, you must follow it or you will get error. An example like selected parameter that if you adding aggregate you will get error. So You need to use this raw parameter.</p>
+              <h5><font style="color: #f85351;">#</font> Example 1 | <font style="color: #f85351;">Incorrect</font></h5>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"selected"</td>
+                    <td>:</td>
+                    <td>["BOOK_AUTHOR, "count(BOOK_AUTHOR) as BOOK_TOTAL"],</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"groupBy"</td>
+                    <td>:</td>
+                    <td>"BOOK_AUTHOR",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"start"</td>
+                    <td>:</td>
+                    <td>"0",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"limit"</td>
+                    <td>:</td>
+                    <td>"10"</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <p>Wrong JSON, aggregate function in selected parameter will get an error because it read as field, so <b>count(BOOK_AUTHOR) as BOOK_TOTAL</b> read as field. if you don't have field named <b>count(BOOK_AUTHOR) as BOOK_TOTAL</b> you will get error. In query you will hit sql script like below</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT `BOOK_AUTHOR`, `count(BOOK_AUTHOR) as BOOK_TOTAL` from TX_HDR_BOOK GROUP BY `BOOK_AUTHOR`
+              </div>
+              <br><br>
+              <h5><font style="color: #f85351;">#</font> Example 1 | <font style="color: #f85351;">Correct</font></h5>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"list", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"raw"</td>
+                    <td>:</td>
+                    <td>{</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"selected"</td>
+                    <td>:</td>
+                    <td>"BOOK_AUTHOR, count(BOOK_AUTHOR) as BOOK_TOTAL"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>},</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"groupBy"</td>
+                    <td>:</td>
+                    <td>"BOOK_AUTHOR",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"start"</td>
+                    <td>:</td>
+                    <td>"0",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"limit"</td>
+                    <td>:</td>
+                    <td>"10"</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>Correct JSON, different by selected in raw parameter, that <b>count(BOOK_AUTHOR) as BOOK_TOTAL</b> read as raw SQL Query, so it will give you data count of BOOK_AUTHOR as BOOK_TOTAL because count read as aggregate function not field</p>
+              <div class="bg-light" style="padding:15px;">
+                SELECT `BOOK_AUTHOR`, count(`BOOK_AUTHOR`) as BOOK_TOTAL from TX_HDR_BOOK GROUP BY `BOOK_AUTHOR`
+              </div>
+              <br><br>
+            </div>
+
+            <div class="tab-pane fade" id="view-header-detail" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> View Header Detail</h1>
+              <hr>
+              <p>If you separate data in header and detail, you can show them in action <b><i>viewheaderdetail</i></b>. This function is powerfull you can show data in one JSON from two or more table that have foreign key. An Example, I have two table : TX_HDR_USER and TX_DTL_USER. In TX_HDR_USER i choose USER_ID as primary key. Then in TX_DTL_USER i choose DTL_ID as primary key and DTL_HDR_ID as foreign key or ID that link into header data. Format view header detail you can see below</p>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"viewheaderdetail", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"data"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"HEADER"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"DETAIL1"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"DETAIL2"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>....</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>....</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>],</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"HEADER"</td>
+                    <td>:</td>
+                    <td>{</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <table>
+                        <tr>
+                          <td>"DB"</td>
+                          <td>:</td>
+                          <td>"your_database_config",</td>
+                        </tr>
+                        <tr>
+                          <td>"TABLE"</td>
+                          <td>:</td>
+                          <td>"your_table",</td>
+                        </tr>
+                        <tr>
+                          <td>"PK"</td>
+                          <td>:</td>
+                          <td>["primary_key", "header_id"]</td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"DETAIL1"</td>
+                    <td>:</td>
+                    <td>{</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <table>
+                        <tr>
+                          <td>"DB"</td>
+                          <td>:</td>
+                          <td>"your_database_config",</td>
+                        </tr>
+                        <tr>
+                          <td>"TABLE"</td>
+                          <td>:</td>
+                          <td>"your_table",</td>
+                        </tr>
+                        <tr>
+                          <td>"FK"</td>
+                          <td>:</td>
+                          <td>["primary_key", "header_primary_key"]</td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>},</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"DETAIL2"</td>
+                    <td>:</td>
+                    <td>{</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <table>
+                        <tr>
+                          <td>"DB"</td>
+                          <td>:</td>
+                          <td>"your_database_config",</td>
+                        </tr>
+                        <tr>
+                          <td>"TABLE"</td>
+                          <td>:</td>
+                          <td>"your_table",</td>
+                        </tr>
+                        <tr>
+                          <td>"FK"</td>
+                          <td>:</td>
+                          <td>["primary_key", "header_primary_key"]</td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>},</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>....</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>....</td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br><br>
+              <h5><font style="color: #f85351;">#</font> Example 1</h5>
+              <p>This an example how to use function view header detail</p>
+              <div class="bg-light">
+              <table>
+                <tr>
+                  <td>{</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>"action"</td>
+                  <td>:</td>
+                  <td>"viewheaderdetail", </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>"data"</td>
+                  <td>:</td>
+                  <td>[</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>"HEADER"</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>"DETAIL"</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>"SPLIT_NOTA"</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>],</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>"HEADER"</td>
+                  <td>:</td>
+                  <td>{</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <table>
+                      <tr>
+                        <td>"DB"</td>
+                        <td>:</td>
+                        <td>"omcargo",</td>
+                      </tr>
+                      <tr>
+                        <td>"TABLE"</td>
+                        <td>:</td>
+                        <td>"TX_HDR_BM",</td>
+                      </tr>
+                      <tr>
+                        <td>"PK"</td>
+                        <td>:</td>
+                        <td>["BM_ID", "496"]</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>}</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>"DETAIL"</td>
+                  <td>:</td>
+                  <td>{</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <table>
+                      <tr>
+                        <td>"DB"</td>
+                        <td>:</td>
+                        <td>"omcargo",</td>
+                      </tr>
+                      <tr>
+                        <td>"TABLE"</td>
+                        <td>:</td>
+                        <td>"TX_DTL_BM",</td>
+                      </tr>
+                      <tr>
+                        <td>"FK"</td>
+                        <td>:</td>
+                        <td>["HDR_BM_ID", "bm_id"]</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>},</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>"SPLIT_NOTA"</td>
+                  <td>:</td>
+                  <td>{</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <table>
+                      <tr>
+                        <td>"DB"</td>
+                        <td>:</td>
+                        <td>"omcargo",</td>
+                      </tr>
+                      <tr>
+                        <td>"TABLE"</td>
+                        <td>:</td>
+                        <td>"TX_SPLIT_NOTA",</td>
+                      </tr>
+                      <tr>
+                        <td>"FK"</td>
+                        <td>:</td>
+                        <td>["REQ_NO", "bm_no"]</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>},</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>"EQUIPMENT"</td>
+                  <td>:</td>
+                  <td>{</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <table>
+                      <tr>
+                        <td>"DB"</td>
+                        <td>:</td>
+                        <td>"omcargo",</td>
+                      </tr>
+                      <tr>
+                        <td>"TABLE"</td>
+                        <td>:</td>
+                        <td>"TX_EQUIPMENT",</td>
+                      </tr>
+                      <tr>
+                        <td>"FK"</td>
+                        <td>:</td>
+                        <td>["REQ_NO", "bm_no"]</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>}</td>
+                </tr>
+                <tr>
+                  <td>}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </table>
+              </div>
+
+              <br>
+
+              <h5><font style="color: #f85351;">#</font> Table of Explanation</h5>
+              <div class="table-responsive">
+                <table class="table" style="width:100%">
+                  <tr>
+                    <th width="15%">Parameter</th>
+                    <th width="35%">Description</th>
+                    <th width="25%">Example</th>
+                    <th width="25%">Note</th>
+                  </tr>
+                  <tr>
+                    <td>"action"</td>
+                    <td>Use to declare that we use function viewheaderdetail</td>
+                    <td>: "viewheaderdetail"<td>
+                      The value of this parameter is fix
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>"data"</td>
+                    <td>Use for declare data that will execute, value of this parameter is free fill but case sensitive. What we declare in this parameter will execute There's no limit for value of this parameter</td>
+                    <td>:
+                      [ <br>
+                        "HEADER", <br>
+                        "DETAIL",<br>
+                        "SPLIT_NOTA",<br>
+                      ],</td>
+                    <td>
+                      The fixed one is HEADER, you must declare it as "HEADER" then another is free fill
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>"HEADER"</td>
+                    <td>This first data that must be declare in this funtion to get header data that linked into all of its details.</td>
+                    <td> : <br>
+                      {<br> "DB": "omcargo", <br>
+                      "TABLE": "TX_HDR_BM", <br>
+                      "PK": [
+                          "BM_ID",
+                          "496"
+                      ]<br>},
+                    <td>
+                      In example i get data from table TX_HDR_BM that have primary key BM_ID in database omcargo. I get data where BM_ID = 496
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>"DETAIL"</td>
+                    <td>Because in array of data we declare <b>"DETAIL"</b> so this parameter will execute</td>
+                    <td> : <br>
+                      {<br> "DB": "omcargo", <br>
+                      "TABLE": "TX_DTL_BM", <br>
+                      "FK": [
+                          "HDR_BM_ID",
+                          "bm_id"
+                      ]<br>},
+                    <td>
+                      Same as HEADER, on detail we must declare FK not PK. FK mean Foreign Key. Field that relate into header seems like join. Note for header field it must be <b>lowercase</b> and for detail field must be same like database it mean case sensitive.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>"SPLIT_NOTA"</td>
+                    <td>Because in array of data we declare <b>"SPLIT_NOTA"</b> too so this parameter will execute</td>
+                    <td> : <br>
+                      {<br> "DB": "omcargo", <br>
+                      "TABLE": "TX_SPLIT_NOTA", <br>
+                      "FK": [
+                          "REQ_NO",
+                          "bm_no"
+                      ]<br>},
+                    <td>
+                      Like DETAIL, we must declare FK.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>"EQUIPMENT"</td>
+                    <td>We don't declare <b>EQUIPMENT</b> in data, so this parameter wont execute</td>
+                    <td> : <br>
+                      {<br> "DB": "omcargo", <br>
+                      "TABLE": "TX_EQUIPMENT", <br>
+                      "FK": [
+                          "REQ_NO",
+                          "bm_no"
+                      ]<br>},
+                    <br>}
+                    <td>
+                      <p>
+                        it wont be displayed on result because we don't declare it on <b>data</b>. As note, if in your data declare 3 ("HEADER", "DETAIL", "EQUIPMENT") then you create 4 parameter ("HEADER", "DETAIL", "EQUIPMENT", "DOCUMENT") it's ok. you will get only 3 result and no error.
+                      </p>
+                      <p>
+                         But if you declare 3 then you only create 2 parameter ("HEADER", "DETAIL"), you will got some error.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="insert-data" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Insert Data</h1>
+              <hr>
+              <p>Insert data in Lupi mean you can insert single or multiple data using just one JSON Format. Not only save you can update data with this JSON too. the key in on how you declare primaryKey value. primaryKey value is parameter that declare what field that you choose to be primary key. So if you fill the field it will update your data. If you keep it blank this function will read as insert. Here is the basic format. </p>
+              <br>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"simpleSave", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"your_database",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"your_table",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"primaryKey"</td>
+                    <td>:</td>
+                    <td>"table_primary_key",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"value"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field1_primary_key" </td>
+                    <td>: "your_value",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field2" </td>
+                    <td>: "your_value",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field3" </td>
+                    <td>: "your_value",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>},</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field1_primary_key" </td>
+                    <td>: "your_value",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field2" </td>
+                    <td>: "your_value",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"field3" </td>
+                    <td>: "your_value",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 1</h5>
+              <p>This an example how to use function SimpleSave to insert Single data in a table</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"simpleSave", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"primaryKey"</td>
+                    <td>:</td>
+                    <td>"BOOK_ID",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"value"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_ID" </td>
+                    <td>: "",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_TITLE" </td>
+                    <td>: "Moon",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_AUTHOR" </td>
+                    <td>: "Chalidade",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_PUBLISHER" </td>
+                    <td>: "Gramedia",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_USER" </td>
+                    <td>: "2"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>
+                Json mean that you will insert into library database on table TX_HDR_BOOK with value as you declare. Make sure that you fill the field correct and case sensitive, if you wrong you will get some error. It will generate SQL Script like below.
+              </p>
+              <div class="bg-light" style="padding:15px;">
+                INSERT INTO `library`.`TX_HDR_BOOK` (`BOOK_ID`, `BOOK_TITLE`, `BOOK_AUTHOR`, `BOOK_PUBLISHER`, `BOOK_USER`) VALUES (NULL, 'Moon', 'Chalidade', 'Gramedia', '2');
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 2</h5>
+              <p>This an example how to use function SimpleSave to insert Multiple data in a table</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"simpleSave", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"primaryKey"</td>
+                    <td>:</td>
+                    <td>"BOOK_ID",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"value"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_ID" </td>
+                    <td>: "",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_TITLE" </td>
+                    <td>: "Moon",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_AUTHOR" </td>
+                    <td>: "Chalidade",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_PUBLISHER" </td>
+                    <td>: "Gramedia",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_USER" </td>
+                    <td>: "2"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>},</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_ID" </td>
+                    <td>: "",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_TITLE" </td>
+                    <td>: "Sun",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_AUTHOR" </td>
+                    <td>: "Linanurfauziah",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_PUBLISHER" </td>
+                    <td>: "Gramedia",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_USER" </td>
+                    <td>: "1"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>
+                It mean, you will execute database library on table TX_HDR_BOOK that have primary key BOOK_ID and the value is array 2 data. As we can see on JSON, you keep primary_key_field blank (in this case BOOK_ID). So function will read this JSON as insert. It will generate SQL Script like below.
+              </p>
+              <div class="bg-light" style="padding:15px;">
+                INSERT INTO `library`.`TX_HDR_BOOK` (`BOOK_ID`, `BOOK_TITLE`, `BOOK_AUTHOR`, `BOOK_PUBLISHER`, `BOOK_USER`) VALUES (NULL, 'Moon', 'Chalidade', 'Gramedia', '2'), (NULL, 'Sun', 'Linanurfauziah', 'Gramedia', '1');
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Example 3</h5>
+              <p>This an example how to use function SimpleSave to update Multiple data in a table</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"simpleSave", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"primaryKey"</td>
+                    <td>:</td>
+                    <td>"BOOK_ID",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"value"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_ID" </td>
+                    <td>: "2",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_TITLE" </td>
+                    <td>: "Moon",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_AUTHOR" </td>
+                    <td>: "Chalidade",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_PUBLISHER" </td>
+                    <td>: "Gramedia",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_USER" </td>
+                    <td>: "2"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>},</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_ID" </td>
+                    <td>: "1",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_TITLE" </td>
+                    <td>: "Sun",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_AUTHOR" </td>
+                    <td>: "Linanurfauziah",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_PUBLISHER" </td>
+                    <td>: "Gramedia",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_USER" </td>
+                    <td>: "1"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>
+                This json will help you to update multiple data in one hit. It will generate SQL Script like below.
+              </p>
+              <div class="bg-light" style="padding:15px;">
+                UPDATE `TX_HDR_BOOK` SET `BOOK_TITLE` = 'Moon', `BOOK_AUTHOR` = 'Chalidade', `BOOK_PUBLISHER` = 'Gramedia', `BOOK_USER` = '2' WHERE `TX_HDR_BOOK`.`BOOK_ID` = 2; UPDATE `TX_HDR_BOOK` SET `BOOK_TITLE` = 'Sun', `BOOK_AUTHOR` = 'Linanurfauziah', `BOOK_PUBLISHER` = 'Gramedia', `BOOK_USER` = '1' WHERE `TX_HDR_BOOK`.`BOOK_ID` = 1;
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="update-data" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Update Data</h1>
+              <hr>
+              <p>This how to update data in database using Lupi. As another service, you can change parameter and value as you want. There are several way to update the data that it will explain in this section.</p>
+              <h5><font style="color: #f85351;">#</font> Simple Update</h5>
+              <p>This an example how to use function SimpleSave to update Multiple data in a table</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"update", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"update"</td>
+                    <td>:</td>
+                    <td>{</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_AUTHOR" </td>
+                    <td>: "Lina",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_TITLE" </td>
+                    <td>: "Moon"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>},</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"where"</td>
+                    <td>:</td>
+                    <td>{</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_ID" </td>
+                    <td>: "1"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>
+                This json will help you to update multiple data in one hit. It will generate SQL Script like below.
+              </p>
+              <div class="bg-light" style="padding:15px;">
+                UPDATE `TX_HDR_BOOK` SET `BOOK_TITLE` = 'Moon', `BOOK_AUTHOR` = 'Lina' WHERE `TX_HDR_BOOK`.`BOOK_ID` = 1;
+              </div>
+              <br>
+              <h5><font style="color: #f85351;">#</font> Using Simplesave For Update</h5>
+              <p>This an example how to use function SimpleSave to update Multiple data in a table</p>
+              <div class="bg-light" style="padding:15px;">
+                <table>
+                  <tr>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"action"</td>
+                    <td>:</td>
+                    <td>"simpleSave", </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"db"</td>
+                    <td>:</td>
+                    <td>"library",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"table"</td>
+                    <td>:</td>
+                    <td>"TX_HDR_BOOK",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"primaryKey"</td>
+                    <td>:</td>
+                    <td>"BOOK_ID",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>"value"</td>
+                    <td>:</td>
+                    <td>[</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_ID" </td>
+                    <td>: "2",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_TITLE" </td>
+                    <td>: "Moon",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_AUTHOR" </td>
+                    <td>: "Chalidade",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_PUBLISHER" </td>
+                    <td>: "Gramedia",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_USER" </td>
+                    <td>: "2"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>},</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_ID" </td>
+                    <td>: "1",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_TITLE" </td>
+                    <td>: "Sun",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_AUTHOR" </td>
+                    <td>: "Linanurfauziah",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_PUBLISHER" </td>
+                    <td>: "Gramedia",</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>"BOOK_USER" </td>
+                    <td>: "1"</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>]</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <br>
+              <p>
+                This json will help you to update multiple data in one hit. It will generate SQL Script like below.
+              </p>
+              <div class="bg-light" style="padding:15px;">
+                UPDATE `TX_HDR_BOOK` SET `BOOK_TITLE` = 'Moon', `BOOK_AUTHOR` = 'Chalidade', `BOOK_PUBLISHER` = 'Gramedia', `BOOK_USER` = '2' WHERE `TX_HDR_BOOK`.`BOOK_ID` = 2; UPDATE `TX_HDR_BOOK` SET `BOOK_TITLE` = 'Sun', `BOOK_AUTHOR` = 'Linanurfauziah', `BOOK_PUBLISHER` = 'Gramedia', `BOOK_USER` = '1' WHERE `TX_HDR_BOOK`.`BOOK_ID` = 1;
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="delete-data" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Delete Data</h1>
+              <hr>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+
+            <div class="tab-pane fade" id="store-header-detail" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Store Header Detail</h1>
+              <hr>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+
+            <div class="tab-pane fade" id="delete-header-detail" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Delete Header Detail</h1>
+              <hr>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+
+            <div class="tab-pane fade" id="require-once" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Warning: require_once(): failed to open stream</h1>
+              <hr>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+
+            <div class="tab-pane fade" id="whoops" role="tabpanel" aria-labelledby="list-messages-list">
+              <h1><font style="color: #f85351;">#</font> Whoops, looks like something went wrong</h1>
+              <hr>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="assets/js/jquery-3.4.1.slim.min.js"></script>
+  <script src="assets/js/popper.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+</html>
