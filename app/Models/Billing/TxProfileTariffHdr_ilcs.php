@@ -39,7 +39,7 @@ class TxProfileTariffHdr_ilcs extends Model
     // }
 
     public function getBranchNameAttribute(){
-      $get = DB::connection('mdm')->table('TM_BRANCH')->where('BRANCH_ID', $this->attributes['branch_id'])->where('BRANCH_CODE', $this->attributes['branch_code'])->get();
+      $get = DB::connection('mdm_ilcs')->table('TM_BRANCH')->where('BRANCH_ID', $this->attributes['branch_id'])->where('BRANCH_CODE', $this->attributes['branch_code'])->get();
       if (count($get) > 0) {
         return $get[0]->branch_name;
       }else{
