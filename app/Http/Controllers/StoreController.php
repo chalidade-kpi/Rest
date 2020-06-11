@@ -27,6 +27,7 @@ use App\Models\OmCargo\TxHdrRec;
 
 use App\Helper\Jbi\JbiRequestBooking;
 use App\Helper\Jbi\MasterContainer;
+use App\Helper\Jbi\BillingEngine as JbiBillingEngine;
 
 class StoreController extends Controller
 {
@@ -222,6 +223,10 @@ class StoreController extends Controller
 
     function storeMasterContainer($input, $request){
       return MasterContainer::storeMasterContainer($input);
+    }
+
+    function storeProfileTariffJbi($input, $request){
+      return JbiBillingEngine::storeProfileTariff($input);
     }
 
     public function testview_file(){
