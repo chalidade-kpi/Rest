@@ -229,6 +229,10 @@ class StoreController extends Controller
       return JbiBillingEngine::storeProfileTariff($input);
     }
 
+    function storeProfileTariffDetilJbi($input, $request){
+      return JbiBillingEngine::storeProfileTariffDetil($input);
+    }
+
     public function testview_file(){
       $file = file_get_contents(url("omcargo/tx_payment/5/users.png"));
       return base64_encode($file);
