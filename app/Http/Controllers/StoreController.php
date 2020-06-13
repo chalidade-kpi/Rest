@@ -288,25 +288,25 @@ class StoreController extends Controller
       // $datenow    = Carbon::now()->format('Y-m-d H:i:s', '+7 hour');
       $datenow    = date('Y-m-d H:i:s', strtotime('+7 hour'));
       $set_data_self = [
-        "truck_create_by" => $user["user_id"],
-        "truck_create_by_name" => $user["user_name"],
-        "truck_create_date" => \DB::raw("TO_DATE('".$datenow."', 'YYYY-MM-DD HH24:mi:ss')"),
-        "truck_id" => str_replace(' ','',$input['truck_plat_no']),
-        "truck_name" => $input['truck_name'],
-        "truck_plat_no" => $input['truck_plat_no'],
-        "truck_cust_id" => $input['truck_cust_id'],
-        "truck_cust_name" => $input['truck_cust_name'],
-        "truck_branch_id" => $input['truck_branch_id'],
-        "truck_branch_code" => $input['truck_branch_code'],
-        "truck_date" => $input['truck_date'],
-        "truck_cust_address" => $input['truck_cust_address'],
-        "truck_type" => $input['truck_type'],
-        "truck_terminal_code" => $terminal->terminal_id,
-        "truck_plat_exp" => $input['truck_plat_exp'],
-        "truck_stnk_no" => $input['truck_stnk_no'],
-        "truck_stnk_exp" => $input['truck_stnk_exp'],
-        "truck_rfid" => $input['truck_rfid'],
-        "truck_type_name" => $input['truck_type_name']
+        "truck_create_by"       => $user["user_id"],
+        "truck_create_by_name"  => $user["user_name"],
+        "truck_create_date"     => \DB::raw("TO_DATE('".$datenow."', 'YYYY-MM-DD HH24:mi:ss')"),
+        "truck_id"              => str_replace(' ','',$input['truck_id']),
+        "truck_name"            => $input['truck_name'],
+        "truck_plat_no"         => str_replace(' ','',$input['truck_plat_no']),
+        "truck_cust_id"         => $input['truck_cust_id'],
+        "truck_cust_name"       => $input['truck_cust_name'],
+        "truck_branch_id"       => $input['truck_branch_id'],
+        "truck_branch_code"     => $input['truck_branch_code'],
+        "truck_date"            => $input['truck_date'],
+        "truck_cust_address"    => $input['truck_cust_address'],
+        "truck_type"            => $input['truck_type'],
+        "truck_terminal_code"   => $terminal->terminal_id,
+        "truck_plat_exp"        => $input['truck_plat_exp'],
+        "truck_stnk_no"         => $input['truck_stnk_no'],
+        "truck_stnk_exp"        => $input['truck_stnk_exp'],
+        "truck_rfid"            => $input['truck_rfid'],
+        "truck_type_name"       => $input['truck_type_name']
       ];
       if ($input['type'] == "CREATE") {
         $input['truck_id'] = str_replace(' ','',$input['truck_plat_no']);
@@ -317,13 +317,16 @@ class StoreController extends Controller
         DB::connection('mdm')->table('TM_TRUCK')->insert($set_data_self);
         $res = ConnectedExternalAppsNPK::truckRegistration($set_data);
       }else{
-        if (is_numeric($input['truck_id'])) {
-          $tid     = DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$input['truck_id'])->first();
+          $platNo  = str_replace(' ','',$input['truck_plat_no']);
+          $tid     = DB::connection('mdm')->table('TM_TRUCK')->where('truck_plat_no',$platNo)->first();
           $truckId = $tid->truck_id;
-        } else {
-          $tid     = DB::connection('mdm')->table('TM_TRUCK')->where('truck_plat_no',$input['truck_id'])->first();
-          $truckId = $tid->truck_id;
-        }
+        // if (is_numeric($input['truck_id'])) {
+        //   $tid     = DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$input['truck_id'])->first();
+        //   $truckId = $tid->truck_id;
+        // } else {
+        //   $tid     = DB::connection('mdm')->table('TM_TRUCK')->where('truck_plat_no',$input['truck_id'])->first();
+        //   $truckId = $tid->truck_id;
+        // }
         $set_data['truck_id'] = $truckId;
         DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$truckId)->update($set_data_self);
         $res = ConnectedExternalAppsNPK::updateTid($set_data);

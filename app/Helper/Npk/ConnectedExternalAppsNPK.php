@@ -665,7 +665,7 @@ class ConnectedExternalAppsNPK{
                      "orgId":"'.$branch->branch_org_id.'",
                      "receiptNumber":"'.$uperH->uper_no.'",
                      "receiptMethod":"UPER",
-                     "receiptAccount":"'.$pay->pay_account_name.' '.$pay->pay_bank_code.' '.$pay->pay_account_no.'",
+                     "receiptAccount":"'.$pay->pay_account_name.'",
                      "bankId":"'.$bank->bank_id.'",
                      "customerNumber":"'.$pay->pay_cust_id.'",
                      "receiptDate":"'.date('Y-m-d H:i:s', strtotime($pay->pay_date)).'",
@@ -1067,7 +1067,7 @@ class ConnectedExternalAppsNPK{
                 "responseMessage": ""
                 },
                 "esbBody": {
-                  "vTid": "'.$truck->truck_plat_no.'",
+                  "vTid": "'.$input['tca_truck_id'].'",
                   "vNoRequest": "'.$input['tca_req_no'].'",
                   "vBlNumber": "'.$input['tca_bl'].'",
                   "vIdTerminal": "'.$terminal->terminal_id.'"
