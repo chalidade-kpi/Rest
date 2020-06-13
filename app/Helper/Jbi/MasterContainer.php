@@ -61,7 +61,7 @@ class MasterContainer{
 				 'CREATED_BY' => $input['CREATED_BY'],
 				 'CREATED_DATE' => \DB::raw("TO_DATE('".$datenow."', 'YYYY-MM-DD')"),
 			 ]);
-			 return [ "success" => true, "result" => "Success, simpan data container"];
+			 return [ "success" => true, "result" => "Success, simpan data maintanance tarif"];
 
 			} else {
 
@@ -84,7 +84,7 @@ class MasterContainer{
 				 'CREATED_BY' => $input['CREATED_BY'],
 				 'CREATED_DATE' => \DB::raw("TO_DATE('".$datenow."', 'YYYY-MM-DD')"),
 			 ]);
-			 return [ "success" => true, "result" => "Success, update data container"];
+			 return [ "success" => true, "result" => "Success, update data maintanance tarif"];
 			}
 
 	}
