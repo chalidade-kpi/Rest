@@ -722,9 +722,9 @@ class PrintAndExport
     // E-MATERAI
     $e_materai = 0;
 
-    if ($header[0]->nota_amount >= 250000 && $header[0]->nota_amount <= 1000000) {
+    if ($header[0]->nota_amount >= 250000 && $header[0]->nota_amount < 1000000) {
       $e_materai = 3000;
-    } else if ($header[0]->nota_amount > 1000000) {
+    } else if ($header[0]->nota_amount >= 1000000) {
       $e_materai = 6000;
     }
 
@@ -782,9 +782,9 @@ class PrintAndExport
     // E-MATERAI
     $e_materai = 0;
 
-    if ($header[0]->nota_amount >= 250000 && $header[0]->nota_amount <= 1000000) {
+    if ($header[0]->nota_amount >= 250000 && $header[0]->nota_amount < 1000000) {
       $e_materai = 3000;
-    } else if ($header[0]->nota_amount > 1000000) {
+    } else if ($header[0]->nota_amount >= 1000000) {
       $e_materai = 6000;
     }
 

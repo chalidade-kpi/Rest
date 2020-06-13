@@ -563,9 +563,9 @@ class JbiGenerateTariff
 			}
 			$e_materai = 0;
 			$totalAmount = $getH->dpp + $getH->ppn;
-			if ($totalAmount >= 250000 && $totalAmount <= 1000000) {
+			if ($totalAmount >= 250000 && $totalAmount < 1000000) {
 				$e_materai = 3000;
-			} else if ($totalAmount > 1000000) {
+			} else if ($totalAmount >= 1000000) {
 				$e_materai = 6000;
 			}
 			$new_total = $totalAmount + $e_materai;

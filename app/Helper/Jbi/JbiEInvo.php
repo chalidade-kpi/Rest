@@ -46,9 +46,9 @@ class JbiEInvo
 	private static function getHdrInvAR($arr)
 	{
 		$e_materai = 0;
-		if ($arr['nota']['nota_amount'] >= 250000 && $arr['nota']['nota_amount'] <= 1000000) {
+		if ($arr['nota']['nota_amount'] >= 250000 && $arr['nota']['nota_amount'] < 1000000) {
 			$e_materai = 3000;
-		} else if ($arr['nota']['nota_amount'] > 1000000) {
+		} else if ($arr['nota']['nota_amount'] >= 1000000) {
 			$e_materai = 6000;
 		}
 		$notaAmount = (int) $arr['nota']['nota_amount'] + $e_materai;
@@ -173,6 +173,12 @@ class JbiEInvo
 		$getDate = DB::connection('eng_ilcs')->table('TX_TEMP_TARIFF_HDR')
 			->leftjoin('TX_TEMP_TARIFF_DTL', 'TX_TEMP_TARIFF_HDR.TEMP_HDR_ID = TX_TEMP_TARIFF_DTL.TEMP_HDR_ID')
 			->select('TX_TEMP_TARIFF_DTL.DATE_IN', 'TX_TEMP_TARIFF_DTL.DATE_OUT')->where('TX_TEMP_TARIFF_HDR.BOOKING_NUMBER', $arr['nota']['nota_req_no'])->limit(1)->get();
+		$e_materai = 0;
+		if ($arr['nota']['nota_amount'] >= 250000 && $arr['nota']['nota_amount'] < 1000000) {
+			$e_materai = 3000;
+		} else if ($arr['nota']['nota_amount'] >= 1000000) {
+			$e_materai = 6000;
+		}
 		foreach ($getNotaDtl as $list) {
 			$getDG = static::getDangerous($list->dtl_bl);
 			$lines .= '
@@ -210,6 +216,48 @@ class JbiEInvo
 				"interfaceLineAttribute11": "' . $list->dtl_cont_type . '",
 				"interfaceLineAttribute12": "' . $list->dtl_cont_status . '",
 				"interfaceLineAttribute13": "' . (isset($getDG->rec_dtl_cont_danger) ? $getDG->rec_dtl_cont_danger : 'N') . '",
+				"interfaceLineAttribute14": "",
+				"interfaceLineAttribute15": "",
+				"lineDoc": ""
+			},';
+		}
+		if ($e_materai != 0) {
+			$lineNumber = $list->dtl_line + 1;
+			$lines .= '
+			{
+				"billerRequestId": "' . $arr['nota']['nota_req_no'] . '",
+				"trxNumber": "' . $arr['nota']['nota_no'] . '",
+				"lineId": null,
+				"lineNumber": "' . $lineNumber . '",
+				"description": "MATERAI",
+				"memoLineId": null,
+				"glRevId": null,
+				"lineContext": "",
+				"taxFlag": "N",
+				"serviceType": "MATERAI",
+				"eamCode": "",
+				"locationTerminal": "",
+				"amount": "' . $e_materai . '",
+				"taxAmount": "",
+				"startDate": "' . $arr['nDateNotHour'] . '",
+				"endDate": "' . $arr['nDateNotHour'] . '",
+				"createdBy": "-1",
+				"creationDate": "' . $arr['nDateNotHour'] . '",
+				"lastUpdatedBy": "-1",
+				"lastUpdatedDate": "' . $arr['nDateNotHour'] . '",
+				"interfaceLineAttribute1": "",
+				"interfaceLineAttribute2": "' . $getDate[0]->date_in . '",
+				"interfaceLineAttribute3": "' . $getDate[0]->date_out . '",
+				"interfaceLineAttribute4": "",
+				"interfaceLineAttribute5": "",
+				"interfaceLineAttribute6": "",
+				"interfaceLineAttribute7": "",
+				"interfaceLineAttribute8": "' . $e_materai . '",
+				"interfaceLineAttribute9": "",
+				"interfaceLineAttribute10": "",
+				"interfaceLineAttribute11": "",
+				"interfaceLineAttribute12": "",
+				"interfaceLineAttribute13": "",
 				"interfaceLineAttribute14": "",
 				"interfaceLineAttribute15": "",
 				"lineDoc": ""
