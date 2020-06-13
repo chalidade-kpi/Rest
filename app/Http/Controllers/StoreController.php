@@ -221,16 +221,20 @@ class StoreController extends Controller
       return JbiRequestBooking::storePaymentJBI($input);
     }
 
-    function storeMasterContainer($input, $request){
-      return MasterContainer::storeMasterContainer($input);
-    }
-
     function storeProfileTariffJbi($input, $request){
       return JbiBillingEngine::storeProfileTariff($input);
     }
 
     function storeProfileTariffDetilJbi($input, $request){
       return JbiBillingEngine::storeProfileTariffDetil($input);
+    }
+
+    function storeMasterContainer($input, $request){
+      return MasterContainer::storeMasterContainer($input);
+    }
+
+    function storeMaintenanceTariff($input, $request){
+      return MasterContainer::storeMaintenanceTariff($input);
     }
 
     public function testview_file(){
