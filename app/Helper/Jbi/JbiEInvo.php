@@ -179,6 +179,7 @@ class JbiEInvo
 		} else if ($arr['nota']['nota_amount'] >= 1000000) {
 			$e_materai = 6000;
 		}
+		$lineNumber = 0;
 		foreach ($getNotaDtl as $list) {
 			$getDG = static::getDangerous($list->dtl_bl);
 			$lines .= '
