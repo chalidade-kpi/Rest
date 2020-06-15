@@ -81,7 +81,7 @@ class SendTos{
             $head['request_paid_date']      = $value->nota_paid_date;
             $head['request_from']           = ($value->rec_from == '1') ? 'DEPO' : $value->rec_from;
             $head['request_status']         = '1';
-            $head['request_di']             = 'I';
+            $head['request_di']             = 'D';
             $head['request_rd']             = 'N';
             $head['request_payment_method'] = $value->rec_paymethod;
             DB::connection('npks_ilcs')->table('TX_REQ_RECEIVING_HDR')->insert($head);
