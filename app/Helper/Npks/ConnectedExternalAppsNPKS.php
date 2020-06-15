@@ -643,6 +643,12 @@ class ConnectedExternalAppsNPKS{
 				}
 				$nota_id_old = $notaData->nota_id;
 			}
+
+			// Update CONT_ISACTIVE to N After Reject
+				$reqCont 	 = $input["no_cont"];
+				DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"N"]);
+			// End Check container
+
 			return $res;
 		}
 
