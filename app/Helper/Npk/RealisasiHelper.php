@@ -58,7 +58,20 @@ class RealisasiHelper{
     // build detil
       $setD = [];
       // return $detil = DB::connection('omcargo')->table('TX_DTL_REALISASI')->where('hdr_real_id', $find->real_id)->get();
-      $detil = DB::connection('omcargo')->table('TX_DTL_REALISASI')->leftJoin('TX_DTL_BM', 'TX_DTL_REALISASI.DTL_BM_ID', '=', 'TX_DTL_BM.DTL_BM_ID')->where('hdr_real_id', $find->real_id)->get();
+      $detil = DB::connection('omcargo')->table('TX_DTL_REALISASI')->leftJoin('TX_DTL_BM', 'TX_DTL_REALISASI.DTL_BM_ID', '=', 'TX_DTL_BM.DTL_BM_ID')->select(
+        'TX_DTL_REALISASI.dtl_bm_id as dtl_bm_id',
+        'dtl_real_id',
+        'dtl_bm_bl',
+        'dtl_pkg_id',
+        'dtl_cmdty_id',
+        'dtl_cont_size',
+        'dtl_cont_type',
+        'dtl_cont_status',
+        'dtl_unit_id',
+        'dtl_real_qty',
+        'dtl_bm_type',
+        'dtl_bm_tl',
+        'TX_DTL_REALISASI.dtl_character_id as dtl_character_id')->where('hdr_real_id', $find->real_id)->get();
       foreach ($detil as $list) {
         $newD = [];
         $list = (array)$list;
