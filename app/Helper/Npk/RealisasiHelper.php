@@ -88,7 +88,11 @@ class RealisasiHelper{
         $newD['DTL_BL'] = empty($list['dtl_bm_bl']) ? 'NULL' : $list['dtl_bm_bl'];
         $newD['DTL_PKG_ID'] = empty($list['dtl_pkg_id']) ? 'NULL' : $list['dtl_pkg_id'];
         $newD['DTL_CMDTY_ID'] = empty($list['dtl_cmdty_id']) ? 'NULL' : $list['dtl_cmdty_id'];
-        $newD['DTL_CHARACTER'] = empty($list['dtl_character_id']) ? 'NULL' : $list['dtl_character_id'];
+        if (empty($list['dtl_character_id']) and $list['dtl_character_id'] != 0) {
+          $newD['DTL_CHARACTER'] = 'NULL';
+        }else{
+          $newD['DTL_CHARACTER'] = $list['dtl_character_id'];
+        }
         $newD['DTL_CONT_SIZE'] = empty($list['dtl_cont_size']) ? 'NULL' : $list['dtl_cont_size'];
         $newD['DTL_CONT_TYPE'] = empty($list['dtl_cont_type']) ? 'NULL' : $list['dtl_cont_type'];
         $newD['DTL_CONT_STATUS'] = empty($list['dtl_cont_status']) ? 'NULL' : $list['dtl_cont_status'];
