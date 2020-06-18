@@ -223,24 +223,26 @@ class RequestBookingNPKS{
 			$config 		 = $config['config'];
 
 			// Check Container Acive on Send Request
-			$findHdr 		 = DB::connection('omuster')->table($config['head_table'])->where($config['head_primery'],$input['id'])->first();
-			$findHdr 		 = json_decode(json_encode($findHdr), TRUE);
-			$findDtl 		 = DB::connection('omuster')->table($config['head_tab_detil'])->where($config['head_forigen'], $findHdr[$config['head_primery']])->get();
-			$findDtl 		 = json_decode(json_encode($findDtl), TRUE);
+			if (!in_array($input['nota_id'], [21,22])) {
+				$findHdr 		 = DB::connection('omuster')->table($config['head_table'])->where($config['head_primery'],$input['id'])->first();
+				$findHdr 		 = json_decode(json_encode($findHdr), TRUE);
+				$findDtl 		 = DB::connection('omuster')->table($config['head_tab_detil'])->where($config['head_forigen'], $findHdr[$config['head_primery']])->get();
+				$findDtl 		 = json_decode(json_encode($findDtl), TRUE);
 
-			// Check if there are container active
-			foreach ($findDtl as $key => $value) {
-				$reqCont 	 = $value[$config['DTL_BL']];
-				$cekTsCont = DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->first();
-				if (!empty($cekTsCont->cont_isactive) AND $cekTsCont->cont_isactive == 'Y') {
-					return ['Success' => false, 'result_msg' => "Container $reqCont is active"];
+				// Check if there are container active
+				foreach ($findDtl as $key => $value) {
+					$reqCont 	 = $value[$config['DTL_BL']];
+					$cekTsCont = DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->first();
+					if (!empty($cekTsCont->cont_isactive) AND $cekTsCont->cont_isactive == 'Y') {
+						return ['Success' => false, 'result_msg' => "Container $reqCont is active"];
+					}
 				}
-			}
 
-			// Change all of container_isactive = Y
-			foreach ($findDtl as $key => $value) {
-				$reqCont 	 = $value[$config['DTL_BL']];
-				DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"Y"]);
+				// Change all of container_isactive = Y
+				foreach ($findDtl as $key => $value) {
+					$reqCont 	 = $value[$config['DTL_BL']];
+					DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"Y"]);
+				}
 			}
 			// End Check container
 
@@ -359,14 +361,16 @@ class RequestBookingNPKS{
 				}
 
 				// Update CONT_ISACTIVE to N After Reject
-				$findHdr 		 = DB::connection('omuster')->table($config['head_table'])->where($config['head_primery'],$input['id'])->first();
-				$findHdr 		 = json_decode(json_encode($findHdr), TRUE);
-				$findDtl 		 = DB::connection('omuster')->table($config['head_tab_detil'])->where($config['head_forigen'], $findHdr[$config['head_primery']])->get();
-				$findDtl 		 = json_decode(json_encode($findDtl), TRUE);
+				if (!in_array($input['nota_id'], [21,22])) {
+					$findHdr 		 = DB::connection('omuster')->table($config['head_table'])->where($config['head_primery'],$input['id'])->first();
+					$findHdr 		 = json_decode(json_encode($findHdr), TRUE);
+					$findDtl 		 = DB::connection('omuster')->table($config['head_tab_detil'])->where($config['head_forigen'], $findHdr[$config['head_primery']])->get();
+					$findDtl 		 = json_decode(json_encode($findDtl), TRUE);
 
-				foreach ($findDtl as $key => $value) {
-					$reqCont 	 = $value[$config['DTL_BL']];
-					DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"N"]);
+					foreach ($findDtl as $key => $value) {
+						$reqCont 	 = $value[$config['DTL_BL']];
+						DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"N"]);
+					}
 				}
 				// End Check container
 
@@ -544,6 +548,19 @@ class RequestBookingNPKS{
             	}
 
             	$msg='Success, rejected!';
+							// Update CONT_ISACTIVE to N After Reject
+							if (!in_array($input['nota_id'], [21,22])) {
+								$findHdr 		 = DB::connection('omuster')->table($config['head_table'])->where($config['head_no'],$getReq[$config['head_no']])->first();
+								$findHdr 		 = json_decode(json_encode($findHdr), TRUE);
+								$findDtl 		 = DB::connection('omuster')->table($config['head_tab_detil'])->where($config['head_forigen'], $findHdr[$config['head_primery']])->get();
+								$findDtl 		 = json_decode(json_encode($findDtl), TRUE);
+
+								foreach ($findDtl as $key => $value) {
+									$reqCont 	 = $value[$config['DTL_BL']];
+									DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"N"]);
+								}
+							}
+							// End Check container
             }
             return ['result' => $msg, 'nota_no' => $getNota->nota_no, 'sendInvAR' => $sendInvAR];
 	    }

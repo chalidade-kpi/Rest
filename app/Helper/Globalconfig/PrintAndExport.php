@@ -102,11 +102,11 @@ class PrintAndExport{
                   A.UPER_VESSEL_NAME,
                   CASE
                   WHEN A.UPER_NOTA_ID = 13
-                    THEN (SELECT TO_CHAR(BM_ETA,'DD MONTH YY')|| ' / ' || TO_CHAR(BM_ETD,'DD MONTH YY') FROM TX_HDR_BM WHERE BM_NO = A.UPER_REQ_NO)
+                    THEN (SELECT TO_CHAR(BM_ATA,'DD MONTH YY')|| ' / ' || TO_CHAR(BM_ATD,'DD MONTH YY') FROM TX_HDR_BM WHERE BM_NO = A.UPER_REQ_NO)
                   WHEN A.UPER_NOTA_ID = 14
-                    THEN (SELECT TO_CHAR(REC_ETA,'DD MONTH YY')|| ' / ' || TO_CHAR(REC_ETD,'DD MONTH YY') FROM TX_HDR_REC WHERE REC_NO = A.UPER_REQ_NO)
+                    THEN (SELECT TO_CHAR(REC_ATA,'DD MONTH YY')|| ' / ' || TO_CHAR(REC_ATD,'DD MONTH YY') FROM TX_HDR_REC WHERE REC_NO = A.UPER_REQ_NO)
                   WHEN A.UPER_NOTA_ID IN (15,19)
-                    THEN (SELECT TO_CHAR(DEL_ETA,'DD MONTH YY')|| ' / ' || TO_CHAR(DEL_ETD,'DD MONTH YY') FROM TX_HDR_DEL WHERE DEL_NO = A.UPER_REQ_NO)
+                    THEN (SELECT TO_CHAR(DEL_ATA,'DD MONTH YY')|| ' / ' || TO_CHAR(DEL_ATD,'DD MONTH YY') FROM TX_HDR_DEL WHERE DEL_NO = A.UPER_REQ_NO)
                   END AS PERIODE,
                   A.UPER_NO,
                   A.UPER_TRADE_TYPE,
@@ -260,11 +260,11 @@ class PrintAndExport{
               END AS PBM_NAME,
               CASE
                     WHEN A.NOTA_GROUP_ID = 13
-                      THEN (SELECT TO_CHAR(BM_ETA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(BM_ETD,'DD-MONTH-YYYY') FROM TX_HDR_BM WHERE BM_NO = A.NOTA_REQ_NO)
+                      THEN (SELECT TO_CHAR(BM_ATA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(BM_ATD,'DD-MONTH-YYYY') FROM TX_HDR_BM WHERE BM_NO = A.NOTA_REQ_NO)
                     WHEN A.NOTA_GROUP_ID = 14
-                      THEN (SELECT TO_CHAR(REC_ETA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(REC_ETD,'DD-MONTH-YYYY') FROM TX_HDR_REC WHERE REC_NO = A.NOTA_REQ_NO)
+                      THEN (SELECT TO_CHAR(REC_ATA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(REC_ATD,'DD-MONTH-YYYY') FROM TX_HDR_REC WHERE REC_NO = A.NOTA_REQ_NO)
                     WHEN A.NOTA_GROUP_ID IN (15,19)
-                      THEN (SELECT TO_CHAR(DEL_ETA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(DEL_ETD,'DD-MONTH-YYYY') FROM TX_HDR_DEL WHERE DEL_NO = A.NOTA_REQ_NO)
+                      THEN (SELECT TO_CHAR(DEL_ATA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(DEL_ATD,'DD-MONTH-YYYY') FROM TX_HDR_DEL WHERE DEL_NO = A.NOTA_REQ_NO)
                     END AS PERIODE
             FROM
               TX_HDR_NOTA A
@@ -281,11 +281,11 @@ class PrintAndExport{
                   A.UPER_VESSEL_NAME,
                   CASE
                   WHEN A.UPER_NOTA_ID = 13
-                    THEN (SELECT TO_CHAR(BM_ETA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(BM_ETD,'DD-MONTH-YYYY') FROM TX_HDR_BM WHERE BM_NO = A.UPER_REQ_NO)
+                    THEN (SELECT TO_CHAR(BM_ATA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(BM_ATD,'DD-MONTH-YYYY') FROM TX_HDR_BM WHERE BM_NO = A.UPER_REQ_NO)
                   WHEN A.UPER_NOTA_ID = 14
-                    THEN (SELECT TO_CHAR(REC_ETA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(REC_ETD,'DD-MONTH-YYYY') FROM TX_HDR_REC WHERE REC_NO = A.UPER_REQ_NO)
+                    THEN (SELECT TO_CHAR(REC_ATA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(REC_ATD,'DD-MONTH-YYYY') FROM TX_HDR_REC WHERE REC_NO = A.UPER_REQ_NO)
                   WHEN A.UPER_NOTA_ID IN (15,19)
-                    THEN (SELECT TO_CHAR(DEL_ETA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(DEL_ETD,'DD-MONTH-YYYY') FROM TX_HDR_DEL WHERE DEL_NO = A.UPER_REQ_NO)
+                    THEN (SELECT TO_CHAR(DEL_ATA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(DEL_ATD,'DD-MONTH-YYYY') FROM TX_HDR_DEL WHERE DEL_NO = A.UPER_REQ_NO)
                   END AS PERIODE,
                   A.UPER_NO,
                   A.UPER_TRADE_TYPE,
@@ -599,11 +599,11 @@ class PrintAndExport{
               END AS KADE,
               CASE
                     WHEN A.NOTA_GROUP_ID = 13
-                      THEN (SELECT TO_CHAR(BM_ETA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(BM_ETD,'DD-MONTH-YYYY') FROM TX_HDR_BM WHERE BM_NO = A.NOTA_REQ_NO)
+                      THEN (SELECT TO_CHAR(BM_ATA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(BM_ATD,'DD-MONTH-YYYY') FROM TX_HDR_BM WHERE BM_NO = A.NOTA_REQ_NO)
                     WHEN A.NOTA_GROUP_ID = 14
-                      THEN (SELECT TO_CHAR(REC_ETA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(REC_ETD,'DD-MONTH-YYYY') FROM TX_HDR_REC WHERE REC_NO = A.NOTA_REQ_NO)
+                      THEN (SELECT TO_CHAR(REC_ATA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(REC_ATD,'DD-MONTH-YYYY') FROM TX_HDR_REC WHERE REC_NO = A.NOTA_REQ_NO)
                     WHEN A.NOTA_GROUP_ID IN (15,19)
-                      THEN (SELECT TO_CHAR(DEL_ETA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(DEL_ETD,'DD-MONTH-YYYY') FROM TX_HDR_DEL WHERE DEL_NO = A.NOTA_REQ_NO)
+                      THEN (SELECT TO_CHAR(DEL_ATA,'DD-MONTH-YYYY')|| ' / ' || TO_CHAR(DEL_ATD,'DD-MONTH-YYYY') FROM TX_HDR_DEL WHERE DEL_NO = A.NOTA_REQ_NO)
                     END AS PERIODE
             FROM
               TX_HDR_NOTA A

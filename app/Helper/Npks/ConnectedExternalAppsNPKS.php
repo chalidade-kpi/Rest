@@ -539,6 +539,7 @@ class ConnectedExternalAppsNPKS{
 				"strip" 		=> "4",
 				"fumi" 			=> "5",
 				"plug" 			=> "6",
+				"tl"				=> "20",
 				"rec_cargo" => "21",
 				"del_cargo" => "22"
 			];
@@ -646,7 +647,16 @@ class ConnectedExternalAppsNPKS{
 
 			// Update CONT_ISACTIVE to N After Reject
 				$reqCont 	 = $input["no_cont"];
-				DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"N"]);
+				$cekTsCont = DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->first();
+				if (in_array($nota_id,[1,20,10,7])) {
+					if ($cekTsCont->cont_location != "GATI" || $cekTsCont->cont_location == "IN_YARD") {
+						DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"N"]);
+					}
+				} else if (in_array($nota_id,[2,3,4,5,6])) {
+					if ($cekTsCont->cont_location == "IN_YARD") {
+						DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"N"]);
+					}
+				}
 			// End Check container
 
 			return $res;
@@ -732,7 +742,11 @@ class ConnectedExternalAppsNPKS{
 		    $tsContainer 		 	= DB::connection('omuster')->table('TS_CONTAINER')->where($findCont)->get();
 
 				// return $tsContainer;
-		                        DB::connection('omuster')->table('TS_CONTAINER')->where($findCont)->update(['CONT_LOCATION'=>"IN_YARD", 'CONT_ISACTIVE' => "N"]);
+				$cekRequest = substr($listR["NO_REQUEST"],0,3);
+				if ($cekRequest == "REC") {
+					DB::connection('omuster')->table('TS_CONTAINER')->where($findCont)->update(['CONT_LOCATION'=>"IN_YARD", 'CONT_ISACTIVE' => "N"]);
+				}
+
 		    $placementID 			= DB::connection('omuster')->table('DUAL')->select('SEQ_TX_PLACEMENT.NEXTVAL')->get();
 
 				if (empty($tsContainer)) {

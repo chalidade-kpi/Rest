@@ -213,9 +213,6 @@ class IndexController extends Controller
     }
 
     function check($input) {
-      $sequence = DB::connection('omuster')->table("SYS.DUAL")->select("SEQ_TX_HDR_NOTA.NEXTVAL")->get();
-      $sequence = $sequence[0]->nextval;
-
-      return $sequence;
+      return substr($input["req_no"],0,3);
     }
 }
