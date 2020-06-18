@@ -1,14 +1,14 @@
 ## REST API NPK - NPKS BILLING DOCUMENTATION
 Dalam dokumen ini akan dijelaskan secara lengkap terkait dokumentasi dari REST-API NPK dan NPKS Billing, mulai dari struktur table hingga detail perfuntion untuk memudahkan proses developmennt, sekaligus apabila Rest-Api global ini digunakan untuk keperluan lainya.
 
-## BASIC INSTALLATION
-### Install Composer
+## 1. BASIC INSTALLATION
+### 1.1. Install Composer
 Langakah awal yang wajib dilakukan sebelum menggunakan API ini adalah pastikan composer sudah terinstall di komputer atau server. Download composer melalui link berikut [composer](https://getcomposer.org/download/). Apabila masih bingung cara installasinya, bisa membuka tutorial berikut : [Very Simple, How To Install Composer](https://medium.com/@chalidade).
 
-### Download API
+### 1.2. Download API
 Setelah menginstall composer di komputer, download atau clone Rest di halaman ini. Anda bisa mendownload zip dengan klik [link](https://codeload.github.com/chalidade/Rest/zip/dev) berikut. Kemudian letakkan di file htdocs jika Anda menggunakan Xampp atau /var/ww/html/ jika Anda menggunakan Linux.
 
-### Setup Composer
+### 1.3. Setup Composer
 Jika sudah, buka terminal / CMD masuk ke direktory project dan ketikkan composer install.
 > composer install
 
@@ -18,9 +18,9 @@ Warning: require_once(D:\xampp\htdocs\lupi\bootstrap/../vendor/autoload.php): fa
 Fatal error: require_once(): Failed opening required ‘D:\xampp\htdocs\lupi\bootstrap/../vendor/autoload’ (include_path=’D:\xampp\php\PEAR’) in ...
 ```
 
-### Setting Connection
+### 1.4. Setting Connection
 Selanjutnya buka folder config/database.php untuk setting koneksi database dan lakukan konfigurasi databasenya.
-#### Contoh Config MySQL :
+#### 1.4.1. Contoh Config MySQL :
 ```
  'exampleMysql'  => [
     'driver'    => 'mysql',
@@ -37,7 +37,7 @@ Selanjutnya buka folder config/database.php untuk setting koneksi database dan l
 ],
 ```
 
-#### Contoh Config ORACLE :
+#### 1.4.2. Contoh Config ORACLE :
 ```
  'exampleOracle'  => [
     'driver'        => 'oracle',
@@ -57,7 +57,7 @@ Selanjutnya buka folder config/database.php untuk setting koneksi database dan l
 Pastikan nama database, host, username, dan password benar. Anda dapat mengubah nama konfigurasi sesuai keinginan anda. Nama konfigurasi ini lah yang digunakan untuk mempermudah penggunaan nanti.
 
 
-## STRUKTUR DAN FUNGSI DIRECTORY
+## 2. STRUKTUR DAN FUNGSI DIRECTORY
 Beberapa directory penting dalam proses development API ini kurang lebih hanya berkutat di folder - folder berikut :
 | No | Directory                | Fungsi                                                                                                                                                                                         | Keterangan                                              |
 |----|--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
@@ -71,7 +71,7 @@ Beberapa directory penting dalam proses development API ini kurang lebih hanya b
 
 Note : Apabila ada service baru, ada baiknya dibuatkan sebuah helper beru (folder baru di dalam Helper) agar tidak menginteferensi API existing.
 
-## FUNGSI FILE DI DALAM SEBUAH DIRECTORY
+## 3. FUNGSI FILE DI DALAM SEBUAH DIRECTORY
 Berikut adalah penjelasan tiap - tiap file dalam sebuah directory pada REST-API NPK NPKS Billing :
 | No | Nama File                     | Lokasi Folder                                     | Fungsi                                                                                                                                                                                                                                  |
 |----|-------------------------------|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
