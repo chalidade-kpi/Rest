@@ -3,23 +3,24 @@ Dalam dokumen ini akan dijelaskan secara lengkap terkait dokumentasi dari REST-A
 
 ## BASIC INSTALLATION
 ### Install Composer
-Lumen need [composer](https://getcomposer.org/download/) to manage its dependencies. So before using REST API, make sure you installed on your machine. If you don't know how to install composer just visit my medium post about [Very Simple, How To Install Composer](https://medium.com/@chalidade).
+Langakah awal yang wajib dilakukan sebelum menggunakan API ini adalah pastikan composer sudah terinstall di komputer atau server. Download composer melalui link berikut [composer](https://getcomposer.org/download/). Apabila masih bingung cara installasinya, bisa membuka tutorial berikut : [Very Simple, How To Install Composer](https://medium.com/@chalidade).
 
 ### Download API
-After install composer in your machine, download or clone Rest in this page. You can Download Zip by clicking this [link](https://codeload.github.com/chalidade/Rest/zip/dev). Then put your file into htdoc if you're using Xampp or var/www/html/ if you're using linux server. then extract.
+Setelah menginstall composer di komputer, download atau clone Rest di halaman ini. Anda bisa mendownload zip dengan klik [link](https://codeload.github.com/chalidade/Rest/zip/dev) berikut. Kemudian letakkan di file htdocs jika Anda menggunakan Xampp atau /var/ww/html/ jika Anda menggunakan Linux.
 
 ### Setup Composer
-Next, open terminal then go to your REST API Directory. Type and enter
+Jika sudah, buka terminal / CMD masuk ke direktory project dan ketikkan composer install.
 > composer install
 
-This function will automatically install All package or vendor to run REST API. You will get error like this, if you don't do this step.
+Fungsi ini akan otomatis menginstall semua package dan vendor untuk menjalankan API. Jika Anda tidak melakukan langkah ini, maka akan mendapat error message seperti dibawah :
 ```
 Warning: require_once(D:\xampp\htdocs\lupi\bootstrap/../vendor/autoload.php): failed to open stream: No such file or directory in ...
 Fatal error: require_once(): Failed opening required ‘D:\xampp\htdocs\lupi\bootstrap/../vendor/autoload’ (include_path=’D:\xampp\php\PEAR’) in ...
 ```
 
 ### Setting Connection
-Open folder config/database.php to setting your connection between REST API and your database. You can copy exampleMysql and change value as your configuration.
+Selanjutnya buka folder config/database.php untuk setting koneksi database dan lakukan konfigurasi databasenya.
+#### Contoh Config MySQL :
 ```
  'exampleMysql'  => [
     'driver'    => 'mysql',
@@ -36,7 +37,24 @@ Open folder config/database.php to setting your connection between REST API and 
 ],
 ```
 
-Make sure your database name, username, and password is right. You can change name of your configuration with rename exampleMysql as you want. Keep it mind, that name will use in parameter REST API. So make easier.
+#### Contoh Config ORACLE :
+```
+ 'exampleOracle'  => [
+    'driver'        => 'oracle',
+    'tns'           => env('DB_TNS', ''),
+    'host'          => env('DB_HOST', 'ipserver'),
+    'port'          => env('DB_PORT', 1521),
+    'database'      => env('DB_DATABASE', 'your_database'),
+    'username'      => env('DB_USERNAME', 'your_username'),
+    'password'      => env('DB_PASSWORD', 'your_pass'),
+    'charset'       => env('DB_CHARSET', 'AL32UTF8'),
+    'prefix'        => env('DB_PREFIX', ''),
+    'prefix_schema' => env('DB_SCHEMA_PREFIX', ''),
+    'edition'       => env('DB_EDITION', 'ora$base'),
+],
+```
+
+Pastikan nama database, host, username, dan password benar. Anda dapat mengubah nama konfigurasi sesuai keinginan anda. Nama konfigurasi ini lah yang digunakan untuk mempermudah penggunaan nanti.
 
 
 ## STRUKTUR DAN FUNGSI DIRECTORY
