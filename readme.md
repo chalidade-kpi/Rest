@@ -1,6 +1,44 @@
 ## REST API NPK - NPKS BILLING DOCUMENTATION
 Dalam dokumen ini akan dijelaskan secara lengkap terkait dokumentasi dari REST-API NPK dan NPKS Billing, mulai dari struktur table hingga detail perfuntion untuk memudahkan proses developmennt, sekaligus apabila Rest-Api global ini digunakan untuk keperluan lainya.
 
+## BASIC INSTALLATION
+### INSTALL COMPOSER
+Lumen need [composer](https://getcomposer.org/download/) to manage its dependencies. So before using REST API, make sure you installed on your machine. If you don't know how to install composer just visit my medium post about [Very Simple, How To Install Composer](https://medium.com/@chalidade).
+
+### DOWNLOAD REST API
+After install composer in your machine, download or clone Rest in this page. You can Download Zip by clicking this [link](https://codeload.github.com/chalidade/Rest/zip/dev). Then put your file into htdoc if you're using Xampp or var/www/html/ if you're using linux server. then extract.
+
+### SETUP COMPOSER
+Next, open terminal then go to your REST API Directory. Type and enter
+> composer install
+
+This function will automatically install All package or vendor to run REST API. You will get error like this, if you don't do this step.
+```
+Warning: require_once(D:\xampp\htdocs\lupi\bootstrap/../vendor/autoload.php): failed to open stream: No such file or directory in ...
+Fatal error: require_once(): Failed opening required ‘D:\xampp\htdocs\lupi\bootstrap/../vendor/autoload’ (include_path=’D:\xampp\php\PEAR’) in ...
+```
+
+### SETTING CONNECTION
+Open folder config/database.php to setting your connection between REST API and your database. You can copy exampleMysql and change value as your configuration.
+```
+ 'exampleMysql'  => [
+    'driver'    => 'mysql',
+    'host'      => env('DB_HOST', 'localhost'),
+    'port'      => env('DB_PORT', 3306),
+    'database'  => env('DB_DATABASE', 'your_database'),
+    'username'  => env('DB_USERNAME', 'your_username'),
+    'password'  => env('DB_PASSWORD', 'your_pass'),
+    'charset'   => env('DB_CHARSET', 'utf8'),
+    'collation' => env('DB_COLLATION', 'utf8_unicode_ci'),
+    'prefix'    => env('DB_PREFIX', ''),
+    'timezone'  => env('DB_TIMEZONE', '+00:00'),
+    'strict'    => env('DB_STRICT_MODE', false),
+],
+```
+
+Make sure your database name, username, and password is right. You can change name of your configuration with rename exampleMysql as you want. Keep it mind, that name will use in parameter REST API. So make easier.
+
+
 ### STRUKTUR DAN FUNGSI DIRECTORY
 Beberapa directory penting dalam proses development API ini kurang lebih hanya berkutat di folder - folder berikut :
 | No | Directory                | Fungsi                                                                                                                                                                                         | Keterangan                                              |
