@@ -2,13 +2,13 @@
 Dalam dokumen ini akan dijelaskan secara lengkap terkait dokumentasi dari REST-API NPK dan NPKS Billing, mulai dari struktur table hingga detail perfuntion untuk memudahkan proses developmennt, sekaligus apabila Rest-Api global ini digunakan untuk keperluan lainya.
 
 ## BASIC INSTALLATION
-### INSTALL COMPOSER
+### Install Composer
 Lumen need [composer](https://getcomposer.org/download/) to manage its dependencies. So before using REST API, make sure you installed on your machine. If you don't know how to install composer just visit my medium post about [Very Simple, How To Install Composer](https://medium.com/@chalidade).
 
-### DOWNLOAD REST API
+### Download API
 After install composer in your machine, download or clone Rest in this page. You can Download Zip by clicking this [link](https://codeload.github.com/chalidade/Rest/zip/dev). Then put your file into htdoc if you're using Xampp or var/www/html/ if you're using linux server. then extract.
 
-### SETUP COMPOSER
+### Setup Composer
 Next, open terminal then go to your REST API Directory. Type and enter
 > composer install
 
@@ -18,7 +18,7 @@ Warning: require_once(D:\xampp\htdocs\lupi\bootstrap/../vendor/autoload.php): fa
 Fatal error: require_once(): Failed opening required ‘D:\xampp\htdocs\lupi\bootstrap/../vendor/autoload’ (include_path=’D:\xampp\php\PEAR’) in ...
 ```
 
-### SETTING CONNECTION
+### Setting Connection
 Open folder config/database.php to setting your connection between REST API and your database. You can copy exampleMysql and change value as your configuration.
 ```
  'exampleMysql'  => [
@@ -39,7 +39,7 @@ Open folder config/database.php to setting your connection between REST API and 
 Make sure your database name, username, and password is right. You can change name of your configuration with rename exampleMysql as you want. Keep it mind, that name will use in parameter REST API. So make easier.
 
 
-### STRUKTUR DAN FUNGSI DIRECTORY
+## STRUKTUR DAN FUNGSI DIRECTORY
 Beberapa directory penting dalam proses development API ini kurang lebih hanya berkutat di folder - folder berikut :
 | No | Directory                | Fungsi                                                                                                                                                                                         | Keterangan                                              |
 |----|--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
@@ -53,7 +53,7 @@ Beberapa directory penting dalam proses development API ini kurang lebih hanya b
 
 Note : Apabila ada service baru, ada baiknya dibuatkan sebuah helper beru (folder baru di dalam Helper) agar tidak menginteferensi API existing.
 
-### FUNGSI FILE DI DALAM SEBUAH DIRECTORY
+## FUNGSI FILE DI DALAM SEBUAH DIRECTORY
 Berikut adalah penjelasan tiap - tiap file dalam sebuah directory pada REST-API NPK NPKS Billing :
 | No | Nama File                     | Lokasi Folder                                     | Fungsi                                                                                                                                                                                                                                  |
 |----|-------------------------------|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
