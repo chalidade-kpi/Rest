@@ -192,6 +192,20 @@ Berikut adalah penjabaran tiap - tiap function pada file helper API.
 | 11 | listRoleBranch     | Menampilkan list role branch                                                                        |
 | 12 | deleteRoleBranch   | Menghapus role branch                                                                               |
 
+#### A.5. ViewExt.php
+| No | Nama Function       | Fungsi                                                                     |
+|:--:|---------------------|----------------------------------------------------------------------------|
+|  1 | splitNota           | Mengampilkan data untuk kebutuhan split nota NPK                           |
+|  2 | getViewNotaPLB      | Menampilkan data untuk view nota NPKS                                      |
+|  3 | viewCancelCargo     | Menampilkan Data Cancel Barang NPKS                                        |
+|  4 | getNota             | Mengampilkan data nota dengan join TM_COMP_NOTA, TM_NOTA, dan TM_BRANCH    |
+|  5 | einvoiceLink        | Mendapatkan link einvoice                                                  |
+|  6 | getDebitur          | Menampilkan data Debitur untuk kebutuhan report Debitur NPK                |
+|  7 | getRekonsilasi      | Menampilkan data rekonsilasi nota untuk kebutuhan report NPK               |
+|  8 | getRptDtlPendapatan | Menampilkan data Rekapitulasi Detail Pendapatan untuk kebutuhan report NPK |
+|  9 | getTrafikProduksi   | Menampilkan data trafik produksi untuk report NPK                          |
+| 10 | readExcelImport     | API untuk membaca import file excel                                        |
+
 
 
 ## Develop By Lumen

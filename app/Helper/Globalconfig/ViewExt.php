@@ -584,8 +584,7 @@ class ViewExt{
     return ["result"=>$result, "total"=>$count];
   }
 
-  public function readExcelImport(Request $request)
-  {
+  public function readExcelImport(Request $request) {
     $json_request = $request->json()->get('TCARequest');
     $encoded_string = $json_request['esbBody']['base64'];
 
