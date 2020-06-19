@@ -206,6 +206,32 @@ Berikut adalah penjabaran tiap - tiap function pada file helper API.
 |  9 | getTrafikProduksi   | Menampilkan data trafik produksi untuk report NPK                          |
 | 10 | readExcelImport     | API untuk membaca import file excel                                        |
 
+### B.  /Helper/Npk/
+#### B.1. ConnectedExternalAppsNPK.php
+| No | Nama Function               | Fungsi                                                                                       |
+|:--:|-----------------------------|----------------------------------------------------------------------------------------------|
+|  1 | getListTCA                  | Menampilkan list data TCA via esb                                                            |
+|  2 | getViewDetilTCA             | Menampilkan detail TCA berdasarkan TCA_ID yang dikirim via esb                               |
+|  3 | vessel_index                | Menampilkan data vessel via esb untuk kebutuhan input vessel di form UI                      |
+|  4 | peb_index                   | Menampilkan data PEB via esb untuk kebutuhan input PEB di form UI                            |
+|  5 | realTos                     | Mendapatkan data realisasi dari tos via esb untuk di insert di table TX_REAL_TOS Billing NPK |
+|  6 | realTosGet                  | Turunan fungsi realTos untuk batik json esb dan proses store realisasi                       |
+|  7 | sendRequestBooking          | API untuk kebutuhan send request NPK Billing                                                 |
+|  8 | sendRequestBookingNewExcute | Mengatur JSON untuk Send request via esb kebutuhan saveCargoNpkInterfaceRequest              |
+|  9 | sendUperPutReceipt          | Mengatur JSON untuk kebutuhan Uper Put Receipt via esb                                       |
+| 10 | sendNotaPutReceipt          | Mengatur JSON untuk kebutuhan Send Nota Put Receipt via esb                                  |
+| 11 | truckRegistration           | Registrasi Truck Via esb NPK                                                                 |
+| 12 | updateTid                   | Update TID via ESB                                                                           |
+| 13 | getTruckPrimaryIdTos        | Mengupdate Truck Prmary Id ambil dari TOS via esb dan update ke tabel billing                |
+| 14 | closeTCA                    | Menghapus TCA via ESB                                                                        |
+| 15 | createTCA                   | Membuat TCA via ESB                                                                          |
+| 16 | sendNotaProforma            | Mengatur JSON untuk pengiriman Nota Proforma via esb                                         |
+| 17 | notaProformaPutApply        | Mengatur JSON untuk kebutuhan Nota Proforma put Apply                                        |
+| 18 | uperSimkeuCek               | Melakukan pengecekan Uper Simkeu via ESB                                                     |
+| 19 | notaProformaSimkeuCek       | Melakukan pengecekan Nota Proforma Simkeu via esb                                            |
+| 20 | getLinkCodeQR               | Mendapatkan link QR Code dari E-invoice                                                      |
+| 21 | sendNotifToIBISQA           | Mengirim Notifikasi Untuk kebutuhan aplikasi Mobile                                          |
+
 
 
 ## Develop By Lumen
