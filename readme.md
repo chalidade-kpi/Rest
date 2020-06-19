@@ -106,7 +106,7 @@ Berikut adalah penjelasan tiap - tiap file dalam sebuah directory pada REST-API 
 
 ## 4. PENJELASAN PER-FUNGSI TIAP FILE
 Berikut adalah penjabaran tiap - tiap function pada file helper API.
-### A.  Helper/Globalconfig/
+### A.  /Helper/Globalconfig/
 #### A.1. BillingEngine.php
 | No | Nama Function                     | Fungsi                                                                                                                                                                                                     |
 |:--:|-----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
