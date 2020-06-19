@@ -104,7 +104,7 @@ Berikut adalah penjelasan tiap - tiap file dalam sebuah directory pada REST-API 
 | 27 | StoreController.php           | \app\Http\Controllers\StoreController.php         | File pertama yang dieksekusi oleh lumen melalui ketika memanggil endpoint "/store"                                                                                                                                                      |
 | 28 | ViewController.php            | \app\Http\Controllers\ViewController.php          | File pertama yang dieksekusi oleh lumen melalui ketika memanggil endpoint "/view"                                                                                                                                                       |
 
-## 4. PENJELASAN PER-FUNGSI TIAP FILE
+## 4. PENJELASAN PER-FUNCTION TIAP FILE
 Berikut adalah penjabaran tiap - tiap function pada file helper API.
 ### A.  /Helper/Globalconfig/
 #### A.1. BillingEngine.php
@@ -120,6 +120,28 @@ Berikut adalah penjabaran tiap - tiap function pada file helper API.
 |  8 | calculateTariff                   | Membatik berdasarkan data inputan untuk perhitungan tarif via prosedur database                                                                                                                            |
 |  9 | calculateTariffExcute             | Menjalankan prosedure untuk perhitungan tarif dari hasil batikan fungsi calculateTariff                                                                                                                    |
 | 10 | getSimulasiTarif                  | Membatik dan menjalankan prosedur untuk simulasi tariff                                                                                                                                                    |
+
+#### A.2. FileUpload.php
+| No | Nama Function | Fungsi                                                                                                                               |
+|:--:|---------------|--------------------------------------------------------------------------------------------------------------------------------------|
+|  1 | upload_file   | Meng-create sebuah folder di dalam folder public, kemudian men-decode file berformat base64 dan menyimpannya kedalam folder tersebut |
+
+#### A.3. GlobalHelper.php
+| No | Nama Function      | Fungsi                                                                                                                      |
+|:--:|--------------------|-----------------------------------------------------------------------------------------------------------------------------|
+|  1 | viewHeaderDetail   | Menampilkan data dalam format header detail, biasanya digunakan ketika view detail di UI                                    |
+|  2 | index              | Menampilkan data dalam list sesuai dengan kondisi / parameter yang ditentukan                                               |
+|  3 | filter             | Memfilter data sesuai dengan input dan parameter yang dideklarasikan                                                        |
+|  4 | filterByGrid       | Memfilter data dalam grid table, biasanya digunakan di UI Ketika ada table dan ingin mencari data melalui klik header table |
+|  5 | autoComplete       | Mencari data berdasarkan inputan dalam format autocomplete dibuat sesuai kebutuhan UI dengan format JSON sesuai extJs       |
+|  6 | join               | Menampilkan data dengan fungsi join pada beberapa table                                                                     |
+|  7 | whereQuery         | Memiliki fungsi mirip dengan autocomplete namun dengan tambahan where dan filter                                            |
+|  8 | tanggalMasukKeluar | Mendapatkan tanggal masuk dan keluar untuk kebutuhan proforma NPK Banten                                                    |
+|  9 | saveheaderdetail   | Menyimpan / Mengupdate data dalam format header detail                                                                      |
+| 10 | update             | Mengupdate data untuk kebutuhan lebih spesifik                                                                              |
+| 11 | delHeaderDetail    | Menghapus data dalam format header detail                                                                                   |
+| 12 | getUper            | Mendapatkan nilai uper untuk kebutuhan print proforma dan invoice                                                           |
+| 13 | totalPenumpukan    | Mendapatkan nilai total penumpukan untuk kebutuhan print proforma dan invoice                                               |
 
 
 
