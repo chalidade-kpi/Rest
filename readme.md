@@ -105,7 +105,21 @@ Berikut adalah penjelasan tiap - tiap file dalam sebuah directory pada REST-API 
 | 28 | ViewController.php            | \app\Http\Controllers\ViewController.php          | File pertama yang dieksekusi oleh lumen melalui ketika memanggil endpoint "/view"                                                                                                                                                       |
 
 ## 4. PENJELASAN PER-FUNGSI TIAP FILE
-Berikut adalah penjabaran fungsi pada tiap - tiap menu yang ada di API.
+Berikut adalah penjabaran tiap - tiap function pada file helper API.
+### A. BillingEngine.php (Globalconfig)
+| No | Nama Function                     | Fungsi                                                                                                                                                                                                     |
+|:--:|-----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|  1 | storeProfileTariff                |  Menyimpan header profile tarif data dan input pentarifan, berhubungan dengan insert data ke TxProfileTariffHdr dan TsTarif juga berhubugan dengan create iso.                                             |
+|  2 | storeProfileTariffDetil           | Menyimpan detail dari profil tarif data, sistem save detail terpisah dari header untuk menanggulangi case ketika tarif di inputkan dan ada error ditengah - tengah, agar tidak mengulang input dari awal.  |
+|  3 | deleteProfileTariffDetil          | Menghapus detail profile tarif berdasarkan tariff_id yang diinputkan.                                                                                                                                      |
+|  4 | storeCustomerProfileTariffAndUper | Menyimpan data customer profile tarif dan uper dengan meng-insert ke tabel TS_CUSTOMER_PROFILE dan TS_UPER DB engine.                                                                                      |
+|  5 | listProfileTariffDetil            | Menampilkan list profile tarif detail serta berhubungan dengan ISO_CODE                                                                                                                                    |
+|  6 | viewProfileTariff                 | Menampilkan list profile tarif header dan detail serta berhubungan dengan ISO_CODE                                                                                                                         |
+|  7 | viewCustomerProfileTariff         | Menampilkan list customer profile dan tarif berdasarkan inputan cust_profile_id nya.                                                                                                                       |
+|  8 | calculateTariff                   | Membatik berdasarkan data inputan untuk perhitungan tarif via prosedur database                                                                                                                            |
+|  9 | calculateTariffExcute             | Menjalankan prosedure untuk perhitungan tarif dari hasil batikan fungsi calculateTariff                                                                                                                    |
+| 10 | getSimulasiTarif                  | Membatik dan menjalankan prosedur untuk simulasi tariff                                                                                                                                                    |
+
 
 
 ## Develop By Lumen
