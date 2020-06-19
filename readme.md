@@ -176,6 +176,22 @@ Berikut adalah penjabaran tiap - tiap function pada file helper API.
 | 15 | penyebut             | Mengconvert number menjadi string untuk kebutuhan terbilang dalam print   |
 | 16 | terbilang            | Fungsi lanjutan dari penyebut                                             |
 
+#### A.5. UserAndRoleManagemnt.php
+| No | Nama Function      | Fungsi                                                                                              |
+|:--:|--------------------|-----------------------------------------------------------------------------------------------------|
+|  1 | storeUser          | Menyimpan User ke dalam tabel TM_USER dengan pengecekan beberapa kondisi terlebih dahulu            |
+|  2 | changePasswordUser | Mengganti password user berdasarkan USER_ID                                                         |
+|  3 | storeRole          | Mendaftarkan / mengupdate data role ke table TR_ROLE                                                |
+|  4 | storeRolePermesion | Menyimpan / mengupdate role permission user                                                         |
+|  5 | permissionGet      | Mengecek permission user yang nantinya digunakan untuk menampilkan menu sesuai role masing - masing |
+|  6 | role_data          | Mendapatkan Role data dari user yang login                                                          |
+|  7 | role_p             | Kondisi untuk cek menu berdasarkan role user                                                        |
+|  8 | permission         | Turunan fungsi dari permisson get untuk menampilkan data berdasarkan role masing - masing user      |
+|  9 | menuTree           | Mengatur menu pada tampilan UI                                                                      |
+| 10 | storeRoleBranch    | Menyimpan / mengupdate role pada tiap - tiap branch                                                 |
+| 11 | listRoleBranch     | Menampilkan list role branch                                                                        |
+| 12 | deleteRoleBranch   | Menghapus role branch                                                                               |
+
 
 
 ## Develop By Lumen
