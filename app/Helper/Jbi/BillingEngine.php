@@ -1041,7 +1041,7 @@ class BillingEngine {
       if ($getServCode->service_code == 1) {
         $procPKG = 'PKG_BILLING';
       }else if ($getServCode->service_code == 2) {
-        $procPKG = 'PKG_BILLING_NPKS';
+        $procPKG = 'PKG_BILLING_JAMBI';
       }
 
       $sql = " DECLARE
