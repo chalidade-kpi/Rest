@@ -232,6 +232,15 @@ Berikut adalah penjabaran tiap - tiap function pada file helper API.
 | 20 | getLinkCodeQR               | Mendapatkan link QR Code dari E-invoice                                                      |
 | 21 | sendNotifToIBISQA           | Mengirim Notifikasi Untuk kebutuhan aplikasi Mobile                                          |
 
+#### B.2. RealisasiHelper.php
+| No | Nama Function        | Fungsi                                                                                                                                                                          |
+|:--:|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|  1 | confirmRealBM        | Membatik JSON untuk melakukan perhitungan tarif sesuai dengan realisasi Bongkar Muat di TOS, Jika berhasil mengupdate status menjadi realisasi di NPK Billing                   |
+|  2 | confirmRealBPRP      | Membatik JSON untuk melakukan perhitungan tarif sesuai dengan realisasi BPRP di TOS, jika berhasil maka update status BPRP menjadi realisasi                                    |
+|  3 | migrateNotaData      | API untuk Migrate data nota NPK Billing                                                                                                                                         |
+|  4 | rejectedProformaNota | Mereject proforma nota dan mengembalikan status ke send                                                                                                                         |
+|  5 | approvedProformaNota | Melakukan approve nota kemudian mengirim nota ke e-invoice via esb melalui fungsi sendNotaProforma, mengubah status nota menjadi approve dan menyimpan pembayaran ke TX_PAYMENT |
+
 
 
 ## Develop By Lumen
