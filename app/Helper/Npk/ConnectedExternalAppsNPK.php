@@ -1034,9 +1034,12 @@ class ConnectedExternalAppsNPK{
       $results = json_decode($res->getBody()->getContents(), true);
 
       if(isset($results['getTruckResponse']['esbBody']['results'][0]) and isset($results['getTruckResponse']['esbBody']['results'][0]['idTruck'])){
-        DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',str_replace(' ','',$input['truck_plat_no']))->update([
+        DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',$input['truck_id'])->update([
           "truck_id_seq" => $results['getTruckResponse']['esbBody']['results'][0]['idTruck']
         ]);
+        // DB::connection('mdm')->table('TM_TRUCK')->where('truck_id',str_replace(' ','',$input['truck_plat_no']))->update([
+        //   "truck_id_seq" => $results['getTruckResponse']['esbBody']['results'][0]['idTruck']
+        // ]);
       }
       $res = [
         "request" => json_decode($string_json, true),

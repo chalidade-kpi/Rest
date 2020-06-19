@@ -104,6 +104,8 @@ Berikut adalah penjelasan tiap - tiap file dalam sebuah directory pada REST-API 
 | 27 | StoreController.php           | \app\Http\Controllers\StoreController.php         | File pertama yang dieksekusi oleh lumen melalui ketika memanggil endpoint "/store"                                                                                                                                                      |
 | 28 | ViewController.php            | \app\Http\Controllers\ViewController.php          | File pertama yang dieksekusi oleh lumen melalui ketika memanggil endpoint "/view"                                                                                                                                                       |
 
+## 4. PENJELASAN PER-FUNGSI TIAP FILE
+Berikut adalah penjabaran fungsi pada tiap - tiap menu yang ada di API.
 
 
 ## Develop By Lumen
