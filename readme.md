@@ -143,6 +143,39 @@ Berikut adalah penjabaran tiap - tiap function pada file helper API.
 | 12 | getUper            | Mendapatkan nilai uper untuk kebutuhan print proforma dan invoice                                                           |
 | 13 | totalPenumpukan    | Mendapatkan nilai total penumpukan untuk kebutuhan print proforma dan invoice                                               |
 
+#### A.4. ListIndexExt.php
+| No | Nama Function       | Fungsi                                                                                                                                                      |
+|:--:|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|  1 | cektoken            | Melakukan pengecekan pada token untuk kebutuhan apabila token tidak terdaftar di DB atau expired maka akan dilempar kembali ke login                        |
+|  2 | cleartoken          | Menghapus token pada DB untuk kebutuhan logout                                                                                                              |
+|  3 | clearlogin          | Menghapus token dan mengupdate user login apabila user sudah login tapi diakses di komputer atau device lain sedangkan session masih aktif                  |
+|  4 | clearsession        | Menghapus token dan mengembalikan posisi user seperti sebelum login untuk kebutuhan auto logout jika user tidak melakukan kegiatan sama sekali selama 4 jam |
+|  5 | unit                | Mengambil data unit dengan menggabungkan data dari TS_UNIT DB omcargo dan TM_UNIT DB mdm, yang tidak bisa dijoin lewat api global                           |
+|  6 | listproforma        | Menampilkan list proforma khusus berdasarkan kondisi di NPK Billing                                                                                         |
+|  7 | listProfileCustomer | Menampilkan list profile customer khusus berdasarkan kondisi di NPK Billing                                                                                 |
+|  8 | listRecBatalCargo   | Menampilkan list batal receiving barang khusus berdasarkan kondisi di NPKS Billing                                                                          |
+|  9 | listDelBatalCargo   | Menampilkan list batal delivery barang khusus berdasarkan kondisi di NPKS Billing                                                                           |
+
+#### A.5. PrintAndExport.php
+| No | Nama Function        | Fungsi                                                                    |
+|:--:|----------------------|---------------------------------------------------------------------------|
+|  1 | printGetPass         | Mengambil data dari beberapa table untuk kebutuhan print getPass Card NPK |
+|  2 | printRDCardNPKS      | API print RD Card dan SPPS Card                                           |
+|  3 | printUperPaidNPK     | API print Uper Paid NPK                                                   |
+|  4 | printProformaNPK     | API print proforma NPK                                                    |
+|  5 | printUperNPK         | API print Uper NPK                                                        |
+|  6 | printBprpNPK         | API print BPRP NPK                                                        |
+|  7 | printRealisasiNPK    | API print Realisasi NPK                                                   |
+|  8 | printInvoiceNPK      | API Print Invoice NPK                                                     |
+|  9 | printInvoiceNPKS     | API Print Invoice NPKS                                                    |
+| 10 | printProformaNPKS    | API Print Proforma NPKS                                                   |
+| 11 | ExportDebiturNPK     | API Export laporan debitur NPK                                            |
+| 12 | ExportRekonsilasiNPK | API Export laporan rekonsilasi NPK                                        |
+| 13 | ExportPendapatanNPK  | API Export pendapatan NPK                                                 |
+| 14 | ExportTrafikProduksi | API Export Trafik produksi                                                |
+| 15 | penyebut             | Mengconvert number menjadi string untuk kebutuhan terbilang dalam print   |
+| 16 | terbilang            | Fungsi lanjutan dari penyebut                                             |
+
 
 
 ## Develop By Lumen
