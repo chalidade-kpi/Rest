@@ -24,7 +24,7 @@
     <tr>
       <td width="13%"><img src="{{ url('/other/logo.jpg') }}" height="50"></td>
 			<td width="45%">
-				<div>PT. Pelabuhan Tanjung Priok <br>Jln. Raya Pelabuhan No.9 Tanjung Priok <div style="margin-top:3px;font-size:10px">NPWP. 03.276.305.4-093.000</div></div>
+				<div>PT. Pelabuhan Tanjung Priok <br>Jl. Pasoso No. 1, Tanjung Priok, Jakarta Utara 14310 <div style="margin-top:3px;font-size:10px">NPWP. 03.276.305.4-093.000</div></div>
 				</td>
       <td style="vertical-align:top;text-align:right" width="42%">
         <table style="border-collapse:collapse; font-size:10px;width:100%">
@@ -243,9 +243,14 @@
 <p style="font-size:9px">Terbilang : <font style="text-transform:capitalize">{{$terbilang}} Rupiah</font></p>
 <table style="border-collapse:collapse; font-size:11px;margin-top:60px;float:right;text-align:center">
 	<tr><td>Palembang, <?php  echo strtoupper(date("d-M-y", strtotime($header->nota_date))); ?></td></tr>
-	<tr><td>A.N. GENERAL MANAGER<br>DEPUTY GM KEUANGAN & ADMINISTRASI</td></tr>
-	<tr><td><div style="margin-top:50px"><u>Ambarwati Legina</u></div></td></tr>
-	<tr><td>NIPP. 285047354</td></tr>
+	<tr><td>General Manager Palembang<br>PTP</td></tr>
+	<tr><td><div style="margin-top:50px"><u>Andi Purwantoro</u></div></td></tr>
+	<tr>
+		<td>
+			<img src="http://10.88.56.112/api/public/other/ttd_andi.png" alt="" style="width:160px">
+		</td>
+	</tr>
+	<tr><td>NIPP. 273096777</td></tr>
 </table>
 
 <div style="position:absolute;bottom:20px;font-size:11px; width:100%">

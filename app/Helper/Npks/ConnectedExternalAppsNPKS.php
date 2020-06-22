@@ -531,8 +531,11 @@ class ConnectedExternalAppsNPKS{
 			return $res;
 		}
 
-		public static function realisationByHit($input){
-			$activity = [
+		public static function realisationByHit($input,$request){
+			$branch_code = $request["user"]->user_branch_code;
+			$branch_id 	 = $request["user"]->user_branch_id;
+			$noRequest 	 = $input["no_req"];
+			$activity 	 = [
 				"rec" 			=> "1",
 				"del" 			=> "2",
 				"stuff" 		=> "3",
@@ -658,6 +661,26 @@ class ConnectedExternalAppsNPKS{
 					}
 				}
 			// End Check container
+
+			$config 		= json_decode($nota[0]->api_set,TRUE);
+			$kegiatan 	= DB::connection('omuster')->table('TM_REFF')->where('REFF_ID', $config['kegiatan'])->where('REFF_TR_ID', '12')->first();
+			$activity 	= $kegiatan->reff_name;
+
+			$data = [
+				'NO_CONTAINER' => $reqCont,
+				'NO_REQUEST' => $noRequest,
+				'ACTIVITY' => $activity
+			];
+
+			$data = json_encode($data);
+			$url = 'http://10.88.48.33:4001/updateRealiasi?branch='.$branch_id.'&branch_code='.$branch_code.'&data='.$data;
+
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_POST, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+			$response = curl_exec($ch);
 
 			return $res;
 		}

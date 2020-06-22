@@ -28,9 +28,9 @@
 		@foreach($branch as $branch)
   <table width="100%" style="font-size:10px">
     <tr>
-      <td width="13%"><img src="{{ url('/other/logo_ptp.png') }}" height="70"></td>
-			<td width="45%" style="vertical-align:top;font-size:12px">
-				<div>PT. Pelabuhan Tanjung Priok <br>Jln. Raya Pelabuhan No.9 Tanjung Priok <div style="margin-top:3px;font-size:10px">NPWP. 03.276.305.4-093.000</div></div>
+      <td width="13%" style="vertical-align:top"><img src="{{ url('/other/logo_ptp.png') }}" height="60"></td>
+			<td width="50%" style="vertical-align:top;font-size:12px">
+				<div>PT. Pelabuhan Tanjung Priok <br>Jl. Pasoso No. 1, Tanjung Priok, Jakarta Utara 14310 <div style="margin-top:3px;font-size:10px">NPWP. 03.276.305.4-093.000</div></div>
 				</td>
       <td style="vertical-align:top;text-align:right">
         <table style="border-collapse:collapse; font-size:11px;width:70%">
@@ -50,7 +50,7 @@
           </tr>
 					<tr>
             <td colspan="2">
-							<!-- Nota sebagai faktur pajak berdasarkan Peraturan Dirjen Pajak Nomor PER-13/PJ/2019 tanggal 2 Juli 2019 -->
+							Nota sebagai Faktur Pajak berdasarkan Peraturan Dirjen Pajak PER-13/PJ/2019 tanggal 2 Juli 2019
 						</td>
           </tr>
         </table>
@@ -275,8 +275,8 @@
 		@foreach($penumpukan as $penumpukan)
 		<tr>
 			<td>{{$penumpukan->group_tariff_name}}</td>
-			<td style="text-align:center">-</td>
-			<td style="text-align:center">-</td>
+			<td style="text-align:center"><?php echo substr($penumpukan->date_in_out,0,10); ?></td>
+			<td style="text-align:center"><?php echo substr($penumpukan->date_in_out,15); ?></td>
 			<td style="text-align:center">{{$penumpukan->qty}}</td>
 			<td style="text-align:center">{{$penumpukan->cont_size}}</td>
 			<td style="text-align:center">{{$penumpukan->cont_type}}</td>
@@ -331,7 +331,6 @@
 		<td colspan="7" style="text-align:right">Jumlah Dibayar</td>
 		<td style="text-align:right;">:</td>
 		<td style="text-align:right">{{number_format($header->nota_amount)}}</td>
-		<!-- <td style="text-align:right">{{number_format($bayar)}}</td> -->
 	</tr>
 	<!-- <tr>
 		<td colspan="7" style="text-align:right">
@@ -350,15 +349,20 @@
 		</td>
 		<td style="vertical-align:top">
 			<table style="border-collapse:collapse; font-size:11px;float:right;text-align:center">
-				<tr><td>Banten,
+				<tr><td>Palembang,
         <?php
         $originalDate = $header->nota_date;
         $newDate = date("d-M-y", strtotime($originalDate));
         echo strtoupper($newDate);
         ?></td></tr>
-				<tr><td>A.N. GENERAL MANAGER<br>DEPUTY GM KEUANGAN & SDM</td></tr>
-				<tr><td><div style="margin-top:50px"><u>Ambarwati Legina</u></div></td></tr>
-				<tr><td>NIPP. 285047354</td></tr>
+				<tr><td>General Manager Palembang | PTP</td></tr>
+				<tr>
+					<td>
+						<img src="http://10.88.56.112/api/public/other/ttd_andi.png" alt="" style="width:160px">
+					</td>
+				</tr>
+				<tr><td><div style="margin-top:0px"><u>Andi Purwantoro</u></div></td></tr>
+				<tr><td>NIPP. 273096777</td></tr>
 			</table>
 		</td>
 	</tr>
