@@ -249,8 +249,22 @@ Berikut adalah penjabaran tiap - tiap function pada file helper API.
 |  3 | config          | Configurasi field DB di API yang digunakan untuk semua proses send dan approval request |
 
 #### B.4. RequestTCA.php
+| No | Nama Function        | Fungsi                                                                |
+|:--:|----------------------|-----------------------------------------------------------------------|
+|  1 | readExcelImportNoPol | API untuk kebutuhan membaca file excel yang di import saat proses TCA |
 
+#### B.5. UperRequest.php
+| No | Nama Function      | Fungsi                                                                                                                |
+|:--:|--------------------|-----------------------------------------------------------------------------------------------------------------------|
+|  1 | viewTempUper       | Menampilkan Temp Uper dari gabungan beberapa tabel seperti V_PAY_SPLIT, TX_TEMP_TARIF_SPLIT, dan TS_UPER              |
+|  2 | storePayment       | Memvalidasi dan menyimpan pembayaran uper ke table TX_PAYMENT NPK BIlling                                             |
+|  3 | confirmPaymentUper | Konfirmasi pembayaran uper lewat ESB, Jika berhasil status uper menjadi W                                             |
+|  4 | updateUperStatus   | Api untuk kebutuhan Update status uper di NPK Billing                                                                 |
+|  5 | sendRequestBooking | Api untuk send request uper, dengan memanfaatkan kembali fungsi sendRequestBooking pada helper ConnectexternalAppsNpk |
+|  6 | updateNotaStatus   | Melakukan update Nota Status dan nota paid sesuai dengan balikan dari esb NPK Billing                                 |
 
+### C.  /Helper/Npks/
+#### C.1. CanclHelper.php
 
 ## Develop By Lumen
 Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).

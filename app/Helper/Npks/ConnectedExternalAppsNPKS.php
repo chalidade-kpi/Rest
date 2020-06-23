@@ -677,8 +677,10 @@ class ConnectedExternalAppsNPKS{
 				$kegiatan = $config["kegiatan_real"];
 			}
 
+
+			// Notification
 			$kegiatan 	= DB::connection('omuster')->table('TM_REFF')->where('REFF_ID', $kegiatan)->where('REFF_TR_ID', '12')->first();
-			$activity 	= $kegiatan->reff_name;
+			$activity 	= str_replace(' ','%20',$kegiatan->reff_name);
 
 			$data = [
 				'NO_CONTAINER' => $reqCont,
@@ -687,14 +689,14 @@ class ConnectedExternalAppsNPKS{
 			];
 
 			$data = json_encode($data);
-			$url = 'http://10.88.48.33:4001/updateRealiasi?branch='.$branch_id.'&branch_code='.$branch_code.'&data='.$data;
-
+			$url = 'http://10.88.48.33:4001/updateRealiasi?branch='.$branch_id.'&branch_code='.$branch_code.'&data={%22NO_CONTAINER%22:%22'.$reqCont.'%22,%22NO_REQUEST%22:%22'.$noRequest.'%22,%22ACTIVITY%22:%22'.$activity.'%22}';
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_POST, 0);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 			$response = curl_exec($ch);
+			// End Notification
 
 			return $res;
 		}
@@ -780,7 +782,7 @@ class ConnectedExternalAppsNPKS{
 
 				// return $tsContainer;
 				$cekRequest = substr($listR["NO_REQUEST"],0,3);
-				if ($cekRequest == "REC") {
+				if (substr($input["no_req"],0,3) == "REC") {
 					DB::connection('omuster')->table('TS_CONTAINER')->where($findCont)->update(['CONT_LOCATION'=>"IN_YARD", 'CONT_ISACTIVE' => "N"]);
 				}
 
@@ -821,7 +823,23 @@ class ConnectedExternalAppsNPKS{
 					];
 
 					$headerID 				= DB::connection('omuster')->table('TX_HDR_REC')->where('REC_NO', $listR["NO_REQUEST"])->first();
+					$branch_code 			= $headerID->rec_branch_code;
+					// Notification
+					$data = [
+						'NO_CONTAINER' => $input["no_cont"],
+						'NO_REQUEST' => $input["no_req"],
+						'ACTIVITY' => "PLACEMENT"
+					];
 
+					$data = json_encode($data);
+					$url = 'http://10.88.48.33:4001/updateRealiasi?branch='.$input["branch_id"].'&branch_code='.$branch_code.'&data={%22NO_CONTAINER%22:%22'.$input["no_cont"].'%22,%22NO_REQUEST%22:%22'.$input["no_req"].'%22,%22ACTIVITY%22:%22PLACEMENT%22}';
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_POST, 0);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+					$response = curl_exec($ch);
+					// End Notification
 					$updateFlReal 		= DB::connection('omuster')
 					->table("TX_DTL_REC")
 					->where('REC_DTL_CONT', $listR["NO_CONTAINER"])
@@ -838,6 +856,7 @@ class ConnectedExternalAppsNPKS{
 					}
 				}
 		  }
+
 			return $container;
 		}
 
