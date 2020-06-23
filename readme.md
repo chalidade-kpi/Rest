@@ -241,6 +241,15 @@ Berikut adalah penjabaran tiap - tiap function pada file helper API.
 |  4 | rejectedProformaNota | Mereject proforma nota dan mengembalikan status ke send                                                                                                                         |
 |  5 | approvedProformaNota | Melakukan approve nota kemudian mengirim nota ke e-invoice via esb melalui fungsi sendNotaProforma, mengubah status nota menjadi approve dan menyimpan pembayaran ke TX_PAYMENT |
 
+#### B.3. RequestBookingNPK.php
+| No | Nama Function   | Fungsi                                                                                  |
+|:--:|-----------------|-----------------------------------------------------------------------------------------|
+|  1 | sendRequest     | API untuk kebutuhan send request dan kondisi - kondisinya di NPK Billing Banten         |
+|  2 | approvalRequest | Fungsi approval dan reject sebelum request masuk ke uper NPK Billing                    |
+|  3 | config          | Configurasi field DB di API yang digunakan untuk semua proses send dan approval request |
+
+#### B.4. RequestTCA.php
+
 
 
 ## Develop By Lumen

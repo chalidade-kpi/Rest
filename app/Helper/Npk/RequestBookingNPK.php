@@ -183,9 +183,9 @@ class RequestBookingNPK{
 				]);
 			}
 			return $tariffResp;
-	    }
+	  }
 
-	    public static function approvalRequest($input){
+  	public static function approvalRequest($input){
 	    	$input['table'] = strtoupper($input['table']);
 			$config = static::config($input['table']);
 			$find = DB::connection('omcargo')->table($input['table'])->where($config['head_primery'],$input['id'])->get();
@@ -361,9 +361,9 @@ class RequestBookingNPK{
 				'no_req' => $find[$config['head_no']],
 				'sendRequestBooking' => $sendRequestBooking
 			];
-	    }
+    }
 
-	    public static function config($input){
+    public static function config($input){
 	    	$requst_config = [
 	        	"TX_HDR_BM" => [
 	        		"head_eta" => "bm_eta",
@@ -494,6 +494,6 @@ class RequestBookingNPK{
 	        ];
 
 	        return $requst_config[$input];
-	    }
+    }
 	// BTN
 }

@@ -532,8 +532,7 @@ class ConnectedExternalAppsNPKS{
 		}
 
 		public static function realisationByHit($input,$request){
-			$branch_code = $request["user"]->user_branch_code;
-			$branch_id 	 = $request["user"]->user_branch_id;
+			$branch_id 	 = $input["branch_id"];
 			$noRequest 	 = $input["no_req"];
 			$activity 	 = [
 				"rec" 			=> "1",
@@ -562,6 +561,15 @@ class ConnectedExternalAppsNPKS{
 
 			$res = [];
 			$nota = DB::connection('mdm')->table('TS_NOTA')->where($nota_cond)->whereNotNull('API_SET')->orderBy('nota_id', 'asc')->get();
+
+			// Tambahan Branch Code
+			$notaConfig = DB::connection('mdm')->table('TS_NOTA')->where($nota_cond)->whereNotNull('API_SET')->orderBy('nota_id', 'asc')->first();
+			$configNota = json_decode($notaConfig->api_set, true);
+			$getHdr = DB::connection('omuster')->table($configNota["head_table"])->where($configNota["head_no"], $input["no_req"])->first();
+			$getHdr = json_decode(json_encode($getHdr),TRUE);
+			$branch_code = $getHdr[$configNota['head_branch_code']];
+			//
+
 			$nota_id_old = 0;
 			foreach ($nota as $notaData) {
 				if ($nota_id_old != $notaData->nota_id) {
@@ -652,7 +660,7 @@ class ConnectedExternalAppsNPKS{
 				$reqCont 	 = $input["no_cont"];
 				$cekTsCont = DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->first();
 				if (in_array($nota_id,[1,20,10,7])) {
-					if ($cekTsCont->cont_location != "GATI" || $cekTsCont->cont_location == "IN_YARD") {
+					if (isset($cekTsCont->cont_location) AND $cekTsCont->cont_location != "GATI" || isset($cekTsCont->cont_location) AND  $cekTsCont->cont_location == "IN_YARD") {
 						DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"N"]);
 					}
 				} else if (in_array($nota_id,[2,3,4,5,6])) {
@@ -663,7 +671,13 @@ class ConnectedExternalAppsNPKS{
 			// End Check container
 
 			$config 		= json_decode($nota[0]->api_set,TRUE);
-			$kegiatan 	= DB::connection('omuster')->table('TM_REFF')->where('REFF_ID', $config['kegiatan'])->where('REFF_TR_ID', '12')->first();
+			if (count($config["kegiatan_real"]) > 1) {
+				$kegiatan = $config["kegiatan_real"][1];
+			} else {
+				$kegiatan = $config["kegiatan_real"];
+			}
+
+			$kegiatan 	= DB::connection('omuster')->table('TM_REFF')->where('REFF_ID', $kegiatan)->where('REFF_TR_ID', '12')->first();
 			$activity 	= $kegiatan->reff_name;
 
 			$data = [
