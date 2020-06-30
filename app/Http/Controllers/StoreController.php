@@ -324,6 +324,7 @@ class StoreController extends Controller
         }
         DB::connection('mdm')->table('TM_TRUCK')->insert($set_data_self);
         $res = ConnectedExternalAppsNPK::truckRegistration($set_data);
+        $set_data['truck_id'] = $input['truck_id'];
       }else{
           $platNo  = str_replace(' ','',$input['truck_plat_no']);
           $tid     = DB::connection('mdm')->table('TM_TRUCK')->where('truck_plat_no',$platNo)->first();

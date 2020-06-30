@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 use App\Helper\Globalconfig\GlobalHelper;
 use App\Helper\Globalconfig\UserAndRoleManagemnt;
@@ -213,6 +214,8 @@ class IndexController extends Controller
     }
 
     function check($input) {
-      return substr($input["req_no"],0,3);
+      session_start();
+      $_SESSION["truck_id"] = $input["truck_id"];
+      return $_SESSION["truck_id"];
     }
 }
