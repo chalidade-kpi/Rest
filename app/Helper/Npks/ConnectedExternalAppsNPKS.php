@@ -531,6 +531,10 @@ class ConnectedExternalAppsNPKS{
 			return $res;
 		}
 
+		public static function storeHistory($inp){
+			DB::connection('omuster')->table('TH_LOGS_API_STORE')->insert($inp);
+		}
+
 		public static function realisationByHit($input,$request){
 			$branch_id 	 = $input["branch_id"];
 			$noRequest 	 = $input["no_req"];
@@ -664,21 +668,19 @@ class ConnectedExternalAppsNPKS{
 						DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"N"]);
 					}
 				} else if (in_array($nota_id,[2,3,4,5,6])) {
-					if ($cekTsCont->cont_location == "IN_YARD") {
+					if (isset($cekTsCont->cont_location) AND $cekTsCont->cont_location == "IN_YARD") {
 						DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"N"]);
 					}
 				}
 			// End Check container
 
 			$config 		= json_decode($nota[0]->api_set,TRUE);
-			if (count($config["kegiatan_real"]) > 1) {
+			if (is_array($config["kegiatan_real"]) > 1) {
 				$kegiatan = $config["kegiatan_real"][1];
 			} else {
 				$kegiatan = $config["kegiatan_real"];
 			}
 
-
-			// Notification
 			$kegiatan 	= DB::connection('omuster')->table('TM_REFF')->where('REFF_ID', $kegiatan)->where('REFF_TR_ID', '12')->first();
 			$activity 	= str_replace(' ','%20',$kegiatan->reff_name);
 
@@ -696,7 +698,6 @@ class ConnectedExternalAppsNPKS{
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 			$response = curl_exec($ch);
-			// End Notification
 
 			return $res;
 		}
@@ -862,50 +863,50 @@ class ConnectedExternalAppsNPKS{
 
 		public static function renameByHit($input) {
 			$json = '
-		  {
-		    "action" 		: "generateRename",
+			{
+				"action" 		: "generateRename",
 				"no_cont" 	: "'.$input["no_cont"].'",
 				"no_req" 		: "'.$input["no_req"].'",
 				"branch_id" : "'.$input["branch_id"].'"
-		  }';
+			}';
 
-		  $json = base64_encode(json_encode(json_decode($json,true)));
-		  $json = '
-		    {
-		        "repoGetRequest": {
-		            "esbHeader": {
-		                "internalId": "",
-		                "externalId": "",
-		                "timestamp": "",
-		                "responseTimestamp": "",
-		                "responseCode": "",
-		                "responseMessage": ""
-		            },
-		            "esbBody": {
-		                "request": "'.$json.'"
-		            },
-		            "esbSecurity": {
-		                "orgId": "",
-		                "batchSourceId": "",
-		                "lastUpdateLogin": "",
-		                "userId": "",
-		                "respId": "",
-		                "ledgerId": "",
-		                "respAppId": "",
-		                "batchSourceName": ""
-		            }
-		        }
-		    }
-		      ';
-		  $json = json_encode(json_decode($json,true));
-		  $arr = [
-		          "user"		 	=> config('endpoint.tosGetPLG.user'),
-		          "pass" 		 	=> config('endpoint.tosGetPLG.pass'),
-		          "target" 	 	=> config('endpoint.tosGetPLG.target'),
-		          "json" 		 	=> $json
-		        ];
-		  $res 							 	= static::sendRequestToExtJsonMet($arr);
-		  $res				 			 	= FunctTOS::decodeResultAftrSendToTosNPKS($res, 'repoGet');
+			$json = base64_encode(json_encode(json_decode($json,true)));
+			$json = '
+				{
+						"repoGetRequest": {
+								"esbHeader": {
+										"internalId": "",
+										"externalId": "",
+										"timestamp": "",
+										"responseTimestamp": "",
+										"responseCode": "",
+										"responseMessage": ""
+								},
+								"esbBody": {
+										"request": "'.$json.'"
+								},
+								"esbSecurity": {
+										"orgId": "",
+										"batchSourceId": "",
+										"lastUpdateLogin": "",
+										"userId": "",
+										"respId": "",
+										"ledgerId": "",
+										"respAppId": "",
+										"batchSourceName": ""
+								}
+						}
+				}
+					';
+			$json = json_encode(json_decode($json,true));
+			$arr = [
+							"user"		 	=> config('endpoint.tosGetPLG.user'),
+							"pass" 		 	=> config('endpoint.tosGetPLG.pass'),
+							"target" 	 	=> config('endpoint.tosGetPLG.target'),
+							"json" 		 	=> $json
+						];
+			$res 							 	= static::sendRequestToExtJsonMet($arr);
+			$res				 			 	= FunctTOS::decodeResultAftrSendToTosNPKS($res, 'repoGet');
 
 			if (empty($res["result"]["result"])) {
 				return "TX_RENAME Up to Date";
@@ -954,7 +955,7 @@ class ConnectedExternalAppsNPKS{
 					];
 
 					foreach ($request as $key => $value) {
-					  $field = strtolower($value);
+						$field = strtolower($value);
 						$getRequest 		= DB::connection('omuster')->table($key)->where($value, $result["RENAMED_CONT_OLD"])->first();
 						if (!empty($getRequest->$field)) {
 							$updateReq 			 = [
@@ -966,58 +967,54 @@ class ConnectedExternalAppsNPKS{
 
 					//Update Repo
 					$json = '
-				  {
-				    "action" : "getUpateRename",
+					{
+						"action" : "getUpateRename",
 						"header" : {
 						 "BRANCH_ID" : "'.$result["RENAMED_BRANCH_ID"].'",
 						 "CONT_NO" : "'.$result["RENAMED_CONT_OLD"].'"
 						}
-				  }';
+					}';
 					$json = base64_encode(json_encode(json_decode($json,true)));
-	        $json = '
+					$json = '
 					{
-					    "repoPostRequest": {
-					        "esbHeader": {
-					            "internalId": "",
-					            "externalId": "",
-					            "timestamp": "",
-					            "responseTimestamp": "",
-					            "responseCode": "",
-					            "responseMessage": ""
-					        },
-					        "esbBody": {
-					            "request": "'.$json.'"
-					        },
-					        "esbSecurity": {
-					            "orgId": "",
-					            "batchSourceId": "",
-					            "lastUpdateLogin": "",
-					            "userId": "",
-					            "respId": "",
-					            "ledgerId": "",
-					            "respAppId": "",
-					            "batchSourceName": ""
-					        }
-					    }
+							"repoPostRequest": {
+									"esbHeader": {
+											"internalId": "",
+											"externalId": "",
+											"timestamp": "",
+											"responseTimestamp": "",
+											"responseCode": "",
+											"responseMessage": ""
+									},
+									"esbBody": {
+											"request": "'.$json.'"
+									},
+									"esbSecurity": {
+											"orgId": "",
+											"batchSourceId": "",
+											"lastUpdateLogin": "",
+											"userId": "",
+											"respId": "",
+											"ledgerId": "",
+											"respAppId": "",
+											"batchSourceName": ""
+									}
+							}
 					}
-	        ';
-	        $opt = [
-	        	"user" => config('endpoint.tosPostPLG.user'),
-	        	"pass" => config('endpoint.tosPostPLG.pass'),
-	        	"target" => config('endpoint.tosPostPLG.target'),
-	        	"json" => json_encode(json_decode($json,true))
-	        ];
-	        $res = static::sendRequestToExtJsonMet($opt);
-	        $res = FunctTOS::decodeResultAftrSendToTosNPKS($res, 'repoPost');
+					';
+					$opt = [
+						"user" => config('endpoint.tosPostPLG.user'),
+						"pass" => config('endpoint.tosPostPLG.pass'),
+						"target" => config('endpoint.tosPostPLG.target'),
+						"json" => json_encode(json_decode($json,true))
+					];
+					$res = static::sendRequestToExtJsonMet($opt);
+					$res = FunctTOS::decodeResultAftrSendToTosNPKS($res, 'repoPost');
 					$containerUpdate[] = $res["result"]["CONT_NO"];
 				}
 			}
 
 			return ["Success" => $containerUpdate, "Rename Not Found"=>$error];
-		}
-
-		public static function storeHistory($inp){
-			DB::connection('omuster')->table('TH_LOGS_API_STORE')->insert($inp);
 		}
 
 		public static function clearScheduler() {
