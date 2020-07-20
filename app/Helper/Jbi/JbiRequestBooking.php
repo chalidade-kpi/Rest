@@ -103,7 +103,7 @@ class JbiRequestBooking{
 					foreach ($tarifD as $list) {
 						$countLine++;
 						$list = (array)$list;
-						
+
 						#jika req barang dan komponen tariff pass truck ambil qty_truck
 						if($list['package_id'] == 5 && $list['group_tariff_id'] == 3){
 							$list["qty"] = $list["qty_truck"];
@@ -338,7 +338,7 @@ class JbiRequestBooking{
 		}
 
 	    public static function sendRequestJBI($input){
-			$config = DB::connection('mdm_ilcs')->table('TS_NOTA')->where('nota_id', $input['nota_id'])->first();
+			$config = DB::connection('mdm_ilcs')->table('TS_NOTA')->where('nota_id', $input['nota_id'])->where('branch_id', $input['service_branch_id'])->first();
 			if (empty($config) or empty($config->api_set)) {
 				return ['Success' => false, 'result_msg' => "Fail, nota not set!"];
 			}
