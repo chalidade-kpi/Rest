@@ -127,6 +127,7 @@ class FunctTOS{
 			$dtlLoop = $dtlLoop->where($config['DTL_IS_CANCEL'],'N');
 		}
 		$dtlLoop = $dtlLoop->get();
+		$dtlLoop;
 		$his_cont = [];
 		$Success = true;
 		$msg = 'Success get realisasion';
