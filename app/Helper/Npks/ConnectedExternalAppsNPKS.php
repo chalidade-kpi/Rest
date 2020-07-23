@@ -676,7 +676,7 @@ class ConnectedExternalAppsNPKS{
 			// End Check container
 
 			$config 		= json_decode($nota[0]->api_set,TRUE);
-			if (is_array($config["kegiatan_real"]) > 1) {
+			if (is_array($config["kegiatan_real"]) and count($config["kegiatan_real"]) > 1) {
 				$kegiatan = $config["kegiatan_real"][1];
 			} else {
 				$kegiatan = $config["kegiatan_real"];
