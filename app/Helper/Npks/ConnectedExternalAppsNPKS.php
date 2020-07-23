@@ -536,6 +536,7 @@ class ConnectedExternalAppsNPKS{
 		}
 
 		public static function realisationByHit($input,$request){
+			$output 		 = $input;
 			$branch_id 	 = $input["branch_id"];
 			$noRequest 	 = $input["no_req"];
 			$activity 	 = [
@@ -699,7 +700,14 @@ class ConnectedExternalAppsNPKS{
 
 			$response = curl_exec($ch);
 
-			return $res;
+			$json_response 		 	= json_decode($res[0]["json_response"], TRUE);
+			foreach ($output as $key => $value) {
+				if ($key != "user")
+				$out[$key] = $value;
+			}
+			$out["response"] = $json_response["result"];
+
+			return $out;
 		}
 
 		public static function placementByHit($input){

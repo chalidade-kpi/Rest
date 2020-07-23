@@ -314,6 +314,7 @@ class GenerateTariff{
 		$setH = static::calculateTariffBuildHead($find, $input, $config, $canceledReqPrepare);
 		// build detil
 		$setD = [];
+		// return ["dtl_table"=>$config['head_tab_detil'], "fk"=>$config['head_forigen'], "fk_value"=>$find[$config['head_primery']]];
 		$detil = DB::connection('omuster')->table($config['head_tab_detil'])->where($config['head_forigen'], $find[$config['head_primery']]);
 		/* ini gunanya buat apa ya lit? logic nya gmna maksudny? */
 		//tambahan dari chalid ?
@@ -321,8 +322,8 @@ class GenerateTariff{
 		// 	$detil->where($config['DTL_IS_CANCEL'], 'Y');
 		// } else
 		//
-
-		if (!empty($config['DTL_IS_CANCEL']) and !in_array($input['nota_id'], [21,22,23])) {
+		// Dipastikan lagi apa kalo TL DTL_IS_CANCELL NYA Y atau N untuk di get datanya
+		if (!empty($config['DTL_IS_CANCEL']) and !in_array($input['nota_id'], [21,22,23,20])) {
 			$detil->where($config['DTL_IS_CANCEL'], 'N');
 		}
 		$detil = $detil->get();

@@ -246,7 +246,7 @@ class RequestBookingNPKS{
 			}
 
 			$his_cont = [];
-			$tariffResp = GenerateTariff::calculateTariffBuild($find, $input, $config, $canceledReqPrepare);
+		  $tariffResp = GenerateTariff::calculateTariffBuild($find, $input, $config, $canceledReqPrepare);
 			if (empty($tariffResp['result_flag']) or $tariffResp['result_flag'] != 'S') {
 				return $tariffResp;
 			} else if ($tariffResp['result_flag'] == 'S' and empty($canceledReqPrepare)) {
