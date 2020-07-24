@@ -513,6 +513,14 @@ class GlobalHelper {
   public static function autoCompleteJbi($input) {
     $connect  = DB::connection($input["db"])->table($input["table"]);
 
+    if (isset($input["select"]) && !empty($input["select"])) {
+      if (is_array($input["select"])) {
+        $connect->select(implode(",", $input["select"]));
+      } else {
+        $connect->select($input["select"]);
+      }
+    }
+
     if(!empty($input["groupby"])) {
       $connect->groupBy(strtoupper($input["groupby"]));
     }
@@ -550,14 +558,24 @@ class GlobalHelper {
       }
     }
 
+    if(isset($input["joinRaw"]) and !empty($input["joinRaw"])) {
+      if(isset($input["joinRaw"]["query"]) and isset($input["joinRaw"]["fields"])) {
+        $connect->join(DB::raw($input["joinRaw"]["query"]), function ($join) use ($input) {
+          foreach ($input["joinRaw"]["fields"] as $field) {
+            $join->on($field[0], $field[1], $field[2]);
+          }
+        });
+      }
+    }
+
     if(!empty($input["stripping"])) {
-            foreach ($input["stripping"] as $list) {
+      foreach ($input["stripping"] as $list) {
         $connect->join(strtoupper($list["table"]), strtoupper($list["field1"]), '=', strtoupper($list["field2"]));
       }
     }
 
     if(!empty($input["stuffing"])) {
-            foreach ($input["stuffing"] as $list) {
+      foreach ($input["stuffing"] as $list) {
         $connect->join(strtoupper($list["table"]), strtoupper($list["field1"]), '=', strtoupper($list["field2"]));
       }
     }

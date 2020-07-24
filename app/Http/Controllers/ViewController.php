@@ -26,6 +26,7 @@ use App\Helper\Npk\RequestTCA;
 
 use App\Helper\Jbi\JbiRequestBooking;
 use App\Helper\Jbi\BillingEngine as jbiBillingEngine;
+use App\Helper\Jbi\PrintAndExport as jbiPrintAndExport;
 
 class ViewController extends Controller
 {
@@ -201,6 +202,10 @@ class ViewController extends Controller
   function proformaNPKS($id) {
     return PrintAndExport::printProformaNPKS($id);
   }
+
+  function proformaNPKSJBI($id) {
+    return jbiPrintAndExport::printProformaNPKSJBI($id);
+  }  
 
   function postApi() {
     $id     = Input::get('id');

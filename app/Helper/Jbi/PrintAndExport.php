@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helper;
+namespace App\Helper\Jbi;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Billing\TxProfileTariffHdr_ilcs;
@@ -768,6 +768,90 @@ class PrintAndExport
     $dompdf->render();
     $dompdf->stream($filename, array("Attachment" => false));
   }
+
+  public static function printProformaNPKSJBI($id)
+  {
+    $connect        = DB::connection('omuster_ilcs');
+    $connect2        = DB::connection('npks_ilcs');
+
+    $det            = [];
+    
+    $header         = $connect->table("TX_HDR_NOTA A")
+                      ->join("(SELECT MAX(DTL_BL) CONTAINER, NOTA_HDR_ID FROM TX_DTL_NOTA GROUP BY NOTA_HDR_ID) B","B.NOTA_HDR_ID",'=',"A.NOTA_ID")
+                      ->where("A.NOTA_ID", "=", $id)
+                      ->get(); 
+    $header2        = $connect2
+                      ->table("TH_HISTORY_CONTAINER A")
+                      ->select("MAX(HIST_COUNTER) COUNTER,MAX(HIST_CYCLE) SIKLUS,HIST_CONT,MAX(REFF_NAME) REFF_NAME")
+                      ->join("(SELECT (LABEL_COUNTER) REFF_NAME,ID_CONTAINER_COUNTER FROM TM_CONTAINER_COUNTER) D", "D.ID_CONTAINER_COUNTER", '=', "HIST_CYCLE")
+                      ->groupBy("HIST_CONT")
+                      ->where("HIST_CONT","=",$header[0]->container)
+                      ->get();
+
+                       // DD($header2);exit();
+
+    if(empty($header[0]->reff_name)){
+      $header         = $connect->table("TX_HDR_NOTA")->where("NOTA_ID", "=", $id)->get();
+    }else{
+      $header = $header;
+    }  
+                      
+                      // DD($header);   
+    $detail         = DB::connection('eng')->table("V_TX_TEMP_TARIFF_DTL_NPKS_JBI")->where('BOOKING_NUMBER', $header[0]->nota_req_no)->orderBy("GROUP_TARIFF_NAME", "ASC")->orderBy("NO_BL", "ASC")->orderBy("GROUP_TARIFF_NAME_REAL", "ASC")->get();
+    // print_r($detail);exit;
+    $nota           = DB::connection('mdm')->table('TM_NOTA')->where('NOTA_ID', $header[0]->nota_group_id)->get();
+    $branch         = DB::connection('mdm')->table("TM_BRANCH")->where([['BRANCH_ID', $header[0]->nota_branch_id], ["BRANCH_CODE", $header[0]->nota_branch_code]])->get();
+    $penumpukan     = $connect->table('TX_DTL_NOTA')->where('NOTA_HDR_ID', $id)->where('DTL_GROUP_TARIFF_ID', '10')->get();
+    // $hazard         = $connect->table("TX_DTL_REC")->select("REC_DTL_CONT_DANGER")->where("REC_DTL_ID",$id)->get();
+    $detail2        = DB::connection('eng')->table("V_TX_TEMP_TARIFF_DTL_NPKS_JBI")
+                        ->where('BOOKING_NUMBER', $header[0]->nota_req_no)
+                        ->where('GROUP_TARIFF_ID', '10')
+                        ->where('BOOKING_NUMBER','%RECJBI%')->get();
+    // E-MATERAI
+    $e_materai = 0;
+
+    if ($header[0]->nota_amount >= 250000 && $header[0]->nota_amount < 1000000) {
+      $e_materai = 3000;
+    } else if ($header[0]->nota_amount >= 1000000) {
+      $e_materai = 6000;
+    }
+
+    // Data Uper And Payment
+    $uper        = 0;
+    $notaAmount  = $header[0]->nota_amount + $e_materai;
+    $payAmount   = 0;
+    $total       = $notaAmount - $payAmount;
+    $terbilang   = static::terbilang($total);
+
+    // return $detail;
+
+    $html        = view(
+      'print.proformaNpksJbi',
+      [
+        "total"     => $total,
+        "uper"      => $uper,
+        "branch"    => $branch,
+        "header"    => $header,
+        "header2"    => $header2,
+        "materai"   => $e_materai,
+        "detail"    => $detail,
+        "label"     => $nota,
+        "terbilang" => $terbilang,
+        // "hazard"    => $hazard,
+        "detail2"   => $detail2
+        // "admin"     => $admin
+      ]
+    );
+
+    $filename    = $header[0]->nota_no . rand(10, 100000);
+    $dompdf      = new Dompdf();
+    $dompdf->set_option('isRemoteEnabled', true);
+    $dompdf->loadHtml($html);
+    $dompdf->setPaper('A4', 'potrait');
+    $dompdf->render();
+    $dompdf->stream($filename, array("Attachment" => false));
+  }
+
 
   public static function printProformaNPKS($id)
   {
