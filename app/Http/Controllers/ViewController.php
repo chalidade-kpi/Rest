@@ -131,6 +131,10 @@ class ViewController extends Controller
     return PrintAndExport::printRDCardNPKS($branchCode, $notaId, $id);
   }
 
+  function printRDCardNPKSJBI($branchCode, $notaId, $id) {
+    return jbiPrintAndExport::printRDCardNPKSJBI($branchCode, $notaId, $id);
+  }
+
   function printProforma2($id) {
     return PrintAndExport::printProformaNPK($id);
   }
@@ -199,13 +203,17 @@ class ViewController extends Controller
     return PrintAndExport::printInvoiceNPKS($id);
   }
 
+  function notaNpksJbi($id) {
+    return jbiPrintAndExport::printInvoiceNPKS($id);
+  }
+
   function proformaNPKS($id) {
     return PrintAndExport::printProformaNPKS($id);
   }
 
   function proformaNPKSJBI($id) {
     return jbiPrintAndExport::printProformaNPKSJBI($id);
-  }  
+  }
 
   function postApi() {
     $id     = Input::get('id');

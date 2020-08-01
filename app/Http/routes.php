@@ -51,6 +51,8 @@ $app->get('/print/printRDCardNPKS/{branchCode}/{notaId}/{id}','ViewController@pr
 
 // print NPKS Jambi
 $app->get('/print/proformaNPKSJBI/{id}','ViewController@proformaNPKSJBI');
+$app->get('/print/notaNpksJbi/{id}','ViewController@notaNpksJbi');
+$app->get('/print/printRDCardNPKSJBI/{branchCode}/{notaId}/{id}','ViewController@printRDCardNPKSJBI');
 
 // Export
 $app->get('/export/debitur/{branchId}/{notaNo}/{custName}/{layanan}/{startDate}/{endDate}/{branchCode}'       ,'ViewController@ExportDebitur');

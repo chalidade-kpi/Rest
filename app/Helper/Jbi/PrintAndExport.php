@@ -55,17 +55,19 @@ class PrintAndExport
     $dompdf->stream($filename, array("Attachment" => false));
   }
 
-  public static function printRDCardNPKS($branchCode, $notaId, $id)
+  public static function printRDCardNPKSJBI($branchCode, $notaId, $id)
   {
     $findConfig       =  [
       "NOTA_ID"       => $notaId,
       "BRANCH_CODE"   => $branchCode
     ];
 
-    $tmNota           = DB::connection('mdm_ilcs')->table('TM_NOTA')->where('NOTA_ID', $notaId)->get();
-    $notaData         = DB::connection('mdm_ilcs')->table('TS_NOTA')->where($findConfig)->first();
+    $tmNota           = DB::connection('mdm')->table('TM_NOTA')->where('NOTA_ID', $notaId)->get();
+    $notaData         = DB::connection('mdm')->table('TS_NOTA')->where($findConfig)->first();
     $config           = json_decode($notaData->api_set, true);
     $title            = $tmNota[0]->nota_name;
+    // $paidthru         = DB::connection('omuster')->table('TX_HISTORY_CONTAINER A')->join('V_LIST_RD_CARD B','B.NO','=','A.NO_REQUEST')->whereIn('A.KEGIATAN',[1,2])->first();
+    $paidthru         = DB::connection('omuster')->table('V_LIST_RD_CARD')->where('ID',$id)->first();
 
     $findRequest      = [
       $config["head_primery"] => $id
@@ -77,15 +79,15 @@ class PrintAndExport
     ];
 
 
-    $hdrRequest       = DB::connection('omuster_ilcs')->table($config["head_table"])->where($findRequest)->first();
+    $hdrRequest       = DB::connection('omuster')->table($config["head_table"])->where($findRequest)->first();
     $hdrRequest       = json_decode(json_encode($hdrRequest), TRUE);
-    $dtlRequest       = DB::connection('omuster_ilcs')->table($config["head_tab_detil"])->where($findDetail)->get();
+    $dtlRequest       = DB::connection('omuster')->table($config["head_tab_detil"])->where($findDetail)->get();
     $dtlRequest       = json_decode(json_encode($dtlRequest), TRUE);
 
     // return $dtlRequest;
 
     $page             = count($dtlRequest);
-    $html             = view('print.rdCardNPKS', ["nota_id" => $notaId, "title" => $title, "page" => $page, "header" => $hdrRequest, "detail" => $dtlRequest, "config" => $config]);
+    $html             = view('print.rdCardNPKSJbi', ["nota_id" => $notaId, "title" => $title, "page" => $page, "header" => $hdrRequest, "detail" => $dtlRequest, "config" => $config, "paidthru" => $paidthru->reqdate, "vessel"=>$paidthru->vessel_name, "customer"=>$paidthru->cust_name]);
     $filename         = $hdrRequest[$config["head_primery"]];
     $dompdf           = new Dompdf();
     $dompdf->set_option('isRemoteEnabled', true);
@@ -714,7 +716,7 @@ class PrintAndExport
     $connect        = DB::connection('omuster_ilcs');
     $det            = [];
     $header         = $connect->table("TX_HDR_NOTA")->where("NOTA_ID", "=", $id)->get();
-    $detail         = DB::connection('eng_ilcs')->table("V_TX_TEMP_TARIFF_DTL_NPKS")->where('BOOKING_NUMBER', $header[0]->nota_req_no)->get();
+    $detail         = DB::connection('eng_ilcs')->table("V_TX_TEMP_TARIFF_DTL_NPKS_JBI")->where('BOOKING_NUMBER', $header[0]->nota_req_no)->get();
     $nota           = DB::connection('mdm_ilcs')->table('TM_NOTA')->where('NOTA_ID', $header[0]->nota_group_id)->get();
     $branch         = DB::connection('mdm_ilcs')->table("TM_BRANCH")->where([['BRANCH_ID', $header[0]->nota_branch_id], ["BRANCH_CODE", $header[0]->nota_branch_code]])->get();
     $penumpukan     = $connect->table('TX_DTL_NOTA')->where('NOTA_HDR_ID', $id)->where('DTL_GROUP_TARIFF_ID', '10')->get();
@@ -744,7 +746,7 @@ class PrintAndExport
     // return $detail;
 
     $html        = view(
-      'print.notaNpks',
+      'print.notaNpksJbi',
       [
         "total"     => $total,
         "uper"      => $uper,
@@ -775,11 +777,11 @@ class PrintAndExport
     $connect2        = DB::connection('npks_ilcs');
 
     $det            = [];
-    
+
     $header         = $connect->table("TX_HDR_NOTA A")
                       ->join("(SELECT MAX(DTL_BL) CONTAINER, NOTA_HDR_ID FROM TX_DTL_NOTA GROUP BY NOTA_HDR_ID) B","B.NOTA_HDR_ID",'=',"A.NOTA_ID")
                       ->where("A.NOTA_ID", "=", $id)
-                      ->get(); 
+                      ->get();
     $header2        = $connect2
                       ->table("TH_HISTORY_CONTAINER A")
                       ->select("MAX(HIST_COUNTER) COUNTER,MAX(HIST_CYCLE) SIKLUS,HIST_CONT,MAX(REFF_NAME) REFF_NAME")
@@ -794,9 +796,9 @@ class PrintAndExport
       $header         = $connect->table("TX_HDR_NOTA")->where("NOTA_ID", "=", $id)->get();
     }else{
       $header = $header;
-    }  
-                      
-                      // DD($header);   
+    }
+
+                      // DD($header);
     $detail         = DB::connection('eng')->table("V_TX_TEMP_TARIFF_DTL_NPKS_JBI")->where('BOOKING_NUMBER', $header[0]->nota_req_no)->orderBy("GROUP_TARIFF_NAME", "ASC")->orderBy("NO_BL", "ASC")->orderBy("GROUP_TARIFF_NAME_REAL", "ASC")->get();
     // print_r($detail);exit;
     $nota           = DB::connection('mdm')->table('TM_NOTA')->where('NOTA_ID', $header[0]->nota_group_id)->get();
