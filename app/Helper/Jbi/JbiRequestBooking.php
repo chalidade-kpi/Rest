@@ -338,7 +338,7 @@ class JbiRequestBooking{
 		}
 
 	    public static function sendRequestJBI($input){
-			$config = DB::connection('mdm_ilcs')->table('TS_NOTA')->where('nota_id', $input['nota_id'])->where('branch_id', $input['service_branch_id'])->first();
+			$config = DB::connection('mdm_ilcs')->table('TS_NOTA')->where('nota_id', $input['nota_id'])->where('branch_id','10')->first();
 			if (empty($config) or empty($config->api_set)) {
 				return ['Success' => false, 'result_msg' => "Fail, nota not set!"];
 			}
@@ -724,7 +724,7 @@ class JbiRequestBooking{
 
 	    	$pay = TxPayment_ilcs::find($store->pay_id);
 	    	if (!empty($input['pay_file']['PATH']) and !empty($input['pay_file']['BASE64']) and !empty($input['pay_file'])) {
-	    		$directory  = 'omuster_ilcs/TX_PAYMENT/'.date('d-m-Y').'/';
+	    		$directory  = 'omuster/TX_PAYMENT/'.date('d-m-Y').'/';
 	    		$response   = FileUpload::upload_file($input['pay_file'], $directory, "TX_PAYMENT", $store->pay_id);
 	    		if ($response['response'] == true) {
 	    			TxPayment_ilcs::where('pay_id',$store->pay_id)->update([
@@ -776,28 +776,39 @@ class JbiRequestBooking{
         			]);
         		}
         	}
+					if ($config['head_table'] == 'TX_HDR_RELOKASI') {
+						// only for relokasi jambi
+						$send_data = SendTos::send_data($input['pay_nota_no']);
+					}
 
-        	$send_data = SendTos::send_data($input['pay_nota_no']);
+					return [
+						'result' => "Success, pay proforma!",
+						'no_pay' => $pay->pay_no,
+						'no_nota' => $input['pay_nota_no'],
+						'no_req' => $pay->pay_req_no,
+						'sendInvPay' => $sendInvPay,
+						'sendRequestBooking' => $sendRequestBooking
+					];
 
-        	if($send_data != 'success'){
-        		return [
-        			'Success' => false,
-        			'result' => 'Fail, cant send data',
-        			'no_pay' => $pay->pay_no,
-        			'nota_no' => $getNota->nota_no,
-        			'no_req' => $pay->pay_req_no,
-        			'sendInvPay' => $sendInvPay
-        		];
-        	}else{
-        		return [
-	        		'result' => "Success, pay proforma!",
-	        		'no_pay' => $pay->pay_no,
-	        		'no_nota' => $input['pay_nota_no'],
-	        		'no_req' => $pay->pay_req_no,
-	        		'sendInvPay' => $sendInvPay,
-	        		'sendRequestBooking' => $sendRequestBooking
-        		];
-        	}
+        	// if($send_data != 'success'){
+        	// 	return [
+        	// 		'Success' => false,
+        	// 		'result' => 'Fail, cant send data',
+        	// 		'no_pay' => $pay->pay_no,
+        	// 		'nota_no' => $getNota->nota_no,
+        	// 		'no_req' => $pay->pay_req_no,
+        	// 		'sendInvPay' => $sendInvPay
+        	// 	];
+        	// }else{
+        	// 	return [
+	        // 		'result' => "Success, pay proforma!",
+	        // 		'no_pay' => $pay->pay_no,
+	        // 		'no_nota' => $input['pay_nota_no'],
+	        // 		'no_req' => $pay->pay_req_no,
+	        // 		'sendInvPay' => $sendInvPay,
+	        // 		'sendRequestBooking' => $sendRequestBooking
+        	// 	];
+        	// }
 	    }
 	// JBI
 }

@@ -67,7 +67,7 @@ class PrintAndExport
     $config           = json_decode($notaData->api_set, true);
     $title            = $tmNota[0]->nota_name;
     // $paidthru         = DB::connection('omuster')->table('TX_HISTORY_CONTAINER A')->join('V_LIST_RD_CARD B','B.NO','=','A.NO_REQUEST')->whereIn('A.KEGIATAN',[1,2])->first();
-    $paidthru         = DB::connection('omuster')->table('V_LIST_RD_CARD')->where('ID',$id)->first();
+    $paidthru         = DB::connection('omuster')->table('V_LIST_RD_CARD')->where('ID',$id)->first();    
 
     $findRequest      = [
       $config["head_primery"] => $id
