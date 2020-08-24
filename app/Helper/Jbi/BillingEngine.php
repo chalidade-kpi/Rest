@@ -1177,7 +1177,7 @@ class BillingEngine {
         'paysplit' => []
       ];
 
-      $tariffResp = Billingeng_ilcsine::calculateTariff($set_data);
+      $tariffResp = Billingengine_ilcs::calculateTariff($set_data);
       if ($tariffResp['result_flag'] != 'S') {
         return $tariffResp;
       }

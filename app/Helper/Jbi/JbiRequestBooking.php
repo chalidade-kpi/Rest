@@ -671,7 +671,7 @@ class JbiRequestBooking{
 
 	    public static function storePaymentJBI($input){
 	    	$getNota = TxHdrNota_ilcs::where([ 'nota_no'=>$input['pay_nota_no'] ])->first();
-	    	$config = DB::connection('mdm_ilcs')->table('TS_NOTA')->where('nota_id', $getNota->nota_group_id)->first();
+	    	$config = DB::connection('mdm_ilcs')->table('TS_NOTA')->where('nota_id', $getNota->nota_group_id)->where('branch_code', 'JBI')->where('branch_id', 10)->first();
         	$config = json_decode($config->api_set, true);
             $cekNota = TxHdrNota_ilcs::where([
             	'nota_no'=>$input['pay_nota_no'],
