@@ -542,6 +542,10 @@ class GlobalHelper {
       $connect->where($input["where"]);
     }
 
+    if(!empty($input["whereRaw"][0])) {
+      $connect->whereRaw($input["whereRaw"]);
+    }    
+
     if(!empty($input["whereIn"][0])) {
     $in        = $input["whereIn"];
     $connect->whereIn(strtoupper($in[0]), $in[1]);
@@ -553,8 +557,8 @@ class GlobalHelper {
     }
 
     if(!empty($input["join"])) {
-            foreach ($input["join"] as $list) {
-        $connect->join(strtoupper($list["table"]), strtoupper($list["field2"]), '=', strtoupper($list["field1"]));
+      foreach ($input["join"] as $list) {
+        $connect->join(strtoupper($list["table"]), strtoupper($list["field1"]), '=', strtoupper($list["field2"]));
       }
     }
 

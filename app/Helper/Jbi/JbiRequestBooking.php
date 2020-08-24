@@ -776,7 +776,7 @@ class JbiRequestBooking{
         			]);
         		}
         	}
-					if ($config['head_table'] == 'TX_HDR_RELOKASI') {
+					if (($config['head_table'] == 'TX_HDR_RELOKASI')or($config['head_table'] == 'TX_HDR_REC_CARGO')) {
 						// only for relokasi jambi
 						$send_data = SendTos::send_data($input['pay_nota_no']);
 					}
