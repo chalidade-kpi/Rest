@@ -552,4 +552,8 @@ class StoreController extends Controller
     return ConnectedExternalAppsNPKS::renameByHit($input);
   }
 
+  function testMaterai($input){
+    return ConnectedExternalAppsNPK::checkMaterai($input);
+  }
+
 }

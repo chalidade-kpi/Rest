@@ -1813,5 +1813,51 @@ class ConnectedExternalAppsNPK{
         ]);
       }
     }
+
+    public static function checkMaterai($input) {
+        $endpoint_url=config('endpoint.checkMaterai');
+        $string_json = '{
+          "getAmountMateraiRequest": {
+            "esbHeader": {
+              "externalId": "5275682735",
+              "timestamp": "2019-10-01 15:11:48"
+            },
+            "esbBody": {
+              "pCabang": "'.$input["pCabang"].'",
+              "pTipeLayana": "'.$input["tipe_layanan"].'",
+              "pAmount": "500000"
+            }
+          }
+        }';
+
+        $username="billing";
+        $password ="b1Llin9";
+        $client = new Client();
+        $options= array(
+          'auth' => [
+            $username,
+            $password
+          ],
+          'headers'  => ['content-type' => 'application/json', 'Accept' => 'application/json'],
+          'body' => $string_json,
+          "debug" => false
+        );
+        try {
+          $res = $client->post($endpoint_url, $options);
+        } catch (ClientException $e) {
+          echo $e->getRequest() . "\n";
+          if ($e->hasResponse()) {
+            echo $e->getResponse() . "\n";
+          }
+        }
+
+        $res      = json_decode($res->getBody()->getContents(), true);
+        $materai  = $res["getAmountMateraiResponse"]["esbBody"]["nilaiMaterai"];
+        $result   = "N";
+        if ($materai > 0)
+          $result = "Y";
+
+        return $result;
+    }
   // BTN
 }
