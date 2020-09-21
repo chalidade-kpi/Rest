@@ -51,9 +51,9 @@ class GlobalHelper {
               foreach ($list as $key => $value) {
                 $newDt[$key] = $value;
               }
-              $dataUrl = "http://10.88.48.33/api/public/".$detail[0]["doc_path"];
-              $url     = str_replace(" ", "%20", $dataUrl);
-              $file = file_get_contents($url);
+              $dataUrl          = "http://10.88.48.33/api/public/".$detail[0]["doc_path"];
+              $url              = str_replace(" ", "%20", $dataUrl);
+              $file             = file_get_contents($url);
               $newDt["base64"]  =  base64_encode($file);
               $fil[] = $newDt;
               $vwdata[$data] = $fil;
@@ -544,7 +544,7 @@ class GlobalHelper {
 
     if(!empty($input["whereRaw"][0])) {
       $connect->whereRaw($input["whereRaw"]);
-    }    
+    }
 
     if(!empty($input["whereIn"][0])) {
     $in        = $input["whereIn"];

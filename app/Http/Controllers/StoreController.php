@@ -168,6 +168,27 @@ class StoreController extends Controller
       ]);
     }
 
+    public function addContainerNPKS($input, $request) {
+      $input        = $input["data"];
+      $cekContainer = DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $input['CONT_NO'])->get();
+      if (!empty($cekContainer)) {
+        $updateCont = [
+          "CONT_ISACTIVE" => "N",
+          "CONT_LOCATION" => "IN_YARD"
+        ];
+        $result     = DB::connection('omuster')->table('TS_CONTAINER')
+                                               ->where('CONT_NO', $input['CONT_NO'])
+                                               ->update($updateCont);
+        $result     = DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $input['CONT_NO'])->first();
+      } else {
+        $result     = DB::connection('omuster')->table('TS_CONTAINER')->insert($input);
+        $result     = DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $input['CONT_NO'])->first();
+      }
+
+      return ["message" => "Success", "result" => $result];
+
+    }
+
     // NPKS
       function simulationTariffNPKS($input, $request){
         return GenerateTariff::simulationTariffNPKS($input);
@@ -550,10 +571,6 @@ class StoreController extends Controller
 
   function hitRenameNPKS($input) {
     return ConnectedExternalAppsNPKS::renameByHit($input);
-  }
-
-  function testMaterai($input){
-    return ConnectedExternalAppsNPK::checkMaterai($input);
   }
 
 }

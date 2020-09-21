@@ -222,6 +222,42 @@ class RequestBookingNPKS{
 			$config	 		 = static::getApiConfig($input);
 			$config 		 = $config['config'];
 
+			// Check Container Acive on Send Request
+			if (!in_array($input['nota_id'], [21,22])) {
+				$findHdr 		 = DB::connection('omuster')->table($config['head_table'])->where($config['head_primery'],$input['id'])->first();
+				$findHdr 		 = json_decode(json_encode($findHdr), TRUE);
+				$findDtl 		 = DB::connection('omuster')->table($config['head_tab_detil'])->where($config['head_forigen'], $findHdr[$config['head_primery']])->get();
+				$findDtl 		 = json_decode(json_encode($findDtl), TRUE);
+
+				// Check Container Except Extention Request
+				if (!in_array($input['nota_id'], [16,17, 18])) {
+					// Check if there are container active
+					foreach ($findDtl as $key => $value) {
+						$reqCont 	 = $value[$config['DTL_BL']];
+						$cekTsCont = DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->first();
+						if (!empty($cekTsCont->cont_isactive) AND $cekTsCont->cont_isactive == 'Y') {
+							return ['Success' => false, 'result_msg' => "Container $reqCont is active"];
+						}
+					}
+
+					// Change all of container_isactive = Y
+					foreach ($findDtl as $key => $value) {
+						$reqCont 	 = $value[$config['DTL_BL']];
+						DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"Y"]);
+					}
+				} else {
+					// Check if there are Not active
+					foreach ($findDtl as $key => $value) {
+						$reqCont 	 = $value[$config['DTL_BL']];
+						$cekTsCont = DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->first();
+						if (!empty($cekTsCont->cont_isactive) AND $cekTsCont->cont_isactive == 'N') {
+							return ['Success' => false, 'result_msg' => "Container $reqCont Not active"];
+						}
+					}
+				}
+			}
+			// End Check container
+
 			// request batal
 			$canceledReqPrepare = null;
 			if (!empty($input['canceled']) and $input['canceled'] == 'true') {
@@ -246,35 +282,10 @@ class RequestBookingNPKS{
 			}
 
 			$his_cont = [];
-		  $tariffResp = GenerateTariff::calculateTariffBuild($find, $input, $config, $canceledReqPrepare);
+			$tariffResp = GenerateTariff::calculateTariffBuild($find, $input, $config, $canceledReqPrepare);
 			if (empty($tariffResp['result_flag']) or $tariffResp['result_flag'] != 'S') {
 				return $tariffResp;
 			} else if ($tariffResp['result_flag'] == 'S' and empty($canceledReqPrepare)) {
-
-				// Check Container Acive on Send Request
-				if (!in_array($input['nota_id'], [21,22])) {
-					$findHdr 		 = DB::connection('omuster')->table($config['head_table'])->where($config['head_primery'],$input['id'])->first();
-					$findHdr 		 = json_decode(json_encode($findHdr), TRUE);
-					$findDtl 		 = DB::connection('omuster')->table($config['head_tab_detil'])->where($config['head_forigen'], $findHdr[$config['head_primery']])->get();
-					$findDtl 		 = json_decode(json_encode($findDtl), TRUE);
-
-					// Check if there are container active
-					foreach ($findDtl as $key => $value) {
-						$reqCont 	 = $value[$config['DTL_BL']];
-						$cekTsCont = DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->first();
-						if (!empty($cekTsCont->cont_isactive) AND $cekTsCont->cont_isactive == 'Y') {
-							return ['Success' => false, 'result_msg' => "Container $reqCont is active"];
-						}
-					}
-
-					// Change all of container_isactive = Y
-					foreach ($findDtl as $key => $value) {
-						$reqCont 	 = $value[$config['DTL_BL']];
-						DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $reqCont)->update(["CONT_ISACTIVE"=>"Y"]);
-					}
-				}
-				// End Check container
-
 				DB::connection('omuster')->table($config['head_table'])->where($config['head_primery'],$input['id'])->update([
 					$config['head_status'] => 2
 				]);
@@ -301,8 +312,8 @@ class RequestBookingNPKS{
 	    }
 
 	    public static function viewTempTariffNPKS($input){
-	    	$config = DB::connection('mdm')->table('TS_NOTA')->where('nota_id', $input['nota_id'])->first();
-			$config = json_decode($config->api_set, true);
+			$config	 		 = static::getApiConfig($input);
+			$config 		 = $config['config'];
 			$findCanc = null;
 	    	if (!empty($input['canceled']) and $input['canceled'] == 'true') {
 				$findCanc = DB::connection('omuster')->table('TX_HDR_CANCELLED')->where('cancelled_id',$input['id'])->first();
@@ -326,8 +337,8 @@ class RequestBookingNPKS{
 		}
 
 	    public static function approvalRequestNPKS($input){
-			$config = DB::connection('mdm')->table('TS_NOTA')->where('nota_id', $input['nota_id'])->first();
-			$config = json_decode($config->api_set, true);
+			$config	 		 = static::getApiConfig($input);
+			$config 		 = $config['config'];
 			$cekReqOrCanc = CanclHelper::cekReqOrCanc($input,$config);
 			if ($cekReqOrCanc['Success'] == false) {
 				return $cekReqOrCanc;
@@ -348,12 +359,12 @@ class RequestBookingNPKS{
 			}
 
 			if ($input['approved'] == 'false') {
-				if (empty($findCanc)){
+				if (empty($findCanc)) {
 					 DB::connection('omuster')->table($config['head_table'])->where($config['head_primery'],$input['id'])->update([
 						$config['head_status'] => 4,
 						$config['head_mark'] => $input['msg']
 					]);
-				}else{
+				} else {
 					DB::connection('omuster')->table('tx_hdr_cancelled')->where('cancelled_id',$input['id'])->update([
 						'cancelled_status' => 4,
 						'cancelled_mark' => $input['msg']
@@ -420,6 +431,21 @@ class RequestBookingNPKS{
 					'cancelled_status' => 9,
 					'cancelled_mark' => $input['msg']
 				]);
+
+				// Update CONT_ISACTIVE to N After Cancelled
+				if (!in_array($input['nota_id'], [21,22])) {
+					$findCancel = DB::connection('omuster')
+													 ->table("TX_HDR_CANCELLED")
+													 ->join("TX_DTL_CANCELLED", "TX_HDR_CANCELLED.CANCELLED_ID = TX_DTL_CANCELLED.CANCL_HDR_ID")
+													 ->where("CANCELLED_ID", "=", $findCanc->cancelled_id)
+													 ->get();
+
+					foreach ($findCancel as $cancel) {
+						DB::connection('omuster')->table('TS_CONTAINER')->where('CONT_NO', $cancel->cancl_cont)->update(["CONT_ISACTIVE"=>"N"]);
+					}
+				}
+				// End Check container
+
 			}
 
 			return [
@@ -432,8 +458,8 @@ class RequestBookingNPKS{
 	    }
 
 	    public static function confirmRealisasion($input){
-	    	$config = DB::connection('mdm')->table('TS_NOTA')->where('nota_id', $input['nota_id'])->first();
-			$config = json_decode($config->api_set, true);
+			$config	 		 = static::getApiConfig($input);
+			$config 		 = $config['config'];
 			$find = DB::connection('omuster')->table($config['head_table'])->where($config['head_primery'],$input['id'])->first();
 			$find = (array)$find;
 			if ($find[$config['head_status']] == 5) {
@@ -508,7 +534,7 @@ class RequestBookingNPKS{
             	'nota_id'=>$input['nota_id'],
             	'nota_status'=>'1'
             ])->count();
-            if ($cekNota = 0) {
+            if ($cekNota == 0) {
             	return ['result_msg' => "Fail, proforma not waiting approval!", 'nota_no' => $getNota->nota_no, "Success" => false];
             }
             $config = DB::connection('mdm')->table('TS_NOTA')->where('nota_id', $getNota->nota_group_id)->first();
@@ -527,11 +553,22 @@ class RequestBookingNPKS{
             			"payment" => null,
             			'reqCanc' => (array)$cekIsCanc
             		];
-            		$sendInvAR = EInvo::sendInvPay($arr);
+            			$sendInvAR = EInvo::sendInvPay($arr);
            	        $getNota->nota_status = 5;
            	        $getNota->nota_paid = 'Y';
            	        $getNota->save();
-            	}
+            	}  else {
+								$getNota = TxHdrNota::find($input['nota_id']);
+            		$arr = [
+            			'config' => $config,
+            			"nota" => (array)$getNota['attributes'],
+            			"payment" => null,
+            			'reqCanc' => (array)$cekIsCanc
+            		];
+            			$sendInvAR = EInvo::sendInvPay($arr);
+           	        $getNota->nota_status = 2;
+           	        $getNota->save();
+							}
             	$msg='Success, approved!';
             }else if ($input['approved'] == 'false') {
             	$getNota->nota_status = 4;

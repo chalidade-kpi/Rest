@@ -611,46 +611,13 @@ class PrintAndExport{
               A.NOTA_ID = '$id'
             ";
 
-    $endpoint_url="http://10.88.56.40:5556/restv2/inquiryData/getDataCetak";
-    $string_json = '{
-                   "getDataCetakRequest":{
-                      "esbHeader":{
-                         "internalId":"",
-                         "externalId":"EDI-2910201921570203666",
-                         "timestamp":"2019-10-29 21:57:020.36665400",
-                         "responseTimestamp":"",
-                         "responseCode":"",
-                         "responseMessage":""
-                      },
-                      "esbBody":{
-                         "kode":"billingedii",
-                         "tipe":"nota",
-                         "nota":"'.$all["header"][0]->nota_no.'"
-                      }
-                   }
-                }';
+    $url = config('endpoint.linkInvoice').$all['header'][0]->nota_no;
+    $ch  = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    $username="billing";
-    $password ="b1Llin9";
-    $client = new Client();
-    $options= array(
-      'auth' => [
-        $username,
-        $password
-      ],
-      'headers'  => ['content-type' => 'application/json', 'Accept' => 'application/json'],
-      'body' => $string_json,
-      "debug" => false
-    );
-    try {
-      $res = $client->post($endpoint_url, $options);
-    } catch (ClientException $e) {
-      return $e->getResponse();
-    }
-
-    $results  = json_decode($res->getBody()->getContents(), true);
-    $qrcode   = $results['getDataCetakResponse']['esbBody']['url']; //dari esb
-    $qrcode = "https://eservice.indonesiaport.co.id/index.php/eservice/api/getdatacetak?kode=billingedii&tipe=nota&no=".$header[0]->nota_no; //optional
+    $qrcode = curl_exec($ch);
+    // $qrcode = "https://eservice.indonesiaport.co.id/index.php/eservice/api/getdatacetak?kode=billingedii&tipe=nota&no=".$header[0]->nota_no; //optional
     $kapal    = DB::connection('omcargo')->select($query);
     $nota     = DB::connection('mdm')->table('TM_NOTA')->where('NOTA_ID', $all['header'][0]->nota_group_id)->get();
     $handa     = $connect->table("V_TX_DTL_NOTA")->where('NOTA_HDR_ID','=', $id)->get();
@@ -697,7 +664,6 @@ class PrintAndExport{
   }
 
   public static function printInvoiceNPKS($id) {
-
     $connect        = DB::connection('omuster');
     $det            = [];
     $header         = $connect->table("TX_HDR_NOTA")->where("NOTA_ID", "=", $id)->get();
@@ -710,6 +676,12 @@ class PrintAndExport{
 
     // Data Uper And Payment
     $payment     = DB::connection('omuster')->table("TX_PAYMENT")->where('PAY_REQ_NO', $header[0]->nota_req_no)->first();
+    $arrInvoice  = [
+      "nota_no"       => $header[0]->nota_no,
+      "nota_tipe"     => "nota",
+      "hdr_context"   => "UST"
+    ];
+    $qrcode      = static::getdatacetak($arrInvoice); //optional
     if (!empty($payment)) {
       $uper      = $payment->pay_amount;
     } else {
@@ -737,7 +709,7 @@ class PrintAndExport{
                           "detail"    => $detail,
                           "penumpukan"=> $penumpukan,
                           "terbilang" => $terbilang,
-                          "qrcode"    => "0"
+                          "qrcode"    => $qrcode
                         ]);
 
     $filename    = $header[0]->nota_no.rand(10,100000);
@@ -1007,5 +979,57 @@ class PrintAndExport{
     }
     return $hasil;
   }
+
+  public static function getdatacetak($input) {
+        $no          = $input['nota_no'];
+        $tipe        = $input['nota_tipe'];
+        $hdr_context = $input['hdr_context'];
+        $enc_trx_number = static::encrypt($no);
+        if($tipe == 'uper')
+        {
+            return "https://eservice.indonesiaport.co.id/index.php/einvoice/payment/cetak_uper/uper/".$enc_trx_number;
+        }
+        else if($tipe == 'nota')
+        {
+          if ($hdr_context == 'BRG')
+          {
+            return "https://eservice.indonesiaport.co.id/index.php/einvoice/nota/cetak_barang/barang/".$enc_trx_number;
+          }
+          else if ($hdr_context == 'UST')
+          {
+            return "https://eserviceqa.indonesiaport.co.id/index.php/einvoice/nota_cabang/priview_nota/UST/".$enc_trx_number;
+          }
+        }
+    }
+
+  public static function genrandomstring($length) {
+    $res = "";
+    for($i=0;$i<$length;$i++) {
+      $x = mt_rand(1,3);
+      if($x === 1) {
+        $res .= chr(mt_rand(48,57));
+      } elseif($x === 2) {
+        $res .= chr(mt_rand(97,122));
+      } else {
+        $res .= chr(mt_rand(65,90));
+      }
+    }
+    return $res;
+  }
+
+  public static function encrypt($msg) {
+    $secret_key = substr(md5(base64_encode('ini_kunci_rahasia_statis')),16);
+    $enc_msg = "";
+    $enc_key = "";
+    $random_key = static::genrandomstring(16);
+    for($i = 0;$i < strlen($msg);$i++) {
+      $enc_msg .= chr(ord($msg[$i]) ^ ord($random_key[$i % strlen($random_key)]));
+    }
+    for($j = 0;$j < 16; $j++) {
+      $enc_key .= chr(ord($random_key[$j]) ^ ord($secret_key[$j]));
+    }
+    return bin2hex($enc_key.$enc_msg);
+  }
+
 }
 ?>
