@@ -14,32 +14,23 @@ class RequestBookingNPK{
 	// BTN
 		public static function sendRequest($input){
 			$input['table'] = strtoupper($input['table']);
-			$config 				= static::config($input['table']);
-			$find 					= DB::connection('omcargo')->table($input['table'])->where($config['head_primery'],$input['id'])->get();
+			$config = static::config($input['table']);
+			$find = DB::connection('omcargo')->table($input['table'])->where($config['head_primery'],$input['id'])->get();
 			if (empty($find)) {
 				return ['Success' => false, 'result' => "Fail, requst not found!"];
 			}
 			$find = (array)$find[0];
 
-			// Tambahan Chalid 07/10/2020
-			if (isset($input["nota_id"]) and !empty($input["nota_id"]))
-				$nota_id = $input['nota_id'];
-			else
-				$nota_id = $find[$config['head_nota_id']];
-
-			$cekStatusNota 	= DB::connection('mdm')->table('TS_NOTA')->where([
-				'branch_id' 	=> $find[$config['head_branch']],
+			$cekStatusNota = DB::connection('mdm')->table('TS_NOTA')->where([
+				'branch_id' => $find[$config['head_branch']],
 				'branch_code' => $find[$config['head_branch_code']],
-				'nota_id'		 	=> $nota_id
-				// 'nota_id'		 	=> $input['nota_id'] //Chalid rubah 07/10/2020
+				'nota_id' => $input['nota_id']
 			])->get();
-
 			if (count($cekStatusNota) == 0) {
 				return ['Success' => false, 'result' => "Fail, nota not available!"];
 			}else if ($cekStatusNota[0]->flag_status == 'N') {
 				return ['Success' => false, 'result' => "Fail, nota not active!"];
 			}
-
 			$pbmCek = 'N';
 			if ($input['table'] == 'TX_HDR_BM') {
 				$countPBM = DB::connection('mdm')->table('TM_PBM_INTERNAL')->where('PBM_ID',$find['bm_pbm_id'])->where('BRANCH_ID',$find['bm_branch_id'])->where('BRANCH_CODE',$find['bm_branch_code'])->count();
@@ -57,53 +48,40 @@ class RequestBookingNPK{
 			//
 			// $materai = ConnectedExternalAppsNPK::checkMaterai($input);
 
-
 			// build head
-				$setH 										= [];
-				$setH['P_NOTA_ID'] 				= $nota_id;
-				$setH['P_BRANCH_ID'] 			= $find[$config['head_branch']];
-				$setH['P_BRANCH_CODE'] 		= $find[$config['head_branch_code']];
-				$setH['P_CUSTOMER_ID'] 		= $find[$config['head_cust']];
-				$setH['P_PBM_INTERNAL'] 	= $pbmCek;
+				$setH = [];
+				$setH['P_NOTA_ID'] = $input['nota_id'];
+				$setH['P_BRANCH_ID'] = $find[$config['head_branch']];
+				$setH['P_BRANCH_CODE'] = $find[$config['head_branch_code']];
+				$setH['P_CUSTOMER_ID'] = $find[$config['head_cust']];
+				$setH['P_PBM_INTERNAL'] = $pbmCek;
 				$setH['P_BOOKING_NUMBER'] = $find[$config['head_no']];
-				$setH['P_REALIZATION'] 		= 'N';
+				$setH['P_REALIZATION'] = 'N';
 				// Tambahan
 				// $setH['P_MATERAI'] = $materai;
-				$setH['P_RESTITUTION'] 		= 'N';
-				$setH['P_TRADE'] 					= $find[$config['head_trade']];
-				$setH['P_USER_ID'] 				= $find[$config['head_by']];
+				$setH['P_RESTITUTION'] = 'N';
+				$setH['P_TRADE'] = $find[$config['head_trade']];
+				$setH['P_USER_ID'] = $find[$config['head_by']];
 			// build head
 
 			// build detil
-				$setD 		= [];
-				$detil 		= DB::connection('omcargo')->table($config['head_tab_detil'])->where($config['head_forigen'], $find[$config['head_primery']])->get();
+				$setD = [];
+				$detil = DB::connection('omcargo')->table($config['head_tab_detil'])->where($config['head_forigen'], $find[$config['head_primery']])->get();
 				foreach ($detil as $list) {
-					$newD 										= [];
-					$list 										= (array)$list;
+					$newD = [];
+					$list = (array)$list;
+					$newD['DTL_VIA'] = 'NULL';
+					$newD['DTL_BL'] = empty($list[$config['head_tab_detil_bl']]) ? 'NULL' : $list[$config['head_tab_detil_bl']];
+					$newD['DTL_PKG_ID'] = empty($list['dtl_pkg_id']) ? 'NULL' : $list['dtl_pkg_id'];
+					$newD['DTL_CMDTY_ID'] = empty($list['dtl_cmdty_id']) ? 'NULL' : $list['dtl_cmdty_id'];
+					$newD['DTL_CHARACTER'] = empty($list['dtl_character_id']) ? 'NULL' : $list['dtl_character_id'];
+					$newD['DTL_CONT_SIZE'] = empty($list['dtl_cont_size']) ? 'NULL' : $list['dtl_cont_size'];
+					$newD['DTL_CONT_TYPE'] = empty($list['dtl_cont_type']) ? 'NULL' : $list['dtl_cont_type'];
+					$newD['DTL_CONT_STATUS'] = empty($list['dtl_cont_status']) ? 'NULL' : $list['dtl_cont_status'];
+					$newD['DTL_UNIT_ID'] = empty($list['dtl_unit_id']) ? 'NULL' : $list['dtl_unit_id'];
+					$newD['DTL_QTY'] = empty($list['dtl_qty']) ? 'NULL' : $list['dtl_qty'];
 
-					$newD['DTL_VIA'] 					= 'NULL';
-					$newD['DTL_BL'] 					= empty($list[$config['head_tab_detil_bl']]) ? 'NULL' : $list[$config['head_tab_detil_bl']];
-					$newD['DTL_PKG_ID'] 			= empty($list['dtl_pkg_id']) ? 'NULL' : $list['dtl_pkg_id'];
-					$newD['DTL_CMDTY_ID'] 		= empty($list['dtl_cmdty_id']) ? 'NULL' : $list['dtl_cmdty_id'];
-					$newD['DTL_CHARACTER'] 		= empty($list['dtl_character_id']) ? 'NULL' : $list['dtl_character_id'];
-					$newD['DTL_CONT_SIZE'] 		= empty($list['dtl_cont_size']) ? 'NULL' : $list['dtl_cont_size'];
-					$newD['DTL_CONT_TYPE'] 		= empty($list['dtl_cont_type']) ? 'NULL' : $list['dtl_cont_type'];
-					$newD['DTL_CONT_STATUS'] 	= empty($list['dtl_cont_status']) ? 'NULL' : $list['dtl_cont_status'];
-					$newD['DTL_UNIT_ID'] 			= empty($list['dtl_unit_id']) ? 'NULL' : $list['dtl_unit_id'];
-					$newD['DTL_QTY'] 					= empty($list['dtl_qty']) ? 'NULL' : $list['dtl_qty'];
-
-					if ($input['table'] == 'TX_HDR_CANCELLED') {
-						$newD['DTL_PKG_ID'] 			= empty($list['cncl_pkg_id']) ? 'NULL' : $list['cncl_pkg_id'];
-						$newD['DTL_CMDTY_ID'] 		= empty($list['cncl_cmdty_id']) ? 'NULL' : $list['cncl_cmdty_id'];
-						$newD['DTL_CHARACTER'] 		= empty($list['cncl_character_id']) ? 'NULL' : $list['cncl_character_id'];
-						$newD['DTL_CONT_SIZE'] 		= empty($list['cncl_cont_size']) ? 'NULL' : $list['cncl_cont_size'];
-						$newD['DTL_CONT_TYPE'] 		= empty($list['cncl_cont_type']) ? 'NULL' : $list['cncl_cont_type'];
-						$newD['DTL_CONT_STATUS'] 	= empty($list['cncl_cont_status']) ? 'NULL' : $list['cncl_cont_status'];
-						$newD['DTL_UNIT_ID'] 			= empty($list['cncl_unit_id']) ? 'NULL' : $list['cncl_unit_id'];
-						$newD['DTL_QTY'] 					= empty($list['cncl_qty']) ? 'NULL' : $list['cncl_qty'];
-					}
-
-					$getPFS = DB::connection('mdm')->table('TM_COMP_NOTA')->where('NOTA_ID', $nota_id)->where('BRANCH_ID',$find[$config['head_branch']])->where('BRANCH_CODE',$find[$config['head_branch_code']])->where('GROUP_TARIFF_ID', 15)->count();
+					$getPFS = DB::connection('mdm')->table('TM_COMP_NOTA')->where('NOTA_ID', $input['nota_id'])->where('BRANCH_ID',$find[$config['head_branch']])->where('BRANCH_CODE',$find[$config['head_branch_code']])->where('GROUP_TARIFF_ID', 15)->count();
 					if ($getPFS > 0) {
 						$newD['DTL_PFS'] = 'Y';
 					}else{
@@ -111,21 +89,14 @@ class RequestBookingNPK{
 					}
 
 					$DTL_BM_TYPE = 'NULL';
-					if ($nota_id == "13") {
-						if ($input['table'] == 'TX_HDR_CANCELLED')
-							$DTL_BM_TYPE = empty($list['cncl_bm_type_id']) ? 'NULL' : $list['cncl_bm_type_id'];
-						else
-							$DTL_BM_TYPE = empty($list['dtl_bm_type']) ? 'NULL' : $list['dtl_bm_type'];
-
+					if ($input['nota_id'] == "13") {
+						$DTL_BM_TYPE = empty($list['dtl_bm_type']) ? 'NULL' : $list['dtl_bm_type'];
 					}
 					$newD['DTL_BM_TYPE'] = $DTL_BM_TYPE;
 
 					$DTL_STACK_AREA = 'NULL';
-					if (in_array($nota_id, ["14", "15","19", 14, 15, 19])) {
-						if ($input['table'] == 'TX_HDR_CANCELLED')
-							$DTL_STACK_AREA = empty($list['cncl_stacking_type_id']) ? 'NULL' : $list['cncl_stacking_type_id'];
-						else
-							$DTL_STACK_AREA = empty($list['dtl_stacking_type_id']) ? 'NULL' : $list['dtl_stacking_type_id'];
+					if (in_array($input['nota_id'], ["14", "15","19", 14, 15, 19])) {
+						$DTL_STACK_AREA = empty($list['dtl_stacking_type_id']) ? 'NULL' : $list['dtl_stacking_type_id'];
 					}
 					$newD['DTL_STACK_AREA'] = $DTL_STACK_AREA;
 
@@ -141,28 +112,28 @@ class RequestBookingNPK{
 						}else{
 							$newD['DTL_DATE_IN'] = empty($list[$config['head_tab_detil_date_in']]) ? 'NULL' : 'to_date(\''.\Carbon\Carbon::parse($list[$config['head_tab_detil_date_in']])->format('Y-m-d').'\',\'yyyy-MM-dd\')';
 							if (!empty($find['del_ext_from'])) {
-								$gthdrId 							= DB::connection('omcargo')->table('TX_HDR_DEL')->where('del_no', $find['del_ext_from'])->get();
-								$gthdrId 							= $gthdrId[0];
-								$getdatein 						= DB::connection('omcargo')->table('TX_DTL_DEL')->where('hdr_del_id',$gthdrId->del_id)->where('dtl_del_bl', $list['dtl_del_bl'])->get();
-								$getdatein 						= $getdatein[0];
-								$getdatein 						= (array)$getdatein;
-								$newD['DTL_DATE_IN'] 	= 'to_date(\''.\Carbon\Carbon::parse($getdatein[$config['head_tab_detil_date_in']])->format('Y-m-d').'\',\'yyyy-MM-dd\')';
+								$gthdrId = DB::connection('omcargo')->table('TX_HDR_DEL')->where('del_no', $find['del_ext_from'])->get();
+								$gthdrId = $gthdrId[0];
+								$getdatein = DB::connection('omcargo')->table('TX_DTL_DEL')->where('hdr_del_id',$gthdrId->del_id)->where('dtl_del_bl', $list['dtl_del_bl'])->get();
+								$getdatein = $getdatein[0];
+								$getdatein = (array)$getdatein;
+								$newD['DTL_DATE_IN'] = 'to_date(\''.\Carbon\Carbon::parse($getdatein[$config['head_tab_detil_date_in']])->format('Y-m-d').'\',\'yyyy-MM-dd\')';
 							}
 						}
 					}else{
-						$newD['DTL_DATE_IN'] 		= 'NULL';
+						$newD['DTL_DATE_IN'] = 'NULL';
 					}
 
-					$newD['DTL_DATE_OUT'] 		= 'NULL';
+					$newD['DTL_DATE_OUT'] = 'NULL';
 					$newD['DTL_DATE_OUT_OLD'] = 'NULL';
 
 					if ($config['head_tab_detil_date_out_old'] != null and $input['table'] == 'TX_HDR_DEL') {
 						if ($find['del_ext_status'] == 'Y') {
-							$newD['DTL_DATE_OUT'] 		= empty($list['dtl_out']) ? 'NULL' : 'to_date(\''.\Carbon\Carbon::parse($list['dtl_out'])->format('Y-m-d').'\',\'yyyy-MM-dd\')';
-							$old_req_id 							= DB::connection('omcargo')->table('TX_HDR_DEL')->where('DEL_NO',$find['del_ext_from'])->get();
-							$old_req_id 							= $old_req_id[0]->del_id;
-							$old_bl 									= DB::connection('omcargo')->table('TX_DTL_DEL')->where('HDR_DEL_ID',$old_req_id)->where('DTL_DEL_BL',$list['dtl_del_bl'])->get();
-							$old_bl_date_out 					= $old_bl[0]->dtl_out;
+							$newD['DTL_DATE_OUT'] = empty($list['dtl_out']) ? 'NULL' : 'to_date(\''.\Carbon\Carbon::parse($list['dtl_out'])->format('Y-m-d').'\',\'yyyy-MM-dd\')';
+							$old_req_id = DB::connection('omcargo')->table('TX_HDR_DEL')->where('DEL_NO',$find['del_ext_from'])->get();
+							$old_req_id = $old_req_id[0]->del_id;
+							$old_bl = DB::connection('omcargo')->table('TX_DTL_DEL')->where('HDR_DEL_ID',$old_req_id)->where('DTL_DEL_BL',$list['dtl_del_bl'])->get();
+							$old_bl_date_out = $old_bl[0]->dtl_out;
 							$newD['DTL_DATE_OUT_OLD'] = empty($old_bl_date_out) ? 'NULL' : 'to_date(\''.\Carbon\Carbon::parse($old_bl_date_out)->format('Y-m-d').'\',\'yyyy-MM-dd\')';
 						}else{
 							$newD['DTL_DATE_OUT'] = empty($list['dtl_out']) ? 'NULL' : 'to_date(\''.\Carbon\Carbon::parse($list['dtl_out'])->format('Y-m-d').'\',\'yyyy-MM-dd\')';
@@ -170,7 +141,7 @@ class RequestBookingNPK{
 						}
 					}else{
 						$newD['DTL_DATE_OUT_OLD'] = empty($find[$config['head_tab_detil_date_out_old']]) ? 'NULL' : 'to_date(\''.\Carbon\Carbon::parse($find[$config['head_tab_detil_date_out_old']])->format('Y-m-d').'\',\'yyyy-MM-dd\')';
-						$newD['DTL_DATE_OUT'] 		= empty($find[$config['head_tab_detil_date_out']]) ? 'NULL' : 'to_date(\''.\Carbon\Carbon::parse($find[$config['head_tab_detil_date_out']])->format('Y-m-d').'\',\'yyyy-MM-dd\')';
+						$newD['DTL_DATE_OUT'] = empty($find[$config['head_tab_detil_date_out']]) ? 'NULL' : 'to_date(\''.\Carbon\Carbon::parse($find[$config['head_tab_detil_date_out']])->format('Y-m-d').'\',\'yyyy-MM-dd\')';
 					}
 
 					$setD[] = $newD;
@@ -181,33 +152,31 @@ class RequestBookingNPK{
 				$setE = [];
 				$eqpt = DB::connection('omcargo')->table('TX_EQUIPMENT')->where('req_no', $find[$config['head_no']])->get();
 				foreach ($eqpt as $list) {
-					$newE 							= [];
-					$list 							= (array)$list;
-					$newE['EQ_TYPE'] 		= empty($list['eq_type_id']) ? 'NULL' : $list['eq_type_id'];
-					$newE['EQ_QTY'] 		= empty($list['eq_qty']) ? 'NULL' : $list['eq_qty'];
+					$newE = [];
+					$list = (array)$list;
+					$newE['EQ_TYPE'] = empty($list['eq_type_id']) ? 'NULL' : $list['eq_type_id'];
+					$newE['EQ_QTY'] = empty($list['eq_qty']) ? 'NULL' : $list['eq_qty'];
 					$newE['EQ_UNIT_ID'] = empty($list['eq_unit_id']) ? 'NULL' : $list['eq_unit_id'];
 					$newE['EQ_GTRF_ID'] = empty($list['group_tariff_id']) ? 'NULL' : $list['group_tariff_id'];
-					$newE['EQ_PKG_ID'] 	= empty($list['package_id']) ? 'NULL' : $list['package_id'];
+					$newE['EQ_PKG_ID'] = empty($list['package_id']) ? 'NULL' : $list['package_id'];
 					$newE['EQ_QTY_PKG'] = empty($list['unit_qty']) ? 'NULL' : $list['unit_qty'];
-					$setE[] 						= $newE;
+					$setE[] = $newE;
 				}
 			// build eqpt
 
 			// build paysplit
 				$setP = [];
-				if (isset($find[$config['head_split']]) and !empty($find[$config['head_split']])) {
 				if ($find[$config['head_split']] == 'Y') {
 					$paysplit = DB::connection('omcargo')->table('TX_SPLIT_NOTA')->where('req_no', $find[$config['head_no']])->get();
 					$paysplit = (array)$paysplit;
 					foreach ($paysplit as $list) {
-						$newP 							= [];
-						$list 							= (array)$list;
+						$newP = [];
+						$list = (array)$list;
 						$newP['PS_CUST_ID'] = $list['cust_id'];
 						$newP['PS_GTRF_ID'] = $list['group_tarif_id'];
-						$setP[] 						= $newP;
+						$setP[] = $newP;
 					}
 				}
-			}
 			// build paysplit
 
 			// set data
@@ -223,79 +192,14 @@ class RequestBookingNPK{
 			$tariffResp = BillingEngine::calculateTariff($set_data);
 
 			if ($tariffResp['result_flag'] == 'S') {
-				if ($input['table'] == 'TX_HDR_CANCELLED') {
-					DB::connection('omcargo')->table($input['table'])->where($config['head_primery'],$input['id'])->update([
-						$config['head_status'] =>3
-					]);
-
-					$notaHdrLama 	= (array) DB::connection('omcargo')->table("TX_HDR_NOTA")->where('NOTA_NO', $find[$config['head_nota_no_reff']])->first();
-					$notaDtlLama 	= (array) DB::connection('omcargo')->table("TX_DTL_NOTA")->where('NOTA_HDR_ID',  $notaHdrLama["nota_id"])->get();
-					$tariffHdr 		= (array) DB::connection('eng')->table("TX_TEMP_TARIFF_HDR")->where('BOOKING_NUMBER', $find[$config['head_real_req_no']])->first();
-					$sequence 		= DB::connection('omcargo')->table("DUAL")->select("SEQ_TX_HDR_NOTA.NEXTVAL")->get();
-					$idHeader     = ($sequence[0]->nextval);
-					$header 			= [
-							"APP_ID" 								=> $notaHdrLama["app_id"],
-							"NOTA_AMOUNT" 					=> $tariffHdr["total"],
-							"NOTA_BRANCH_ACCOUNT" 	=> $notaHdrLama["nota_branch_account"],
-							"NOTA_BRANCH_CODE" 			=> $find[$config['head_branch_code']],
-							"NOTA_BRANCH_ID" 				=> $find[$config['head_branch']],
-							"NOTA_CONTEXT" 					=> $tariffHdr["nota_context"],
-							"NOTA_CURRENCY_CODE" 		=> $notaHdrLama["nota_currency_code"],
-							"NOTA_CUST_ADDRESS" 		=> $find[$config['head_cust_addr']],
-							"NOTA_CUST_ID" 					=> $find[$config['head_cust']],
-							"NOTA_CUST_NAME" 				=> $find[$config['head_cust_name']],
-							"NOTA_CUST_NPWP" 				=> $find[$config['head_cust_npwp']],
-							"NOTA_DATE" 						=> $find[$config['head_date']],
-							"NOTA_DPP" 							=> $tariffHdr["dpp"],
-							"NOTA_FAKTUR_NO" 				=> $find[$config['head_nota_no']],
-							"NOTA_GROUP_ID" 				=> $find[$config['head_nota_id']],
-							"NOTA_ID" 							=> $idHeader,
-							"NOTA_NO" 							=> $find[$config['head_nota_no']],
-							"NOTA_NO_EX" 						=> $find[$config['head_nota_no_reff']],
-							"NOTA_ORG_ID" 					=> $notaHdrLama["nota_org_id"],
-							"NOTA_PAID" 						=> $notaHdrLama["nota_paid"],
-							"NOTA_PAID_DATE" 				=> $notaHdrLama["nota_paid_date"],
-							"NOTA_PPN" 							=> $tariffHdr["ppn"],
-							"NOTA_PROFORMA_NO" 			=> $find[$config['head_nota_no']],
-							"NOTA_REAL_NO" 					=> $find[$config['head_real_req_no']],
-							"NOTA_REQ_NO" 					=> $find[$config['head_req_no']],
-							"NOTA_SERVICE_CODE" 		=> $notaHdrLama["nota_service_code"],
-							"NOTA_STATUS" 					=> 4,
-							"NOTA_SUB_CONTEXT" 			=> $tariffHdr["nota_sub_context"],
-							"NOTA_TAX_CODE" 				=> "011",
-							"NOTA_TERMINAL" 				=> $find[$config['head_terminal_code']],
-							"NOTA_TRADE_TYPE" 			=> $find[$config['head_trade']],
-							"NOTA_UKK" 							=> $find[$config['head_ukk']],
-							"NOTA_VESSEL_NAME" 			=> $find[$config['head_vessel_name']],
-							"PROFORMA_DATE" 				=> $notaHdrLama["proforma_date"],
-							"REST_PAYMENT" 					=> $notaHdrLama["rest_payment"]
-						];
-
-					$allDetail 	= [];
-					foreach ($notaDtlLama as $listDtlNota) {
-						foreach ($listDtlNota as $key => $value) {
-							if ($key == "nota_hdr_id") {
-								$detail[$key] = $idHeader;
-							} else if ($key == "nota_dtl_id") {
-								$detail[$key] = null;
-							}
-						}
-						$allDetail[] = $detail;
-					}
-
-					$insertHdr = DB::connection('omcargo')->table('TX_HDR_NOTA')->insert([$header]);
-					$insertDtl = DB::connection('omcargo')->table('TX_DTL_NOTA')->insert($allDetail);
-
-				} else {
-					DB::connection('omcargo')->table($input['table'])->where($config['head_primery'],$input['id'])->update([
-						$config['head_status'] => 2
-					]);
-				}
+				DB::connection('omcargo')->table($input['table'])->where($config['head_primery'],$input['id'])->update([
+					$config['head_status'] => 2
+				]);
 			}
 			return $tariffResp;
-    }
+	  }
 
-	    public static function approvalRequest($input){
+  	public static function approvalRequest($input){
 	    	$input['table'] = strtoupper($input['table']);
 			$config = static::config($input['table']);
 			$find = DB::connection('omcargo')->table($input['table'])->where($config['head_primery'],$input['id'])->get();
@@ -471,66 +375,10 @@ class RequestBookingNPK{
 				'no_req' => $find[$config['head_no']],
 				'sendRequestBooking' => $sendRequestBooking
 			];
-	    }
+    }
 
-	    public static function config($input){
+    public static function config($input){
 	    	$requst_config = [
-					"TX_HDR_CANCELLED" => [
-						"head_eta" 										=> "cancelled_eta",
-						"head_etd" 										=> "cancelled_etd",
-						"head_etb" 										=> "cancelled_etb",
-						"head_ata" 										=> "cancelled_ata",
-						"head_atd" 										=> "cancelled_atd",
-						"head_kade" 									=> "cancelled_kade",
-						"head_real_req_no" 						=> "cancelled_real_req_no",
-						"head_real_req_date" 					=> "cancelled_real_req_date",
-						"head_req_no" 								=> "cancelled_req_no",
-						"head_nota_no"								=> "cancelled_no",
-						"head_nota_no_reff"						=> "cancelled_no_reff",
-						"head_req_date" 							=> "cancelled_req_date",
-						"head_no_reff" 								=> "cancelled_no_reff",
-						"head_create_date" 						=> "cancelled_create_date",
-						"head_open_stack" 						=> "cancelled_open_stack",
-						"head_closing_time" 					=> null,
-						"head_cust_id" 								=> "cancelled_cust_id",
-						"head_cust_name" 							=> "cancelled_cust_name",
-						"head_cust_addr" 							=> "cancelled_cust_address",
-						"head_cust_npwp" 							=> "cancelled_cust_npwp",
-						"head_voyin" 									=> "cancelled_voyin",
-						"head_voyout" 								=> "cancelled_voyout",
-						"head_vvd_id" 								=> "cancelled_vvd_id",
-						"head_nota_id" 								=> "cancelled_type",
-						"head_tab" 										=> "TX_HDR_CANCELLED",
-						"head_mark" 									=> "cancelled_remark",
-						"head_tab_detil" 							=> "TX_DTL_CANCELLED",
-						"head_tab_detil_id" 					=> "cncl_dtl_id",
-						"head_ukk" 										=> "cancelled_ukk",
-						"head_tab_detil_bl" 					=> "cncl_bl",
-						"head_tab_detil_tl" 					=> "cncl_tl",
-						"head_tab_detil_date_in" 			=> "cncl_date_in",
-						"head_tab_detil_date_out" 		=> "cncl_date_out",
-						"head_tab_detil_date_out_old" => null,
-						"head_status" 								=> "cancelled_status",
-						"head_primery" 								=> "cancelled_id",
-						"head_forigen" 								=> "cncl_hdr_id",
-						"head_no" 										=> "cancelled_real_req_no",
-						"head_split" 									=> null,
-						"head_by" 										=> "cancelled_create_by",
-						"head_date" 									=> "cancelled_date",
-						"head_branch" 								=> "cancelled_branch_id",
-						"head_branch_code" 						=> "cancelled_branch_code",
-						"head_cust" 									=> "cancelled_cust_id",
-						"head_trade" 									=> "cancelled_trade_type",
-						"head_trade_name"							=> "cancelled_trade_name",
-						"head_terminal_code" 					=> "cancelled_terminal_code",
-						"head_terminal_name" 					=> "cancelled_terminal_name",
-						"head_pbm_id" 								=> "cancelled_pbm_id",
-						"head_pbm_name" 							=> "cancelled_pbm_name",
-						"head_shipping_agent_id" 			=> "cancelled_shipping_agent_id",
-						"head_shipping_agent_name" 		=> "cancelled_shipping_agent_name",
-						"head_vessel_code" 						=> "cancelled_vessel_code",
-						"head_vessel_name" 						=> "cancelled_vessel_name"
-					],
 	        	"TX_HDR_BM" => [
 	        		"head_eta" => "bm_eta",
 	        		"head_etd" => "bm_etd",
@@ -660,6 +508,6 @@ class RequestBookingNPK{
 	        ];
 
 	        return $requst_config[$input];
-	    }
+    }
 	// BTN
 }
